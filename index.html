@@ -1,0 +1,245 @@
+---
+
+#### 檔案 2：`index.html`（網站主入口頁面，直接存於根目錄）
+
+```html
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BioPhotonics & OCT Lab Wiki | 生醫光電知識庫與互動講義</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0d1117;
+      --bg-card: #161b22;
+      --bg-card-hover: #1f2733;
+      --border-color: #30363d;
+      --accent-orange: #f97316;
+      --accent-cyan: #38bdf8;
+      --text-main: #f0f6fc;
+      --text-muted: #8b949e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Noto Sans TC', sans-serif;
+      line-height: 1.65;
+      padding: 2.5rem 1.5rem;
+    }
+    .container { max-width: 1080px; margin: 0 auto; }
+    header {
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 2rem;
+      margin-bottom: 2.5rem;
+    }
+    .badge-rule {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--accent-orange);
+      background: rgba(249, 115, 22, 0.12);
+      border: 1px solid rgba(249, 115, 22, 0.35);
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+    h1 { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+    .subtitle { color: var(--text-muted); font-size: 1.05rem; max-width: 760px; }
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1.75rem;
+    }
+    .stat-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+    }
+    .stat-num { font-family: 'JetBrains Mono', monospace; font-size: 1.6rem; font-weight: 600; color: var(--accent-cyan); }
+    .stat-label { font-size: 0.85rem; color: var(--text-muted); }
+    .section-title {
+      font-size: 1.35rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-left: 4px solid var(--accent-orange);
+      padding-left: 0.75rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 3rem;
+    }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent-orange);
+      background: var(--bg-card-hover);
+    }
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--accent-cyan);
+      margin-bottom: 0.75rem;
+    }
+    .card h3 { font-size: 1.2rem; margin-bottom: 0.65rem; color: var(--text-main); }
+    .card p { font-size: 0.92rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+    .card-footer {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--accent-orange);
+      border-top: 1px solid var(--border-color);
+      padding-top: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    .pipeline-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2.5rem;
+      font-size: 0.92rem;
+    }
+    .pipeline-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .step-item {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    .step-item code { color: var(--accent-orange); font-family: 'JetBrains Mono', monospace; }
+    footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border-color);
+      padding-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="badge-rule">Driven by AGENTS.md Schema v1.0</span>
+      <h1>BioPhotonics &amp; SS-PS-OCT Lab Wiki</h1>
+      <p class="subtitle">
+        國立陽明交通大學生醫光電研究所・許浩哲個人研究知識庫與互動式技術講義系統。
+        本網站所有頁面皆遵循 <code>AGENTS.md</code> 定義之三層式 LLM Wiki 規範（Raw 原始紀錄 → Wiki 雙向連結概念頁 → Standalone HTML 互動講義）自動化生成與擴充。
+      </p>
+      <div class="stats-bar">
+        <div class="stat-box">
+          <div class="stat-num" id="stat-lessons">2</div>
+          <div class="stat-label">互動式 HTML 技術講義 (lessons/)</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" id="stat-wiki">4</div>
+          <div class="stat-label">結構化 Wiki 概念節點 (wiki/)</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">1045 nm</div>
+          <div class="stat-label">核心掃頻雷射系統波段 (200 kHz)</div>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <div class="section-title">
+        <span>互動式技術講義庫 (Interactive HTML Lessons)</span>
+      </div>
+      <div class="grid" id="lesson-grid">
+        <a class="card" href="lessons/01-ps-oct-birefringence.html">
+          <div>
+            <div class="card-meta">
+              <span>LESSON 01</span>
+              <span>Signal-Processing</span>
+            </div>
+            <h3>1045nm SS-PS-OCT 雙折射相位延遲與 k-clock 同步機制</h3>
+            <p>
+              從後鞏膜膠原纖維之光學各向異性出發，推導雙通道瓊斯矩陣振幅比值公式，並解析高速 DAQ 卡 PFI0 硬體時脈與色散補償之條紋偽影排查流程。
+            </p>
+          </div>
+          <div class="card-footer">
+            <span>Updated: 2026-11-04</span>
+            <span>開啟互動講義 &rarr;</span>
+          </div>
+        </a>
+
+        <a class="card" href="lessons/01-ps-oct-birefringence.html#slide-3">
+          <div>
+            <div class="card-meta">
+              <span>LESSON 02</span>
+              <span>Lab-Safety &amp; Optics</span>
+            </div>
+            <h3>Class 3B 近紅外光雷射環安衛與 BPD 平衡探測器飽和防護</h3>
+            <p>
+              整理 ANSI Z136.1 角膜等效平面 1.8 mW 入眼安全上限實測規範、OD 5+ 護目鏡波段檢核，以及 APC 斜面光纖單向清潔標準作業程序。
+            </p>
+          </div>
+          <div class="card-footer">
+            <span>Updated: 2026-11-04</span>
+            <span>開啟互動講義 &rarr;</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section class="pipeline-box">
+      <div class="section-title">
+        <span>AGENTS.md 自動化擴充工作流 (Ingest-to-Publish Pipeline)</span>
+      </div>
+      <p style="color: var(--text-muted);">
+        當研究人員將新的實驗筆記或論文丟入專案時，AI Agent 會先讀取根目錄的 <code>AGENTS.md</code> 員工手冊，並依序執行以下四個標準步驟：
+      </p>
+      <div class="pipeline-steps">
+        <div class="step-item">
+          <strong>1. 封存原始素材</strong><br/>
+          將未修改之實驗紀錄存入 <code>raw/YYYY-MM-DD-topic.md</code>，確保原始數據零污染。
+        </div>
+        <div class="step-item">
+          <strong>2. 編譯 Wiki 概念節點</strong><br/>
+          萃取物理公式與系統參數，建立 <code>wiki/*.md</code> 並補上 <code>[[雙向連結]]</code>。
+        </div>
+        <div class="step-item">
+          <strong>3. 產出單檔 HTML 講義</strong><br/>
+          生成支援 KaTeX 數學公式與鍵盤翻頁之 <code>lessons/NN-topic.html</code>。
+        </div>
+        <div class="step-item">
+          <strong>4. 同步首頁與日誌</strong><br/>
+          自動於本頁新增講義卡片，並將異動寫入 <code>log.md</code> 供版本追蹤。
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      TAICA 生成式 AI：文字與圖像生成的原理與實務（第九週作業）｜ 國立陽明交通大學 生醫光電研究所 314264011 許浩哲
+    </footer>
+  </div>
+</body>
+</html>
