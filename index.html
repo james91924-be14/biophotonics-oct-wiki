@@ -39,72 +39,67 @@
     .nav-links { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
     .nav-links a { color: var(--text-sec); text-decoration: none; font-size: 0.88rem; font-weight: 600; padding: 0.35rem 0.65rem; border-radius: 8px; }
     .nav-links a:hover { background: var(--orange-soft); color: var(--orange); }
-    .pill-btn { background: var(--bg-sec); color: var(--text-main); border: 1px solid var(--border); padding: 0.38rem 0.85rem; border-radius: 99px; cursor: pointer; font-size: 0.82rem; font-weight: 700; transition: 0.2s; }
-    .pill-btn.active, .pill-btn:hover { background: var(--orange); color: #fff; border-color: var(--orange); }
-    .container { max-width: 1160px; margin: 0 auto; padding: 1.5rem 1.25rem 4rem; }
+    .pill-btn { background: var(--bg-sec); color: var(--text-main); border: 1px solid var(--border); padding: 0.38rem 0.85rem; border-radius: 99px; cursor: pointer; font-size: 0.82rem; font-weight: 700; }
+    .pill-btn.active { background: var(--orange); color: #fff; border-color: var(--orange); }
+    .container { max-width: 1160px; margin: 0 auto; padding: 1.75rem 1.25rem 4rem; }
     .music-bar { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 0.75rem 1.25rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; box-shadow: var(--shadow); }
-    .hero { background: var(--hero-grad); border: 1px solid var(--border); border-radius: 22px; padding: 2.2rem; margin-bottom: 2.2rem; display: grid; grid-template-columns: 1.35fr 0.85fr; gap: 1.75rem; align-items: center; box-shadow: var(--shadow); }
+    .hero { background: var(--hero-grad); border: 1px solid var(--border); border-radius: 22px; padding: 2.25rem; margin-bottom: 2.25rem; display: grid; grid-template-columns: 1.35fr 0.85fr; gap: 1.75rem; align-items: center; box-shadow: var(--shadow); }
     @media (max-width: 860px) { .hero { grid-template-columns: 1fr; } }
-    .badge { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; font-weight: 700; background: var(--orange-soft); color: var(--orange); padding: 0.25rem 0.75rem; border-radius: 99px; margin-bottom: 0.7rem; }
-    .hero h1 { font-size: 2.05rem; font-weight: 900; line-height: 1.3; margin-bottom: 0.8rem; }
-    .hero p { color: var(--text-sec); font-size: 0.96rem; margin-bottom: 1.2rem; }
-    .btn-primary { background: var(--orange); color: #fff; border: none; padding: 0.6rem 1.2rem; border-radius: 10px; font-weight: 700; cursor: pointer; text-decoration: none; font-size: 0.9rem; display: inline-block; }
-    .btn-outline { background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); padding: 0.6rem 1.15rem; border-radius: 10px; font-weight: 700; cursor: pointer; text-decoration: none; font-size: 0.9rem; display: inline-block; }
-    .hero-panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.3rem; }
+    .badge { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; font-weight: 700; background: var(--orange-soft); color: var(--orange); padding: 0.25rem 0.75rem; border-radius: 99px; margin-bottom: 0.75rem; }
+    .hero h1 { font-size: 2.1rem; font-weight: 900; line-height: 1.3; margin-bottom: 0.85rem; }
+    .hero p { color: var(--text-sec); font-size: 0.98rem; margin-bottom: 1.25rem; }
+    .btn-primary { background: var(--orange); color: #fff; border: none; padding: 0.65rem 1.25rem; border-radius: 10px; font-weight: 700; cursor: pointer; text-decoration: none; font-size: 0.9rem; display: inline-block; }
+    .btn-outline { background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); padding: 0.65rem 1.15rem; border-radius: 10px; font-weight: 700; cursor: pointer; text-decoration: none; font-size: 0.9rem; display: inline-block; }
+    .hero-panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.35rem; }
     .prog-track { height: 10px; background: var(--bg-sec); border-radius: 99px; overflow: hidden; margin: 0.5rem 0 1rem; }
     .prog-fill { height: 100%; background: linear-gradient(90deg, var(--orange), var(--blue)); width: 25%; transition: width 0.3s; }
-    .mini-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
-    .mini-stat { background: var(--bg-sec); padding: 0.6rem 0.85rem; border-radius: 10px; }
-    .mini-stat .num { font-family: 'JetBrains Mono', monospace; font-size: 1.15rem; font-weight: 700; color: var(--blue); }
-    .mini-stat .lbl { font-size: 0.74rem; color: var(--text-muted); }
-    .sec-head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; margin: 2.4rem 0 1rem; }
-    .sec-head h2 { font-size: 1.4rem; font-weight: 900; }
-    .sec-head p { color: var(--text-muted); font-size: 0.88rem; }
-    .toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.2rem; }
+    .mini-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
+    .mini-stat { background: var(--bg-sec); padding: 0.65rem 0.85rem; border-radius: 10px; }
+    .mini-stat .num { font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; font-weight: 700; color: var(--blue); }
+    .mini-stat .lbl { font-size: 0.75rem; color: var(--text-muted); }
+    .sec-head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; margin: 2.5rem 0 1.1rem; }
+    .sec-head h2 { font-size: 1.45rem; font-weight: 900; }
+    .sec-head p { color: var(--text-muted); font-size: 0.9rem; }
+    .toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem; }
     .search-box { background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); padding: 0.45rem 0.95rem; border-radius: 99px; min-width: 220px; font-size: 0.86rem; }
-    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 1.2rem; }
-    .lesson-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.35rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow); transition: transform 0.2s, border-color 0.2s; }
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 1.25rem; }
+    .lesson-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.4rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow); transition: transform 0.2s, border-color 0.2s; }
     .lesson-card:hover { transform: translateY(-3px); border-color: var(--orange); }
-    .card-top { display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; margin-bottom: 0.65rem; }
+    .card-top { display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; margin-bottom: 0.7rem; }
     .tag { padding: 0.2rem 0.55rem; border-radius: 6px; font-weight: 700; }
     .t-opt { background: var(--blue-soft); color: var(--blue); }
     .t-ps { background: var(--orange-soft); color: var(--orange); }
     .t-hw { background: var(--purple-soft); color: var(--purple); }
     .t-ai { background: var(--green-soft); color: var(--green); }
-    .lesson-card h3 { font-size: 1.12rem; font-weight: 800; margin-bottom: 0.5rem; }
-    .lesson-card p { color: var(--text-sec); font-size: 0.88rem; margin-bottom: 0.85rem; }
-    .pts { list-style: none; background: var(--bg-sec); padding: 0.65rem 0.85rem; border-radius: 10px; font-size: 0.8rem; margin-bottom: 0.95rem; color: var(--text-sec); }
+    .lesson-card h3 { font-size: 1.14rem; font-weight: 800; margin-bottom: 0.55rem; }
+    .lesson-card p { color: var(--text-sec); font-size: 0.88rem; margin-bottom: 0.9rem; }
+    .pts { list-style: none; background: var(--bg-sec); padding: 0.7rem 0.9rem; border-radius: 10px; font-size: 0.81rem; margin-bottom: 1rem; color: var(--text-sec); }
     .pts li { margin-bottom: 0.2rem; }
-    .card-foot { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 0.75rem; }
-    .btn-sm { background: var(--orange-soft); color: var(--orange); border: none; padding: 0.36rem 0.72rem; border-radius: 8px; font-weight: 700; font-size: 0.8rem; cursor: pointer; text-decoration: none; }
+    .card-foot { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 0.8rem; }
+    .btn-sm { background: var(--orange-soft); color: var(--orange); border: none; padding: 0.38rem 0.75rem; border-radius: 8px; font-weight: 700; font-size: 0.8rem; cursor: pointer; text-decoration: none; }
     .btn-sm:hover { background: var(--orange); color: #fff; }
-    .btn-sm-out { background: var(--bg-sec); color: var(--text-main); border: 1px solid var(--border); padding: 0.36rem 0.72rem; border-radius: 8px; font-weight: 700; font-size: 0.8rem; text-decoration: none; }
+    .btn-sm-out { background: var(--bg-sec); color: var(--text-main); border: 1px solid var(--border); padding: 0.38rem 0.75rem; border-radius: 8px; font-weight: 700; font-size: 0.8rem; text-decoration: none; }
     .btn-sm-out:hover { border-color: var(--orange); color: var(--orange); }
-    .sim-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; padding: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; box-shadow: var(--shadow); }
+    .sim-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; padding: 1.65rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; box-shadow: var(--shadow); }
     @media (max-width: 860px) { .sim-box { grid-template-columns: 1fr; } }
-    .s-row { margin-bottom: 0.95rem; }
-    .s-row label { display: flex; justify-content: space-between; font-weight: 700; font-size: 0.86rem; margin-bottom: 0.25rem; }
+    .s-row { margin-bottom: 1rem; }
+    .s-row label { display: flex; justify-content: space-between; font-weight: 700; font-size: 0.88rem; margin-bottom: 0.25rem; }
     .s-row input { width: 100%; accent-color: var(--orange); }
-    .quiz-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 1.1rem; }
-    .q-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.3rem; box-shadow: var(--shadow); }
-    .q-opt { display: block; width: 100%; text-align: left; background: var(--bg-sec); color: var(--text-main); border: 1px solid var(--border); padding: 0.55rem 0.8rem; border-radius: 8px; margin-top: 0.45rem; cursor: pointer; font-size: 0.84rem; font-weight: 600; }
+    .quiz-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.15rem; }
+    .q-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.35rem; box-shadow: var(--shadow); }
+    .q-opt { display: block; width: 100%; text-align: left; background: var(--bg-sec); color: var(--text-main); border: 1px solid var(--border); padding: 0.6rem 0.85rem; border-radius: 8px; margin-top: 0.45rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; }
     .q-opt:hover { border-color: var(--orange); }
-    .flash-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; }
-    .flashcard { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 1.2rem; min-height: 165px; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow); }
-    .flashcard .a-txt { display: none; color: var(--green); font-weight: 700; font-size: 0.88rem; }
-    .flashcard.flipped .q-txt { display: none; }
-    .flashcard.flipped .a-txt { display: block; }
-    .table-wrap { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem; overflow-x: auto; box-shadow: var(--shadow); }
-    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-    th, td { border-bottom: 1px solid var(--border); padding: 0.7rem; text-align: left; }
+    .table-wrap { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; overflow-x: auto; box-shadow: var(--shadow); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+    th, td { border-bottom: 1px solid var(--border); padding: 0.75rem; text-align: left; }
     th { font-family: 'JetBrains Mono', monospace; color: var(--blue); }
     code { font-family: 'JetBrains Mono', monospace; background: var(--bg-sec); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.8rem; }
-    .mascot { position: fixed; right: 18px; bottom: 18px; z-index: 70; display: flex; flex-direction: column; align-items: flex-end; gap: 0.45rem; }
-    .m-bubble { background: var(--bg-card); border: 2px solid var(--orange); border-radius: 14px; padding: 0.75rem 0.95rem; max-width: 265px; box-shadow: var(--shadow); font-size: 0.82rem; }
-    .m-avatar { width: 54px; height: 54px; border-radius: 50%; background: var(--orange); color: #fff; display: grid; place-items: center; font-size: 1.6rem; cursor: pointer; box-shadow: var(--shadow); }
+    .mascot { position: fixed; right: 20px; bottom: 20px; z-index: 70; display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; }
+    .m-bubble { background: var(--bg-card); border: 2px solid var(--orange); border-radius: 14px; padding: 0.8rem 1rem; max-width: 270px; box-shadow: var(--shadow); font-size: 0.82rem; }
+    .m-avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--orange); color: #fff; display: grid; place-items: center; font-size: 1.7rem; cursor: pointer; box-shadow: var(--shadow); }
     .modal-bg { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); display: none; place-items: center; z-index: 100; padding: 1rem; }
     .modal-bg.open { display: grid; }
-    .modal-box { background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); border-radius: 18px; max-width: 740px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 1.65rem; }
+    .modal-box { background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); border-radius: 18px; max-width: 760px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 1.75rem; }
     footer { text-align: center; padding: 2rem 1rem; color: var(--text-muted); font-size: 0.84rem; border-top: 1px solid var(--border); margin-top: 2.5rem; }
   </style>
 </head>
@@ -115,8 +110,7 @@
       <div class="nav-links">
         <a href="#lessons-sec">📚 8 大互動講義</a>
         <a href="#simulator-sec">🔬 解析度模擬器</a>
-        <a href="#quiz-sec">🎯 觀念闖關</a>
-        <a href="#flash-sec">💡 翻翻卡</a>
+        <a href="#quiz-sec">🎯 觀念闖關測驗</a>
         <a href="#links-sec">🔗 精選教學網</a>
         <a href="#wiki-sec">🗂️ LLM Wiki 庫</a>
         <button class="pill-btn" onclick="toggleTheme()" id="themeBtn">🌙 切換暗房模式</button>
@@ -125,50 +119,49 @@
   </nav>
 
   <div class="container">
-    <!-- Built-in Web Audio Bar -->
+    <!-- Built-in Web Audio Music Bar -->
     <div class="music-bar">
-      <div style="font-size:0.86rem; font-weight:700;">
-        🎧 實驗室專注背景音（瀏覽器內建合成音源，點擊立即發聲）：<span id="bgmStatus" style="color:var(--orange);">目前靜音</span>
+      <div style="font-size:0.88rem; font-weight:700;">
+        🎵 內建專注背景音效（點擊按鈕立即發聲）：<span id="bgmStatus" style="color:var(--orange);">目前靜音</span>
       </div>
-      <div style="display:flex; gap:0.45rem; align-items:center; flex-wrap:wrap;">
-        <button class="pill-btn" id="btnLofi" onclick="playBgm('lofi')">🎹 暗房 Lo-Fi 療癒和弦</button>
-        <button class="pill-btn" id="btnRain" onclick="playBgm('rain')">🌧️ 陽明山午後雨聲</button>
-        <button class="pill-btn" id="btnHz" onclick="playBgm('hz')">🫧 432Hz 專注低頻</button>
-        <button class="pill-btn" onclick="stopBgm()">⏹ 靜音</button>
+      <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+        <button class="pill-btn" id="btnLofi" onclick="startSound('lofi')">🎹 暗房 Lo-Fi 鋼琴和弦</button>
+        <button class="pill-btn" id="btnRain" onclick="startSound('rain')">🌧️ 陽明山夜雨白噪音</button>
+        <button class="pill-btn" onclick="stopSound()">⏹ 停止音效</button>
       </div>
     </div>
 
     <!-- Hero -->
     <section class="hero">
       <div>
-        <span class="badge">✨ AGENTS.md Driven Knowledge Portal v3.0</span>
+        <span class="badge">✨ AGENTS.md Driven Knowledge Portal</span>
         <h1>從零看懂光學同調斷層掃描 (OCT) 與生醫 AI 實務</h1>
-        <p>歡迎來到國立陽明交通大學生醫光電研究所（許浩哲）建立的互動式知識庫！結合 <strong>Karpathy LLM Wiki 三層架構</strong>與互動學習體驗，收錄 8 篇獨立投影片講義、軸向解析度與安全功率模擬器、觀念闖關測驗與翻翻卡。</p>
+        <p>歡迎來到國立陽明交通大學生醫光電研究所（許浩哲）建立的互動式知識庫！我們將複雜的 <strong>1045nm 掃頻偏振 OCT、麥克森干涉儀、GRIN 微探頭、LabVIEW 高速同步與深度學習降噪</strong>，轉化為初學者 5 分鐘就能輕鬆看懂的互動講義與模擬器。</p>
         <div style="display:flex; gap:0.65rem; flex-wrap:wrap;">
           <a href="#lessons-sec" class="btn-primary">🚀 瀏覽 8 大互動講義</a>
           <button class="btn-outline" onclick="openModal('agents_spec')">📜 檢視 AGENTS.md 規格書</button>
         </div>
       </div>
       <div class="hero-panel">
-        <div style="display:flex; justify-content:space-between; font-size:0.85rem; font-weight:700;">
+        <div style="display:flex; justify-content:space-between; font-size:0.86rem; font-weight:700;">
           <span>🎯 你的生醫光電學習進度</span>
           <span id="progText">2 / 8 單元已完成 (25%)</span>
         </div>
         <div class="prog-track"><div class="prog-fill" id="progBar"></div></div>
         <div class="mini-stats">
           <div class="mini-stat"><div class="num">8 篇獨立頁</div><div class="lbl">lessons/*.html 投影片</div></div>
-          <div class="mini-stat"><div class="num">8 個節點</div><div class="lbl">wiki/*.md 雙向連結庫</div></div>
+          <div class="mini-stat"><div class="num">8 個節點</div><div class="lbl">wiki/*.md 結構化筆記</div></div>
           <div class="mini-stat"><div class="num">1045 nm</div><div class="lbl">200kHz 後鞏膜穿透波段</div></div>
           <div class="mini-stat"><div class="num" id="quizScore">0 / 3 題</div><div class="lbl">觀念闖關測驗得分</div></div>
         </div>
       </div>
     </section>
 
-    <!-- Section 1: 8 Interactive Lessons -->
+    <!-- Section 1: 8 Modules -->
     <div class="sec-head" id="lessons-sec">
       <div>
         <h2>📚 8 大互動式主題講義庫 (Standalone Lessons &amp; Quick Read)</h2>
-        <p>每張卡片皆支援「✨ 互動速讀（彈出視窗）」與「📄 開啟獨立頁（進入完整 4 頁投影片與隨堂測驗）」！</p>
+        <p>每張卡片皆支援「✨ 互動速讀（直接彈出視窗）」與「📄 開啟獨立頁（進入 4 頁完整投影片）」！</p>
       </div>
     </div>
 
@@ -348,7 +341,7 @@
     <div class="sim-box">
       <div>
         <div class="s-row">
-          <label><span>1. 雷射中心波長 $\lambda_0$ (nm)</span><span id="valLam" style="color:var(--orange);">1045 nm (深層鞏膜波段)</span></label>
+          <label><span>1. 雷射中心波長 $\lambda_0$ (nm)</span><span id="valLam" style="color:var(--orange);">1045 nm</span></label>
           <input type="range" id="simLam" min="800" max="1350" step="5" value="1045" oninput="runSim()">
         </div>
         <div class="s-row">
@@ -364,36 +357,36 @@
       <div style="background:var(--bg-sec); padding:1.25rem; border-radius:14px; display:flex; flex-direction:column; justify-content:space-between;">
         <div>
           <div style="font-size:0.84rem; color:var(--text-muted); font-weight:700;">生物組織內理論軸向解析度 ($\delta z / n$)</div>
-          <div id="outRes" style="font-family:'JetBrains Mono',monospace; font-size:1.85rem; font-weight:900; color:var(--orange);">3.49 μm (空氣中 4.81 μm)</div>
+          <div id="outRes" style="font-family:'JetBrains Mono',monospace; font-size:1.9rem; font-weight:900; color:var(--orange);">3.49 μm</div>
           <p id="outNote" style="font-size:0.88rem; color:var(--text-sec); margin-top:0.35rem;">🌟 1045nm 波段兼具低 RPE 散射與 3.5 微米級高解析度，最適合後鞏膜雙折射成像！</p>
         </div>
-        <div id="outSafe" style="margin-top:0.85rem; padding:0.75rem 1rem; border-radius:10px; background:var(--green-soft); color:var(--green); font-weight:700; font-size:0.86rem;">
+        <div id="outSafe" style="margin-top:0.85rem; padding:0.75rem 1rem; border-radius:10px; background:var(--green-soft); color:var(--green); font-weight:700; font-size:0.88rem;">
           ✅ 環安衛檢核通過：入眼功率 1.4 mW 符合 ANSI Z136.1 安全上限 (≤ 1.8 mW)。
         </div>
       </div>
     </div>
 
-    <!-- Section 3: 3-Question Interactive Quiz -->
+    <!-- Section 3: Interactive 3-Question Quiz Challenge -->
     <div class="sec-head" id="quiz-sec">
       <div>
         <h2>🎯 初學者 3 分鐘觀念闖關測驗 (Interactive OCT Quiz)</h2>
-        <p>點擊選項立即批改並更新右上角闖關得分，幫助初學者自我檢驗學習成效！</p>
+        <p>點擊選項立即批改並顯示物理詳解，看看你能不能拿到 3 題滿分！</p>
       </div>
     </div>
 
     <div class="quiz-grid">
       <div class="q-card">
         <span class="badge">Q1 // 解析度原理</span>
-        <h4>想要讓 OCT 的縱向切面解析度變得更精細（$\delta z$ 數值更小），應該選擇哪一種光源？</h4>
+        <h4>想要讓 OCT 的縱向切面解析度變得更精細（$\delta z$ 更小），應該選擇哪一種光源？</h4>
         <button class="q-opt" onclick="ansQuiz(1, false, this)">A. 頻譜寬度 $\Delta\lambda$ 越窄的單頻雷射</button>
         <button class="q-opt" onclick="ansQuiz(1, true, this)">B. 頻譜半高寬 $\Delta\lambda$ 越寬的寬頻或掃頻光源</button>
         <p id="fb1" style="font-size:0.82rem; margin-top:0.5rem; font-weight:700;"></p>
       </div>
 
       <div class="q-card">
-        <span class="badge">Q2 // 暗房硬體除錯</span>
+        <span class="badge">Q2 // 暗房環安衛</span>
         <h4>當電腦畫面干涉訊號突然變成水平直線且 BPD 亮紅燈時，正確的第一步處置為何？</h4>
-        <button class="q-opt" onclick="ansQuiz(2, true, this)">A. 調降參考臂可調光衰減器，使單臂功率回到 0.5~1.0 mW</button>
+        <button class="q-opt" onclick="ansQuiz(2, true, this)">A. 調降參考臂可調光衰減器，使功率回到 0.5~1.0 mW</button>
         <button class="q-opt" onclick="ansQuiz(2, false, this)">B. 拿一般衛生紙沾酒精用力擦拭 APC 光纖端面</button>
         <p id="fb2" style="font-size:0.82rem; margin-top:0.5rem; font-weight:700;"></p>
       </div>
@@ -407,79 +400,48 @@
       </div>
     </div>
 
-    <!-- Section 4: Click-to-Flip Flashcards -->
-    <div class="sec-head" id="flash-sec">
-      <div>
-        <h2>💡 實驗室新手快問快答翻翻卡 (Click to Flip)</h2>
-        <p>點擊任意卡片即可翻面查看實驗室學長姐最常叮嚀的除錯與安全秘笈：</p>
-      </div>
-    </div>
-
-    <div class="flash-grid">
-      <div class="flashcard" onclick="this.classList.toggle('flipped')">
-        <div class="q-txt"><span class="badge">CARD 01 // 雷射安全</span><h4>為什麼 1045nm 雷射看不見光，進暗房卻規定一定要戴 OD 5+ 護目鏡？</h4></div>
-        <div class="a-txt">✅ 因為 1045nm 是近紅外光（NIR），可穿透角膜直達眼底，但人眼無法感知、不會觸發眨眼反射，極易造成視網膜熱損傷！</div>
-        <span style="font-size:0.75rem; color:var(--text-muted);">👆 點擊卡片翻面看解答</span>
-      </div>
-      <div class="flashcard" onclick="this.classList.toggle('flipped')">
-        <div class="q-txt"><span class="badge">CARD 02 // 光纖維護</span><h4>APC 斜面光纖跳線端面髒了，可以用一般衛生紙沾酒精擦拭嗎？</h4></div>
-        <div class="a-txt">✅ 絕對不行！衛生紙纖維粗糙會刮傷 8 度斜面鍍膜。必須使用 Cletop 光纖專用清潔盒沿同一方向單向輕推！</div>
-        <span style="font-size:0.75rem; color:var(--text-muted);">👆 點擊卡片翻面看解答</span>
-      </div>
-      <div class="flashcard" onclick="this.classList.toggle('flipped')">
-        <div class="q-txt"><span class="badge">CARD 03 // 振鏡同步</span><h4>為什麼 200kHz OCT 的 X 軸鋸齒波要預留 15% Flyback 回掃緩衝區？</h4></div>
-        <div class="a-txt">✅ 因為振鏡鏡片有轉動慣量，若用 0 微秒瞬間反轉會造成高頻機械振盪與驅動板過熱失步！</div>
-        <span style="font-size:0.75rem; color:var(--text-muted);">👆 點擊卡片翻面看解答</span>
-      </div>
-      <div class="flashcard" onclick="this.classList.toggle('flipped')">
-        <div class="q-txt"><span class="badge">CARD 04 // AGENTS.md</span><h4>當原始實驗筆記漏寫某項雷射參數時，AI 應該怎麼處理？</h4></div>
-        <div class="a-txt">✅ 嚴禁自行瞎掰數字！必須依照 AGENTS.md 防幻覺規範標註為 [待實驗室實測補齊]！</div>
-        <span style="font-size:0.75rem; color:var(--text-muted);">👆 點擊卡片翻面看解答</span>
-      </div>
-    </div>
-
-    <!-- Section 5: 3 Curated Educational Websites -->
+    <!-- Section 4: 3 Truly Useful External Learning Links -->
     <div class="sec-head" id="links-sec">
       <div>
-        <h2>🔗 精選 3 大國際光學與課程實作教學網 (Curated Learning Links)</h2>
-        <p>只保留真正能學到 OCT 光路架設、干涉物理公式推導與 GRIN 微透鏡原理的核心教學資源：</p>
+        <h2>🔗 精選 3 大光學與專案實作教學網 (Curated Learning Resources)</h2>
+        <p>去蕪存菁，只保留真正能學到 OCT 硬體架設、干涉物理公式與本週 LLM Wiki 架構的核心網站：</p>
       </div>
     </div>
 
     <div class="quiz-grid">
       <a class="lesson-card" href="https://www.thorlabs.com/newgrouppage9.cfm?objectgroup_id=10759" target="_blank" rel="noopener" style="text-decoration:none; color:inherit;">
         <div>
-          <span class="badge">🔦 光機大廠圖解指南</span>
-          <h3>Thorlabs — OCT 系統光路與元件實務指南</h3>
-          <p>詳盡圖解掃頻 OCT (SS-OCT)、光譜域 OCT、平衡光電探測器與 LSM02 掃描物鏡之實體光路架設教學。</p>
+          <span class="badge">🔦 光機大廠圖解教學</span>
+          <h3>Thorlabs — OCT 系統光路與元件指南</h3>
+          <p>詳盡圖解掃頻 OCT (SS-OCT)、平衡光電探測器、偏振控制器與 LSM02 掃描物鏡之實體光路架設教學。</p>
         </div>
-        <span style="color:var(--orange); font-weight:700; font-size:0.84rem;">前往 Thorlabs 教學庫 &nearr;</span>
+        <span style="color:var(--orange); font-weight:700; font-size:0.85rem;">前往 Thorlabs 教學庫 &nearr;</span>
       </a>
 
       <a class="lesson-card" href="https://www.rp-photonics.com/optical_coherence_tomography.html" target="_blank" rel="noopener" style="text-decoration:none; color:inherit;">
         <div>
           <span class="badge">📘 國際光電物理百科</span>
-          <h3>RP Photonics — 光學同調與干涉物理百科</h3>
-          <p>查詢同調長度公式、群速度色散補償、雙折射（Birefringence）與超寬頻掃頻雷射原理最權威的線上百科。</p>
+          <h3>RP Photonics — 光學同調與雙折射百科</h3>
+          <p>查詢同調長度公式、群速度色散補償、雙折射（Birefringence）與超寬頻雷射原理最權威的線上物理百科。</p>
         </div>
-        <span style="color:var(--orange); font-weight:700; font-size:0.84rem;">前往 RP Photonics &nearr;</span>
+        <span style="color:var(--orange); font-weight:700; font-size:0.85rem;">前往 RP Photonics &nearr;</span>
       </a>
 
-      <a class="lesson-card" href="https://www.edmundoptics.com/knowledge-center/application-notes/optics/gradient-index-grin-lenses/" target="_blank" rel="noopener" style="text-decoration:none; color:inherit;">
+      <a class="lesson-card" href="https://diveai-lab.github.io/diveai-lessons/" target="_blank" rel="noopener" style="text-decoration:none; color:inherit;">
         <div>
-          <span class="badge">🔬 微光學圖解教材</span>
-          <h3>Edmund Optics — GRIN 梯度折射率透鏡原理</h3>
-          <p>用淺顯易懂的幾何光學圖表，解釋 GRIN 透鏡徑向拋物線折射率分布與節距（Pitch）如何實現自聚焦內視鏡成像。</p>
+          <span class="badge">🎓 課堂核心範例</span>
+          <h3>政大蔡炎龍老師 DIVE AI Lab — 呆一布講義</h3>
+          <p>本週作業設計標竿：示範如何透過 CLAUDE.md / AGENTS.md 規範，讓 AI 自動維護並生成翻頁互動講義。</p>
         </div>
-        <span style="color:var(--orange); font-weight:700; font-size:0.84rem;">前往 Edmund 知識庫 &nearr;</span>
+        <span style="color:var(--orange); font-weight:700; font-size:0.85rem;">前往呆一布講義網 &nearr;</span>
       </a>
     </div>
 
-    <!-- Section 6: Complete 8-Row Wiki Mapping Table -->
+    <!-- Section 5: Complete 8-Row Wiki Mapping Table -->
     <div class="sec-head" id="wiki-sec">
       <div>
-        <h2>🗂️ LLM Wiki 知識節點總覽與 AGENTS.md 規則對應表 (完整 8 節點)</h2>
-        <p>完整對應專案 <code>raw/</code>、<code>wiki/</code> 與 <code>lessons/</code> 三層式架構，點擊「速讀」或檔案連結可立即檢視：</p>
+        <h2>🗂️ LLM Wiki 知識節點總覽與 AGENTS.md 規則對應表 (全 8 節點)</h2>
+        <p>完整對應專案 <code>raw/</code>、<code>wiki/</code> 與 <code>lessons/</code> 三層式架構，支援視窗速讀與獨立頁面跳轉：</p>
       </div>
       <button class="btn-primary" onclick="openModal('agents_spec')">📜 檢視 AGENTS.md 完整規則書</button>
     </div>
@@ -508,11 +470,11 @@
     </footer>
   </div>
 
-  <!-- Mascot -->
+  <!-- Desktop Mascot -->
   <div class="mascot">
     <div class="m-bubble" id="mBubble">
       <strong style="color:var(--orange);">🐯 駐站小幫手・橘福福師姐</strong>
-      <div id="mText" style="margin:0.35rem 0;">「點下方按鈕，師姐幫你複習實驗室最常考的光學與環安衛重點！」</div>
+      <div id="mText" style="margin:0.35rem 0;">「點下方的按鈕，師姐立刻抽考你一題 OCT 實驗室口試重點喔！」</div>
       <button class="btn-sm" onclick="nextTip()">🎲 換一題重點提示</button>
     </div>
     <div class="m-avatar" onclick="toggleMascot()" title="點擊開關小幫手">🐯</div>
@@ -523,13 +485,14 @@
     <div class="modal-box">
       <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:0.8rem; margin-bottom:1rem;">
         <h3 id="modalTitle">單元速讀</h3>
-        <button class="pill-btn" onclick="closeModal()">✕ 關閉視窗</button>
+        <button class="pill-btn" onclick="closeModal()">✕ 關閉</button>
       </div>
       <div id="modalBody" style="line-height:1.8; color:var(--text-sec);"></div>
     </div>
   </div>
 
   <script>
+    // 1. Theme Toggle
     function toggleTheme() {
       const root = document.documentElement;
       const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
@@ -537,53 +500,50 @@
       document.getElementById('themeBtn').textContent = next === 'light' ? '🌙 切換暗房模式' : '🌞 切換暖陽模式';
     }
 
-    let actx = null, timer = null, srcNode = null;
-    function stopBgm() {
+    // 2. Built-in Web Audio Synthesizer (Loud & Clear!)
+    let actx = null, timer = null, noise = null;
+    function stopSound() {
       if (timer) { clearInterval(timer); timer = null; }
-      if (srcNode) { try { srcNode.stop(); srcNode.disconnect(); } catch(e){} srcNode = null; }
-      ['btnLofi','btnRain','btnHz'].forEach(id => document.getElementById(id).classList.remove('active'));
+      if (noise) { try { noise.stop(); noise.disconnect(); } catch(e){} noise = null; }
+      document.getElementById('btnLofi').classList.remove('active');
+      document.getElementById('btnRain').classList.remove('active');
       document.getElementById('bgmStatus').textContent = '目前靜音';
     }
-    function playBgm(mode) {
-      stopBgm();
+    function startSound(mode) {
+      stopSound();
       if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
       if (actx.state === 'suspended') actx.resume();
       if (mode === 'lofi') {
         document.getElementById('btnLofi').classList.add('active');
-        document.getElementById('bgmStatus').textContent = '播放中：🎹 暗房 Lo-Fi 療癒和弦';
+        document.getElementById('bgmStatus').textContent = '播放中：🎹 暗房 Lo-Fi 鋼琴和弦';
         const chords = [[261.6, 329.6, 392.0], [220.0, 261.6, 329.6], [174.6, 220.0, 261.6], [196.0, 246.9, 293.7]];
-        let i = 0;
-        const step = () => {
+        let idx = 0;
+        const play = () => {
           const now = actx.currentTime;
-          chords[i % chords.length].forEach(f => {
-            const o = actx.createOscillator(), g = actx.createGain();
-            o.type = 'triangle'; o.frequency.setValueAtTime(f, now);
+          chords[idx % chords.length].forEach(f => {
+            const osc = actx.createOscillator(), g = actx.createGain();
+            osc.type = 'triangle'; osc.frequency.setValueAtTime(f, now);
             g.gain.setValueAtTime(0.01, now);
-            g.gain.linearRampToValueAtTime(0.14, now + 0.12);
+            g.gain.linearRampToValueAtTime(0.12, now + 0.15);
             g.gain.exponentialRampToValueAtTime(0.001, now + 1.8);
-            o.connect(g); g.connect(actx.destination);
-            o.start(now); o.stop(now + 1.9);
+            osc.connect(g); g.connect(actx.destination);
+            osc.start(now); osc.stop(now + 1.9);
           });
-          i++;
+          idx++;
         };
-        step(); timer = setInterval(step, 2000);
-      } else if (mode === 'rain') {
+        play(); timer = setInterval(play, 2000);
+      } else {
         document.getElementById('btnRain').classList.add('active');
-        document.getElementById('bgmStatus').textContent = '播放中：🌧️ 陽明山午後雨聲';
+        document.getElementById('bgmStatus').textContent = '播放中：🌧️ 陽明山夜雨白噪音';
         const len = actx.sampleRate * 2, buf = actx.createBuffer(1, len, actx.sampleRate), d = buf.getChannelData(0);
         let last = 0;
         for (let i = 0; i < len; i++) { const w = Math.random() * 2 - 1; d[i] = (last + 0.05 * w) / 1.05; last = d[i]; d[i] *= 0.35; }
-        srcNode = actx.createBufferSource(); srcNode.buffer = buf; srcNode.loop = true;
-        srcNode.connect(actx.destination); srcNode.start();
-      } else if (mode === 'hz') {
-        document.getElementById('btnHz').classList.add('active');
-        document.getElementById('bgmStatus').textContent = '播放中：🫧 432Hz 專注低頻';
-        const o = actx.createOscillator(), g = actx.createGain();
-        o.type = 'sine'; o.frequency.value = 216; g.gain.value = 0.12;
-        o.connect(g); g.connect(actx.destination); o.start(); srcNode = o;
+        noise = actx.createBufferSource(); noise.buffer = buf; noise.loop = true;
+        noise.connect(actx.destination); noise.start();
       }
     }
 
+    // 3. Filter & Search & Progress
     function calcProg() {
       const all = document.querySelectorAll('.chk');
       let c = 0; all.forEach(x => { if (x.checked) c++; });
@@ -605,6 +565,7 @@
       });
     }
 
+    // 4. Resolution Simulator
     function runSim() {
       const lam = +document.getElementById('simLam').value;
       const bw = +document.getElementById('simBw').value;
@@ -624,6 +585,7 @@
       }
     }
 
+    // 5. Quiz Logic
     const solved = {1: false, 2: false, 3: false};
     function ansQuiz(q, ok, btn) {
       const fb = document.getElementById('fb' + q);
@@ -639,6 +601,7 @@
       document.getElementById('quizScore').textContent = total + ' / 3 題';
     }
 
+    // 6. Mascot Tips
     const tips = [
       "「口試重點：1045nm 波段比 840nm 更能穿透視網膜色素上皮層（RPE），最適合拍後鞏膜！」",
       "「暗房守則：開啟 Class 3B 雷射鑰匙前，一定要戴好 OD 5+ 護目鏡並取下手錶戒指！」",
@@ -652,6 +615,7 @@
       b.style.display = b.style.display === 'none' ? 'block' : 'none';
     }
 
+    // 7. Modal Quick Read Content
     const modals = {
       m1: ["🌱 Module 01 // 認識 OCT：光學界的超音波", "<p>OCT 發射近紅外光進入生物組織，並利用<strong>麥克森干涉儀</strong>將參考臂與樣品臂反射光進行干涉。當兩臂光程差小於同調長度時即產生干涉條紋，軸向解析度約為 1～10 微米（比超音波高出百倍）。</p><p style='margin-top:1rem;'><a class='btn-primary' href='lessons/01-oct-intro.html'>📄 前往 Module 01 完整 4 頁投影片 &rarr;</a></p>"],
       m2: ["🔦 Module 02 // 1045nm SS-PS-OCT 雙折射與後鞏膜成像", "<p>採用 1045nm 200kHz 掃頻雷射穿透 RPE 層，透過雙通道平衡光電探測器（BPD）同步接收水平與垂直偏振訊號，計算累積相位延遲 $\\delta(z)=\\arctan(|E_V|/|E_H|)$，進而求得後鞏膜膠原纖維雙折射率 $\\Delta n$。</p><p style='margin-top:1rem;'><a class='btn-primary' href='lessons/01-ps-oct-birefringence.html'>📄 前往 Module 02 完整 4 頁投影片 &rarr;</a></p>"],
@@ -661,7 +625,7 @@
       m6: ["🤖 Module 06 // 深度學習於 OCT 散斑降噪與防洩漏", "<p>利用 U-Net / CNN 濾除同調散斑雜訊（Speckle Noise）。切分訓練集與測試集時，必須嚴格遵守 Subject-level Split（以不同眼球個體切分），防止相鄰切片造成資料洩漏。</p><p style='margin-top:1rem;'><a class='btn-primary' href='lessons/06-deep-learning-denoising.html'>📄 前往 Module 06 完整 4 頁投影片 &rarr;</a></p>"],
       m7: ["🛡️ Module 07 // 1045nm 雷射環安衛與光纖清潔", "<p>進暗房必戴 OD 5+ (950-1100nm) 護目鏡；依 ANSI Z136.1 標準樣品端功率須 ≤ 1.8 mW（量測前功率計切至 1045nm）；APC 光纖嚴禁用衛生紙擦拭，須用 Cletop 單向推拭。</p><p style='margin-top:1rem;'><a class='btn-primary' href='lessons/02-laser-safety-bpd.html'>📄 前往 Module 07 完整 4 頁投影片 &rarr;</a></p>"],
       m8: ["🤖 Module 08 // 用 AGENTS.md 打造實驗室 LLM Wiki", "<p>遵循 AI Agent = AI Model + Harness，透過 <code>AGENTS.md</code> 定義三層目錄（<code>raw/</code> 唯讀、<code>wiki/</code> 雙向連結、<code>lessons/</code> 獨立網頁）、防幻覺標記與五步驗收標準。</p><p style='margin-top:1rem;'><a class='btn-primary' href='lessons/08-agentic-wiki-workflow.html'>📄 前往 Module 08 完整 4 頁投影片 &rarr;</a></p>"],
-      agents_spec: ["📜 AGENTS.md — 專案員工手冊與自動化擴充規則", "<p><strong>1. 要什麼成品：</strong>定義 <code>raw/</code>（原始筆記）、<code>wiki/</code>（8 個 Markdown 概念節點）、<code>lessons/</code>（8 份獨立互動投影片）與 <code>index.html</code> 首頁。</p><p><strong>2. 有什麼限制：</strong><code>raw/</code> 唯讀不可修改；所有未提供實測值之物理參數（如 $\\Delta\\lambda$、光斑直徑 $d$）強制標註為 <code>[待實驗室實測補齊]</code>，嚴禁 AI 捏造數據。</p><p><strong>3. 怎麼算做完：</strong>每次新增內容必須走完 Save Raw &rarr; Compile Wiki &rarr; Build HTML &rarr; Sync Index &rarr; Update <code>log.md</code> 五步流程。</p>"]
+      agents_spec: ["📜 AGENTS.md — 專案員工手冊與自動化擴充規則", "<p><strong>1. 要什麼成品：</strong>定義 <code>raw/</code>（原始筆記）、<code>wiki/</code>（Markdown 概念節點）、<code>lessons/</code>（8 份獨立互動投影片）與 <code>index.html</code> 首頁。</p><p><strong>2. 有什麼限制：</strong><code>raw/</code> 唯讀不可修改；所有未提供實測值之物理參數（如 $\\Delta\\lambda$、光斑直徑 $d$）強制標註為 <code>[待實驗室實測補齊]</code>，嚴禁 AI 捏造數據。</p><p><strong>3. 怎麼算做完：</strong>每次新增內容必須走完 Save Raw &rarr; Compile Wiki &rarr; Build HTML &rarr; Sync Index &rarr; Update <code>log.md</code> 五步流程。</p>"]
     };
 
     function openModal(k) {
@@ -674,7 +638,6 @@
       }
     }
     function closeModal() { document.getElementById('modalBg').classList.remove('open'); }
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
   </script>
 </body>
 </html>
