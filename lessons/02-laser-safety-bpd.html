@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson 02 | 1045nm Class 3B 掃頻雷射安全與 BPD 探測器清潔規範</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    :root { --bg: #FAF7F2; --card: #FFFFFF; --border: #E2E8F0; --orange: #EA580C; --blue: #0284C7; --text: #1E293B; --muted: #64748B; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Noto Sans TC', sans-serif; min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; padding: 1.5rem; }
+    .top-bar { max-width: 920px; width: 100%; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+    .back-link { color: var(--blue); text-decoration: none; font-weight: 700; }
+    .progress-wrap { width: 100%; max-width: 920px; margin: 0.75rem auto 0; background: var(--border); height: 6px; border-radius: 3px; }
+    .progress-bar { height: 100%; background: var(--orange); width: 25%; transition: width 0.25s ease; }
+    .slide-container { max-width: 920px; width: 100%; margin: 2rem auto; background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 2.5rem; min-height: 440px; box-shadow: 0 10px 25px rgba(0,0,0,0.06); }
+    .slide { display: none; } .slide.active { display: block; }
+    .tag { font-family: 'JetBrains Mono', monospace; color: var(--orange); font-size: 0.82rem; font-weight: 700; margin-bottom: 0.5rem; display: block; }
+    h2 { font-size: 1.75rem; margin-bottom: 1.25rem; }
+    p, li { color: #334155; line-height: 1.8; margin-bottom: 0.85rem; }
+    ul { padding-left: 1.25rem; }
+    .formula-box { background: #FFF7ED; border-left: 4px solid var(--orange); padding: 1rem 1.25rem; border-radius: 8px; margin: 1.25rem 0; }
+    .tbd-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--orange); background: #FFEDD5; padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 700; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.92rem; }
+    th, td { border: 1px solid var(--border); padding: 0.75rem; text-align: left; }
+    th { background: #F8FAFC; color: var(--blue); }
+    .controls { max-width: 920px; width: 100%; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    button { background: var(--card); color: var(--text); border: 1px solid var(--border); padding: 0.6rem 1.25rem; border-radius: 8px; cursor: pointer; font-weight: 700; }
+    button:hover { background: var(--orange); color: #fff; border-color: var(--orange); }
+  </style>
+</head>
+<body>
+  <div>
+    <div class="top-bar">
+      <a class="back-link" href="../index.html">&larr; 返回實驗室互動學習首頁</a>
+      <span id="slide-indicator" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--muted);">Slide 1 / 4</span>
+    </div>
+    <div class="progress-wrap"><div class="progress-bar" id="progress"></div></div>
+  </div>
+  <main class="slide-container">
+    <section class="slide active">
+      <span class="tag">SLIDE 01 // LAB SAFETY &amp; NIR HAZARDS</span>
+      <h2>1. 1045nm Class 3B 掃頻雷射之光學特性與防護規範</h2>
+      <p>本實驗室使用之掃頻雷射中心波長為 $1045\text{ nm}$，平均輸出功率達 $30\text{ mW}$ 以上，屬於 <strong>Class 3B 近紅外光（NIR）不可見光雷射</strong>。由於人眼對 $1045\text{ nm}$ 無視覺感應，無法觸發眨眼反射（Blink Reflex），進暗房開啟電源鑰匙前必須全程配戴 $\text{OD } 5+$（涵蓋 $950\text{ nm} \sim 1100\text{ nm}$）防護鏡，並取下手錶與金屬戒指。</p>
+    </section>
+    <section class="slide">
+      <span class="tag">SLIDE 02 // MPE &amp; POWER DENSITY FORMULA</span>
+      <h2>2. ANSI Z136.1 入眼功率限制與實測公式</h2>
+      <p>搭配 LSM02-BB 物鏡與 90D 眼底鏡成像時，最大允許曝露量（MPE）依 ANSI Z136.1 規定在角膜等效平面不得超過 $1.8\text{ mW}$。功率密度計算公式為：</p>
+      <div class="formula-box">
+        $$E = \frac{P}{\pi (d/2)^2}$$
+        <p style="margin-top:0.5rem; margin-bottom:0;">其中角膜平面光斑直徑 $d$ 實測值目前為 <span class="tbd-badge">[待實驗室實測補齊]</span>（依 AGENTS.md 防幻覺規則標註）。量測前光功率計探頭務必從預設 $633\text{ nm}$ 切換至 $1045\text{ nm}$。</p>
+      </div>
+    </section>
+    <section class="slide">
+      <span class="tag">SLIDE 03 // BPD SATURATION &amp; FIBER CLEANING</span>
+      <h2>3. 平衡光電探測器 (BPD) 飽和與 APC 光纖清潔規範</h2>
+      <table>
+        <thead><tr><th>硬體單元</th><th>異常現象</th><th>標準處置程序 (Source: wiki/)</th></tr></thead>
+        <tbody>
+          <tr><td>BPD 探測器</td><td>干涉波形變水平直線且紅燈亮起</td><td>立即調降參考臂可調光衰減器，使單臂功率回到 $0.5 \sim 1.0\text{ mW}$</td></tr>
+          <tr><td>APC 斜面光纖</td><td>端面灰塵導致反射損耗增加</td><td>嚴禁用衛生紙沾酒精擦拭，必須使用 Cletop 光纖專用清潔盒單向輕推</td></tr>
+        </tbody>
+      </table>
+    </section>
+    <section class="slide">
+      <span class="tag">SLIDE 04 // SUMMARY &amp; WIKI LINKAGE</span>
+      <h2>4. 跨模組知識節點雙向連結</h2>
+      <ul>
+        <li>當確認參考臂與樣品臂功率皆符合安全範圍後，即可進入雙通道偏振相位重建流程：<code>[[ps-oct-birefringence]]</code>。</li>
+        <li>若調整衰減器後仍無干涉條紋，請接續檢查光程差是否落於同調長度內：<code>[[oct-basic-principle]]</code>。</li>
+      </ul>
+    </section>
+  </main>
+  <div class="controls">
+    <button onclick="moveSlide(-1)">&larr; 上一節 (Prev)</button>
+    <span style="color: var(--muted); font-size: 0.85rem;">支援鍵盤 &larr; &rarr; 方向鍵翻頁</span>
+    <button onclick="moveSlide(1)">下一節 (Next) &rarr;</button>
+  </div>
+  <script>
+    let current = 0;
+    const slides = document.querySelectorAll('.slide');
+    const indicator = document.getElementById('slide-indicator');
+    const progress = document.getElementById('progress');
+    function moveSlide(step) {
+      current = (current + step + slides.length) % slides.length;
+      slides.forEach((s, i) => s.classList.toggle('active', i === current));
+      indicator.textContent = `Slide ${current + 1} / ${slides.length}`;
+      progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') moveSlide(1);
+      if (e.key === 'ArrowLeft') moveSlide(-1);
+    });
+  </script>
+</body>
+</html>
