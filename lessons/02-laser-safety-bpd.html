@@ -1,100 +1,167 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-Hant" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lesson 02 | 1045nm Class 3B 掃頻雷射安全與 BPD 探測器清潔規範</title>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <title>Module 07 | 1045nm Class 3B 掃頻雷射安全、ANSI 入眼上限與光纖清潔</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
     onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
   <style>
-    :root { --bg: #FAF7F2; --card: #FFFFFF; --border: #E2E8F0; --orange: #EA580C; --blue: #0284C7; --text: #1E293B; --muted: #64748B; }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: var(--text); font-family: 'Noto Sans TC', sans-serif; min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; padding: 1.5rem; }
-    .top-bar { max-width: 920px; width: 100%; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
-    .back-link { color: var(--blue); text-decoration: none; font-weight: 700; }
-    .progress-wrap { width: 100%; max-width: 920px; margin: 0.75rem auto 0; background: var(--border); height: 6px; border-radius: 3px; }
-    .progress-bar { height: 100%; background: var(--orange); width: 25%; transition: width 0.25s ease; }
-    .slide-container { max-width: 920px; width: 100%; margin: 2rem auto; background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 2.5rem; min-height: 440px; box-shadow: 0 10px 25px rgba(0,0,0,0.06); }
-    .slide { display: none; } .slide.active { display: block; }
-    .tag { font-family: 'JetBrains Mono', monospace; color: var(--orange); font-size: 0.82rem; font-weight: 700; margin-bottom: 0.5rem; display: block; }
-    h2 { font-size: 1.75rem; margin-bottom: 1.25rem; }
-    p, li { color: #334155; line-height: 1.8; margin-bottom: 0.85rem; }
-    ul { padding-left: 1.25rem; }
-    .formula-box { background: #FFF7ED; border-left: 4px solid var(--orange); padding: 1rem 1.25rem; border-radius: 8px; margin: 1.25rem 0; }
-    .tbd-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--orange); background: #FFEDD5; padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 700; }
-    table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.92rem; }
-    th, td { border: 1px solid var(--border); padding: 0.75rem; text-align: left; }
-    th { background: #F8FAFC; color: var(--blue); }
-    .controls { max-width: 920px; width: 100%; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-    button { background: var(--card); color: var(--text); border: 1px solid var(--border); padding: 0.6rem 1.25rem; border-radius: 8px; cursor: pointer; font-weight: 700; }
-    button:hover { background: var(--orange); color: #fff; border-color: var(--orange); }
+    :root[data-theme="light"] { --bg-main:#FAF7F2; --bg-sec:#F3EFE6; --bg-card:#FFFFFF; --text-main:#1E293B; --text-sec:#475569; --text-muted:#64748B; --border:#E2E8F0; --orange:#EA580C; --orange-soft:#FFEDD5; --blue:#0284C7; --blue-soft:#E0F2FE; --green:#059669; --green-soft:#D1FAE5; --shadow:0 12px 28px rgba(15,23,42,0.08); }
+    :root[data-theme="dark"] { --bg-main:#0B0F17; --bg-sec:#111827; --bg-card:#1E293B; --text-main:#F8FAFC; --text-sec:#CBD5E1; --text-muted:#94A3B8; --border:#334155; --orange:#F97316; --orange-soft:rgba(249,115,22,0.18); --blue:#38BDF8; --blue-soft:rgba(56,189,248,0.16); --green:#34D399; --green-soft:rgba(52,211,153,0.16); --shadow:0 14px 32px rgba(0,0,0,0.45); }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { background:var(--bg-main); color:var(--text-main); font-family:'Noto Sans TC',sans-serif; line-height:1.75; min-height:100vh; display:flex; flex-direction:column; justify-content:space-between; transition:background 0.25s,color 0.25s; }
+    .navbar { background:var(--bg-card); border-bottom:1px solid var(--border); padding:0.85rem 1.5rem; position:sticky; top:0; z-index:20; }
+    .nav-inner { max-width:980px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+    .back-btn { color:var(--blue); text-decoration:none; font-weight:700; font-size:0.92rem; }
+    .back-btn:hover { color:var(--orange); }
+    .dots { display:flex; gap:0.5rem; align-items:center; }
+    .dot { width:28px; height:28px; border-radius:50%; border:1px solid var(--border); background:var(--bg-sec); color:var(--text-muted); font-family:'JetBrains Mono',monospace; font-size:0.8rem; font-weight:700; display:grid; place-items:center; cursor:pointer; }
+    .dot.active { background:var(--orange); color:#fff; border-color:var(--orange); }
+    .theme-btn { background:var(--bg-sec); color:var(--text-main); border:1px solid var(--border); padding:0.4rem 0.85rem; border-radius:99px; cursor:pointer; font-size:0.82rem; font-weight:700; }
+    .progress-track { max-width:980px; width:100%; margin:0 auto; height:5px; background:var(--border); }
+    .progress-fill { height:100%; background:linear-gradient(90deg,var(--orange),var(--blue)); width:25%; transition:width 0.25s; }
+    .stage { max-width:980px; width:100%; margin:2rem auto; padding:0 1.25rem; flex:1; }
+    .slide-card { background:var(--bg-card); border:1px solid var(--border); border-radius:22px; padding:2.5rem; box-shadow:var(--shadow); min-height:470px; }
+    .slide { display:none; }
+    .slide.active { display:block; animation:fadeUp 0.3s ease; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+    .badge { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:0.78rem; font-weight:700; background:var(--orange-soft); color:var(--orange); padding:0.25rem 0.75rem; border-radius:99px; margin-bottom:0.85rem; }
+    h1 { font-size:1.85rem; font-weight:900; margin-bottom:1rem; line-height:1.35; }
+    p, li { color:var(--text-sec); font-size:1rem; margin-bottom:0.85rem; }
+    ul { padding-left:1.35rem; margin-bottom:1rem; }
+    .callout { background:var(--bg-sec); border-left:4px solid var(--orange); padding:1.15rem 1.35rem; border-radius:12px; margin:1.15rem 0; }
+    .callout-blue { background:var(--blue-soft); border-left:4px solid var(--blue); padding:1.15rem 1.35rem; border-radius:12px; margin:1.15rem 0; }
+    .tbd-badge { font-family:'JetBrains Mono',monospace; font-size:0.82rem; background:var(--orange-soft); color:var(--orange); padding:0.15rem 0.5rem; border-radius:5px; font-weight:700; }
+    .wiki-tag { font-family:'JetBrains Mono',monospace; font-size:0.84rem; background:var(--blue-soft); color:var(--blue); padding:0.15rem 0.5rem; border-radius:5px; font-weight:600; }
+    table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.92rem; }
+    th, td { border:1px solid var(--border); padding:0.75rem; text-align:left; }
+    th { background:var(--bg-sec); color:var(--blue); font-family:'JetBrains Mono',monospace; }
+    .quiz-btn { display:block; width:100%; text-align:left; background:var(--bg-sec); color:var(--text-main); border:1px solid var(--border); padding:0.8rem 1rem; border-radius:10px; margin-bottom:0.6rem; cursor:pointer; font-weight:600; transition:0.2s; }
+    .quiz-btn:hover { border-color:var(--orange); }
+    .footer-nav { max-width:980px; width:100%; margin:0 auto 2rem; padding:0 1.25rem; display:flex; justify-content:space-between; align-items:center; }
+    .nav-btn { background:var(--bg-card); color:var(--text-main); border:1px solid var(--border); padding:0.65rem 1.35rem; border-radius:12px; font-weight:700; cursor:pointer; font-family:'JetBrains Mono',monospace; transition:0.2s; }
+    .nav-btn:hover { background:var(--orange); color:#fff; border-color:var(--orange); }
   </style>
 </head>
 <body>
   <div>
-    <div class="top-bar">
-      <a class="back-link" href="../index.html">&larr; 返回實驗室互動學習首頁</a>
-      <span id="slide-indicator" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--muted);">Slide 1 / 4</span>
-    </div>
-    <div class="progress-wrap"><div class="progress-bar" id="progress"></div></div>
-  </div>
-  <main class="slide-container">
-    <section class="slide active">
-      <span class="tag">SLIDE 01 // LAB SAFETY &amp; NIR HAZARDS</span>
-      <h2>1. 1045nm Class 3B 掃頻雷射之光學特性與防護規範</h2>
-      <p>本實驗室使用之掃頻雷射中心波長為 $1045\text{ nm}$，平均輸出功率達 $30\text{ mW}$ 以上，屬於 <strong>Class 3B 近紅外光（NIR）不可見光雷射</strong>。由於人眼對 $1045\text{ nm}$ 無視覺感應，無法觸發眨眼反射（Blink Reflex），進暗房開啟電源鑰匙前必須全程配戴 $\text{OD } 5+$（涵蓋 $950\text{ nm} \sim 1100\text{ nm}$）防護鏡，並取下手錶與金屬戒指。</p>
-    </section>
-    <section class="slide">
-      <span class="tag">SLIDE 02 // MPE &amp; POWER DENSITY FORMULA</span>
-      <h2>2. ANSI Z136.1 入眼功率限制與實測公式</h2>
-      <p>搭配 LSM02-BB 物鏡與 90D 眼底鏡成像時，最大允許曝露量（MPE）依 ANSI Z136.1 規定在角膜等效平面不得超過 $1.8\text{ mW}$。功率密度計算公式為：</p>
-      <div class="formula-box">
-        $$E = \frac{P}{\pi (d/2)^2}$$
-        <p style="margin-top:0.5rem; margin-bottom:0;">其中角膜平面光斑直徑 $d$ 實測值目前為 <span class="tbd-badge">[待實驗室實測補齊]</span>（依 AGENTS.md 防幻覺規則標註）。量測前光功率計探頭務必從預設 $633\text{ nm}$ 切換至 $1045\text{ nm}$。</p>
+    <nav class="navbar">
+      <div class="nav-inner">
+        <a href="../index.html" class="back-btn">← 返回實驗室互動學習首頁</a>
+        <div class="dots">
+          <div class="dot active" onclick="goSlide(0)">1</div>
+          <div class="dot" onclick="goSlide(1)">2</div>
+          <div class="dot" onclick="goSlide(2)">3</div>
+          <div class="dot" onclick="goSlide(3)">4</div>
+        </div>
+        <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 切換暗房模式</button>
       </div>
-    </section>
-    <section class="slide">
-      <span class="tag">SLIDE 03 // BPD SATURATION &amp; FIBER CLEANING</span>
-      <h2>3. 平衡光電探測器 (BPD) 飽和與 APC 光纖清潔規範</h2>
-      <table>
-        <thead><tr><th>硬體單元</th><th>異常現象</th><th>標準處置程序 (Source: wiki/)</th></tr></thead>
-        <tbody>
-          <tr><td>BPD 探測器</td><td>干涉波形變水平直線且紅燈亮起</td><td>立即調降參考臂可調光衰減器，使單臂功率回到 $0.5 \sim 1.0\text{ mW}$</td></tr>
-          <tr><td>APC 斜面光纖</td><td>端面灰塵導致反射損耗增加</td><td>嚴禁用衛生紙沾酒精擦拭，必須使用 Cletop 光纖專用清潔盒單向輕推</td></tr>
-        </tbody>
-      </table>
-    </section>
-    <section class="slide">
-      <span class="tag">SLIDE 04 // SUMMARY &amp; WIKI LINKAGE</span>
-      <h2>4. 跨模組知識節點雙向連結</h2>
-      <ul>
-        <li>當確認參考臂與樣品臂功率皆符合安全範圍後，即可進入雙通道偏振相位重建流程：<code>[[ps-oct-birefringence]]</code>。</li>
-        <li>若調整衰減器後仍無干涉條紋，請接續檢查光程差是否落於同調長度內：<code>[[oct-basic-principle]]</code>。</li>
-      </ul>
-    </section>
-  </main>
-  <div class="controls">
-    <button onclick="moveSlide(-1)">&larr; 上一節 (Prev)</button>
-    <span style="color: var(--muted); font-size: 0.85rem;">支援鍵盤 &larr; &rarr; 方向鍵翻頁</span>
-    <button onclick="moveSlide(1)">下一節 (Next) &rarr;</button>
+    </nav>
+    <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
   </div>
+
+  <main class="stage">
+    <div class="slide-card">
+      <section class="slide active">
+        <span class="badge">🛡️ MODULE 07 // SLIDE 1 OF 4</span>
+        <h1>1. 1045nm Class 3B 近紅外光雷射之隱形風險與防護</h1>
+        <p>本實驗室使用之掃頻雷射中心波長為 $1045\text{ nm}$，裸光輸出平均功率達 $30\text{ mW}$ 以上，屬於 <strong>Class 3B 近紅外光（NIR）不可見光雷射</strong>。由於人眼視網膜感光細胞對 $1045\text{ nm}$ 無視覺反應，被照射時<strong>完全不會觸發眨眼反射（Blink Reflex）或瞳孔收縮</strong>，但光束卻能穿透角膜與水晶體聚焦於視網膜與脈絡膜，造成永久性熱損傷！</p>
+        <div class="callout">
+          <strong>⚠️ 進入暗房三大鐵則：</strong><br/>
+          1. 轉動雷射主機電源鑰匙前，全員必須配戴光學密度 <strong>$\text{OD } 5+$（涵蓋 $950\text{ nm} \sim 1100\text{ nm}$ 波段）</strong>之認證雷射防護鏡（衰減率達 $10^{-5}$）。<br/>
+          2. 嚴禁配戴手錶、金屬戒指或反光飾品跨越光學桌平面，防止鏡面反射光掃射眼睛。<br/>
+          3. 對光時嚴禁彎腰使眼睛高度與光學桌平行。
+        </div>
+      </section>
+
+      <section class="slide">
+        <span class="badge">🛡️ MODULE 07 // SLIDE 2 OF 4</span>
+        <h1>2. ANSI Z136.1 入眼功率安全上限與實測公式</h1>
+        <p>當系統搭配 LSM02-BB 掃描物鏡與 90D 眼底鏡進行眼科成像時，依據國際雷射安全標準 <strong>ANSI Z136.1</strong>，角膜等效平面之最大允許曝露量（MPE）嚴格限制在 <strong>$\le 1.8\text{ mW}$</strong>（本實驗室日常離體豬眼與活體實驗設定於 $1.2 \sim 1.5\text{ mW}$）。</p>
+        <div class="callout-blue" style="text-align:center;">
+          $$E = \frac{P}{\pi (d/2)^2}$$
+        </div>
+        <p>其中 $P$ 為角膜平面入射功率，$E$ 為功率密度，而角膜平面光斑直徑 $d$ 之實測數值目前於原始筆記中為 <span class="tbd-badge">[待實驗室實測補齊]</span>（遵循 <code>AGENTS.md</code> 防幻覺規定標註）。</p>
+        <p><strong>💡 功率計校正重點：</strong>每次實驗前使用光功率計（Optical Power Meter）量測樣品臂輸出時，務必確認探頭波長檔位已從預設的 $633\text{ nm}$ 切換至 <strong>$1045\text{ nm}$</strong>，否則讀數會產生高達 20% 以上的偏差！</p>
+      </section>
+
+      <section class="slide">
+        <span class="badge">🛡️ MODULE 07 // SLIDE 3 OF 4</span>
+        <h1>3. 平衡光電探測器 (BPD) 飽和排除與 APC 光纖清潔</h1>
+        <table>
+          <thead>
+            <tr><th>硬體項目</th><th>異常現象與物理原因</th><th>標準處置程序 (SOP)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>BPD 平衡探測器</strong></td><td>LabVIEW 干涉波形瞬間變成水平直線，且探測器紅燈恆亮（跨阻放大器飽和）</td><td>立即調降參考臂<strong>可調光衰減器（VOA）</strong>，使單臂功率回歸 $0.5 \sim 1.0\text{ mW}$ 區間 <span class="wiki-tag">[[ps-oct-birefringence]]</span></td></tr>
+            <tr><td><strong>APC 斜面光纖接頭</strong></td><td>端面沾附灰塵或油漬，導致耦合效率驟降或產生寄生干涉條紋</td><td><strong>絕對禁止</strong>使用一般衛生紙或拭鏡紙沾酒精來回擦拭！必須使用 <strong>Cletop 光纖專用清潔盒</strong>沿同一方向單向輕推一次</td></tr>
+            <tr><td><strong>深夜留守三關原則</strong></td><td>夜間結束暗房實驗離場前之環安衛檢查</td><td>① 關閉雷射電源並拔除鑰匙歸位；② 關閉 DAQ 與振鏡電源；③ 確認除濕機與氣浮光學桌氣閥狀態</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="slide">
+        <span class="badge">🛡️ MODULE 07 // SLIDE 4 OF 4</span>
+        <h1>4. 隨堂互動小測驗 &amp; 雙向連結延伸</h1>
+        <p>測試看看你是否具備進入生醫光電暗房的安全資格：</p>
+        <button class="quiz-btn" onclick="checkAns(this, false)">A. 清潔 APC 8度斜面光纖接頭時，直接拿實驗室桌上的一般衛生紙沾酒精用力擦拭最乾淨。</button>
+        <button class="quiz-btn" onclick="checkAns(this, true)">B. 開啟 1045nm 雷射前必須配戴 OD 5+ 護目鏡、將功率計切至 1045nm 確認樣品端 ≤ 1.8 mW，並用 Cletop 單向清潔光纖！</button>
+        <button class="quiz-btn" onclick="checkAns(this, false)">C. 1045nm 雷射因為肉眼看不見亮光，所以就算直視光纖端面也不會傷害視網膜。</button>
+        <div id="quizFeedback" style="margin-top:0.85rem; font-weight:700;"></div>
+
+        <div class="callout" style="margin-top:1.5rem;">
+          <strong>🔗 下一站 Wiki 雙向連結：</strong><br/>
+          看完了實驗室所有光學、硬體、演算法與環安衛規範，最後一課看看我們如何用 <code>AGENTS.md</code> 驅動 AI 自動維護這整座知識庫：<br/>
+          👉 <a href="08-agentic-wiki-workflow.html" style="color:var(--orange); font-weight:700;">前往 Module 08：用 AGENTS.md 打造實驗室 LLM Wiki 與自動進度回報 Agent &rarr;</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer-nav">
+    <button class="nav-btn" onclick="stepSlide(-1)">← 上一頁 (Prev)</button>
+    <span style="color:var(--text-muted); font-size:0.85rem; font-family:'JetBrains Mono',monospace;">支援鍵盤 ← → 方向鍵翻頁</span>
+    <button class="nav-btn" onclick="stepSlide(1)">下一頁 (Next) →</button>
+  </footer>
+
   <script>
-    let current = 0;
+    let cur = 0;
     const slides = document.querySelectorAll('.slide');
-    const indicator = document.getElementById('slide-indicator');
-    const progress = document.getElementById('progress');
-    function moveSlide(step) {
-      current = (current + step + slides.length) % slides.length;
-      slides.forEach((s, i) => s.classList.toggle('active', i === current));
-      indicator.textContent = `Slide ${current + 1} / ${slides.length}`;
-      progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+    const dots = document.querySelectorAll('.dot');
+    const prog = document.getElementById('progFill');
+    function render() {
+      slides.forEach((s, i) => s.classList.toggle('active', i === cur));
+      dots.forEach((d, i) => d.classList.toggle('active', i === cur));
+      prog.style.width = `${((cur + 1) / slides.length) * 100}%`;
+    }
+    function stepSlide(delta) { cur = (cur + delta + slides.length) % slides.length; render(); }
+    function goSlide(idx) { cur = idx; render(); }
+    function toggleTheme() {
+      const root = document.documentElement;
+      const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      root.setAttribute('data-theme', next);
+      document.getElementById('themeBtn').textContent = next === 'light' ? '🌙 切換暗房模式' : '🌞 切換暖陽模式';
+    }
+    function checkAns(btn, ok) {
+      const fb = document.getElementById('quizFeedback');
+      if (ok) {
+        btn.style.background = 'var(--green-soft)'; btn.style.borderColor = 'var(--green)';
+        fb.style.color = 'var(--green)';
+        fb.textContent = '🎉 恭喜通過暗房安全檢核！牢記 OD 5+ 護目鏡、1.8 mW 上限與 Cletop 單向清潔，保護自己也保護精密儀器！';
+      } else {
+        btn.style.background = 'var(--orange-soft)'; btn.style.borderColor = 'var(--orange)';
+        fb.style.color = 'var(--orange)';
+        fb.textContent = '⚠️ 危險動作！一般衛生紙會刮傷光纖鍍膜，且 1045nm 近紅外光無眨眼反射，直視會導致嚴重眼底損傷！';
+      }
     }
     document.addEventListener('keydown', e => {
-      if (e.key === 'ArrowRight') moveSlide(1);
-      if (e.key === 'ArrowLeft') moveSlide(-1);
+      if (e.key === 'ArrowRight') stepSlide(1);
+      if (e.key === 'ArrowLeft') stepSlide(-1);
     });
   </script>
 </body>
