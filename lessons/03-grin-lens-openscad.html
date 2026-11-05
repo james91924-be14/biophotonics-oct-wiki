@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Module 03 | GRIN 梯度折射率透鏡微探頭與 OpenSCAD 3D 列印光機</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    :root[data-theme="light"] {
+      --bg-main: #FAF7F2; --bg-sec: #F3EFE6; --bg-card: #FFFFFF;
+      --text-main: #1E293B; --text-sec: #475569; --text-muted: #64748B;
+      --border: #E2E8F0; --orange: #EA580C; --orange-soft: #FFEDD5;
+      --blue: #0284C7; --blue-soft: #E0F2FE; --green: #059669; --green-soft: #D1FAE5;
+      --shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+    }
+    :root[data-theme="dark"] {
+      --bg-main: #0B0F17; --bg-sec: #111827; --bg-card: #1E293B;
+      --text-main: #F8FAFC; --text-sec: #CBD5E1; --text-muted: #94A3B8;
+      --border: #334155; --orange: #F97316; --orange-soft: rgba(249, 115, 22, 0.18);
+      --blue: #38BDF8; --blue-soft: rgba(56, 189, 248, 0.16); --green: #34D399; --green-soft: rgba(52, 211, 153, 0.16);
+      --shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg-main); color: var(--text-main);
+      font-family: 'Noto Sans TC', sans-serif; line-height: 1.75;
+      min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between;
+      transition: background 0.25s, color 0.25s;
+    }
+    .navbar { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 0.85rem 1.5rem; position: sticky; top: 0; z-index: 20; }
+    .nav-inner { max-width: 980px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .back-btn { color: var(--blue); text-decoration: none; font-weight: 700; font-size: 0.92rem; }
+    .back-btn:hover { color: var(--orange); }
+    .dots { display: flex; gap: 0.5rem; align-items: center; }
+    .dot {
+      width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border);
+      background: var(--bg-sec); color: var(--text-muted); font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem; font-weight: 700; display: grid; place-items: center; cursor: pointer;
+    }
+    .dot.active { background: var(--orange); color: #fff; border-color: var(--orange); }
+    .theme-btn { background: var(--bg-sec); color: var(--text-main); border: 1px solid var(--border); padding: 0.4rem 0.85rem; border-radius: 99px; cursor: pointer; font-size: 0.82rem; font-weight: 700; }
+    .progress-track { max-width: 980px; width: 100%; margin: 0 auto; height: 5px; background: var(--border); }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--orange), var(--blue)); width: 25%; transition: width 0.25s; }
+    .stage { max-width: 980px; width: 100%; margin: 2rem auto; padding: 0 1.25rem; flex: 1; }
+    .slide-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 22px; padding: 2.5rem; box-shadow: var(--shadow); min-height: 470px; }
+    .slide { display: none; }
+    .slide.active { display: block; animation: fadeUp 0.3s ease; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .badge { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 700; background: var(--blue-soft); color: var(--blue); padding: 0.25rem 0.75rem; border-radius: 99px; margin-bottom: 0.85rem; }
+    h1 { font-size: 1.85rem; font-weight: 900; margin-bottom: 1rem; line-height: 1.35; }
+    p, li { color: var(--text-sec); font-size: 1rem; margin-bottom: 0.85rem; }
+    ul { padding-left: 1.35rem; margin-bottom: 1rem; }
+    .callout { background: var(--bg-sec); border-left: 4px solid var(--orange); padding: 1.15rem 1.35rem; border-radius: 12px; margin: 1.15rem 0; }
+    .callout-blue { background: var(--blue-soft); border-left: 4px solid var(--blue); padding: 1.15rem 1.35rem; border-radius: 12px; margin: 1.15rem 0; }
+    .code-block { background: #0F172A; color: #E2E8F0; font-family: 'JetBrains Mono', monospace; font-size: 0.86rem; padding: 1rem 1.25rem; border-radius: 10px; overflow-x: auto; margin: 1rem 0; }
+    .wiki-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.84rem; background: var(--blue-soft); color: var(--blue); padding: 0.15rem 0.5rem; border-radius: 5px; font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.92rem; }
+    th, td { border: 1px solid var(--border); padding: 0.75rem; text-align: left; }
+    th { background: var(--bg-sec); color: var(--blue); font-family: 'JetBrains Mono', monospace; }
+    .quiz-btn { display: block; width: 100%; text-align: left; background: var(--bg-sec); color: var(--text-main); border: 1px solid var(--border); padding: 0.8rem 1rem; border-radius: 10px; margin-bottom: 0.6rem; cursor: pointer; font-weight: 600; transition: 0.2s; }
+    .quiz-btn:hover { border-color: var(--orange); }
+    .footer-nav { max-width: 980px; width: 100%; margin: 0 auto 2rem; padding: 0 1.25rem; display: flex; justify-content: space-between; align-items: center; }
+    .nav-btn { background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); padding: 0.65rem 1.35rem; border-radius: 12px; font-weight: 700; cursor: pointer; font-family: 'JetBrains Mono', monospace; transition: 0.2s; }
+    .nav-btn:hover { background: var(--orange); color: #fff; border-color: var(--orange); }
+  </style>
+</head>
+<body>
+  <div>
+    <nav class="navbar">
+      <div class="nav-inner">
+        <a href="../index.html" class="back-btn">← 返回實驗室互動學習首頁</a>
+        <div class="dots">
+          <div class="dot active" onclick="goSlide(0)">1</div>
+          <div class="dot" onclick="goSlide(1)">2</div>
+          <div class="dot" onclick="goSlide(2)">3</div>
+          <div class="dot" onclick="goSlide(3)">4</div>
+        </div>
+        <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 切換暗房模式</button>
+      </div>
+    </nav>
+    <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+  </div>
+
+  <main class="stage">
+    <div class="slide-card">
+      <!-- Slide 1 -->
+      <section class="slide active">
+        <span class="badge">🌱 MODULE 03 // SLIDE 1 OF 4</span>
+        <h1>1. 為什麼需要 GRIN 梯度折射率透鏡微探頭？</h1>
+        <p>傳統球面透鏡依賴「表面曲率」來折射光線，體積較大且難以直接與直徑僅 $125\ \mu\text{m}$ 的單模光纖（SMF）貼合。在內視鏡 OCT 或深層組織微創探頭中，我們採用<strong>梯度折射率透鏡（Gradient-Index Lens, GRIN Lens）</strong>。</p>
+        <div class="callout-blue">
+          <strong>🔬 GRIN Lens 徑向拋物線折射率分布公式：</strong>
+          $$n(r) = n_0 \left(1 - \frac{1}{2} g^2 r^2\right)$$
+          其中 $n_0$ 為圓柱中心軸折射率，$r$ 為徑向距離，$g$ 為梯度常數。光線在 GRIN 透鏡內部會沿著正弦曲線平滑彎曲（Self-Focusing），一個完整正弦週期的長度稱為一個<strong>節距（Pitch, $P = \frac{2\pi}{g}$）</strong>。
+        </div>
+        <p>透過精準裁切不同節距（如 $0.23\text{ Pitch}$ 或 $0.25\text{ Pitch}$）並搭配玻璃隔片（Glass Spacer），即可在平面端面上直接實現光束準直或微米級聚焦！</p>
+      </section>
+
+      <!-- Slide 2 -->
+      <section class="slide">
+        <span class="badge">🌱 MODULE 03 // SLIDE 2 OF 4</span>
+        <h1>2. 微光學探頭組裝與 UV 光學膠固化 SOP</h1>
+        <p>在組裝毫米級 GRIN 內視鏡探頭與中繼透鏡（Relay Lens）時，任何微小的角度偏移或膠水溢流都會造成嚴重的回光損耗與像差：</p>
+        <table>
+          <thead>
+            <tr><th>操作工序</th><th>標準作業規範 (SOP)</th><th>禁止事項與風險提示</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>透鏡夾持與對位</td><td>必須使用<strong>鐵氟龍或陶瓷尖頭鑷子</strong>搭配五軸微調架對光</td><td>嚴禁使用金屬硬質鑷子直接夾持 GRIN 圓柱邊緣，極易崩角碎裂</td></tr>
+            <tr><td>UV 光學膠點塗</td><td>使用微量點膠針頭沾取極少許 UV 膠，利用毛細現象均勻填滿端面</td><td>避免膠水溢流至透鏡側面改變邊界條件，或產生氣泡造成強散射</td></tr>
+            <tr><td>同軸對準與固化</td><td>先開啟低功率對光光源並即時監測返回干涉訊號峰值，再分次照射 UV 燈</td><td>切勿在未確認光軸同心度前直接高強度曝光鎖死</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Slide 3 -->
+      <section class="slide">
+        <span class="badge">🌱 MODULE 03 // SLIDE 3 OF 4</span>
+        <h1>3. OpenSCAD 參數化光學探頭外殼與微流體治具建模</h1>
+        <p>為了固定 90D 眼底鏡、13mm 四分之一波片（QWP）以及製作微流體器官晶片（Organ-on-a-chip）U 型流道模具，本實驗室採用純程式碼建模工具 <strong>OpenSCAD</strong> 進行 FDM / SLA 3D 列印：</p>
+        <div class="code-block">
+// OpenSCAD 實驗室光學轉接環標準參數範本
+$fn = 120; // 強制設定高圓弧細分度，防止圓孔退化為多邊形卡死鏡筒
+lens_diameter = 13.0;
+tolerance = 0.18; // 預留 +0.15 ~ +0.20 mm 3D 列印熱脹冷縮公差
+
+difference() {
+    cylinder(h = 8.0, d = lens_diameter + 6.0);
+    translate([0, 0, -0.1])
+        cylinder(h = 8.2, d = lens_diameter + tolerance);
+}
+        </div>
+        <ul>
+          <li><strong>材質與顏色規範</strong>：所有光路外殼與探頭套筒一律使用<strong>消光黑（Matte Black）</strong>線材或樹脂列印，防止 1045nm 近紅外光於內壁產生漫反射雜散光。</li>
+        </ul>
+      </section>
+
+      <!-- Slide 4 -->
+      <section class="slide">
+        <span class="badge">🌱 MODULE 03 // SLIDE 4 OF 4</span>
+        <h1>4. 隨堂互動小測驗 &amp; 雙向連結延伸</h1>
+        <p>測試看看你是否掌握了微光學組裝與 OpenSCAD 建模要領：</p>
+        <button class="quiz-btn" onclick="checkAns(this, false)">A. 用 OpenSCAD 畫 13mm 透鏡槽時，孔徑直接設 13.0mm 不用留公差，且 $fn 維持預設值即可。</button>
+        <button class="quiz-btn" onclick="checkAns(this, true)">B. 必須設定 $fn = 120 確保圓孔平滑，並預留 +0.15 ~ +0.20 mm 公差；夾取 GRIN 透鏡須用非金屬鑷子！</button>
+        <button class="quiz-btn" onclick="checkAns(this, false)">C. 為了讓光學探頭看起來美觀，應該使用白色反光亮面材質列印光機內壁。</button>
+        <div id="quizFeedback" style="margin-top:0.85rem; font-weight:700;"></div>
+
+        <div class="callout" style="margin-top:1.5rem;">
+          <strong>🔗 下一站 Wiki 雙向連結：</strong><br/>
+          完成光學探頭組裝後，下一步我們要讓光束高速掃描起來！看看如何用 LabVIEW 同步控制振鏡與 DAQ 卡：<br/>
+          👉 <a href="04-galvo-daq-sync.html" style="color:var(--orange); font-weight:700;">前往 Module 04：LabVIEW 雙軸 Galvo 振鏡與 200kHz DAQ 高速時脈同步 &rarr;</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer-nav">
+    <button class="nav-btn" onclick="stepSlide(-1)">← 上一頁 (Prev)</button>
+    <span style="color:var(--text-muted); font-size:0.85rem; font-family:'JetBrains Mono',monospace;">支援鍵盤 ← → 方向鍵翻頁</span>
+    <button class="nav-btn" onclick="stepSlide(1)">下一頁 (Next) →</button>
+  </footer>
+
+  <script>
+    let cur = 0;
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    const prog = document.getElementById('progFill');
+    function render() {
+      slides.forEach((s, i) => s.classList.toggle('active', i === cur));
+      dots.forEach((d, i) => d.classList.toggle('active', i === cur));
+      prog.style.width = `${((cur + 1) / slides.length) * 100}%`;
+    }
+    function stepSlide(delta) { cur = (cur + delta + slides.length) % slides.length; render(); }
+    function goSlide(idx) { cur = idx; render(); }
+    function toggleTheme() {
+      const root = document.documentElement;
+      const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      root.setAttribute('data-theme', next);
+      document.getElementById('themeBtn').textContent = next === 'light' ? '🌙 切換暗房模式' : '🌞 切換暖陽模式';
+    }
+    function checkAns(btn, ok) {
+      const fb = document.getElementById('quizFeedback');
+      if (ok) {
+        btn.style.background = 'var(--green-soft)'; btn.style.borderColor = 'var(--green)';
+        fb.style.color = 'var(--green)';
+        fb.textContent = '🎉 答對了！高 $fn 細分度與適當的熱脹冷縮公差是 3D 列印光學治具成功組裝的關鍵！';
+      } else {
+        btn.style.background = 'var(--orange-soft)'; btn.style.borderColor = 'var(--orange)';
+        fb.style.color = 'var(--orange)';
+        fb.textContent = '💡 再想一下！提示：3D 列印塑膠冷卻時會微幅收縮，且預設圓弧分段數太低會變成多邊形。';
+      }
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') stepSlide(1);
+      if (e.key === 'ArrowLeft') stepSlide(-1);
+    });
+  </script>
+</body>
+</html>
