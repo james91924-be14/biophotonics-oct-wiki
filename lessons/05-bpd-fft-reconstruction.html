@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Module 05 | 從干涉條紋到斷層影像：BPD 差動偵測、色散補償與 FFT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    :root[data-theme="light"] {
+      --bg-main: #FAF7F2; --bg-sec: #F3EFE6; --bg-card: #FFFFFF;
+      --text-main: #1E293B; --text-sec: #475569; --text-muted: #64748B;
+      --border: #E2E8F0; --orange: #EA580C; --orange-soft: #FFEDD5;
+      --blue: #0284C7; --blue-soft: #E0F2FE; --green: #059669; --green-soft: #D1FAE5;
+      --shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+    }
+    :root[data-theme="dark"] {
+      --bg-main: #0B0F17; --bg-sec: #111827; --bg-card: #1E293B;
+      --text-main: #F8FAFC; --text-sec: #CBD5E1; --text-muted: #94A3B8;
+      --border: #334155; --orange: #F97316; --orange-soft: rgba(249, 115, 22, 0.18);
+      --blue: #38BDF8; --blue-soft: rgba(56, 189, 248, 0.16); --green: #34D399; --green-soft: rgba(52, 211, 153, 0.16);
+      --shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg-main); color: var(--text-main);
+      font-family: 'Noto Sans TC', sans-serif; line-height: 1.75;
+      min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between;
+      transition: background 0.25s, color 0.25s;
+    }
+    .navbar { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 0.85rem 1.5rem; position: sticky; top: 0; z-index: 20; }
+    .nav-inner { max-width: 980px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .back-btn { color: var(--blue); text-decoration: none; font-weight: 700; font-size: 0.92rem; }
+    .back-btn:hover { color: var(--orange); }
+    .dots { display: flex; gap: 0.5rem; align-items: center; }
+    .dot {
+      width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border);
+      background: var(--bg-sec); color: var(--text-muted); font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem; font-weight: 700; display: grid; place-items: center; cursor: pointer;
+    }
+    .dot.active { background: var(--orange); color: #fff; border-color: var(--orange); }
+    .theme-btn { background: var(--bg-sec); color: var(--text-main); border: 1px solid var(--border); padding: 0.4rem 0.85rem; border-radius: 99px; cursor: pointer; font-size: 0.82rem; font-weight: 700; }
+    .progress-track { max-width: 980px; width: 100%; margin: 0 auto; height: 5px; background: var(--border); }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--green), var(--blue)); width: 25%; transition: width 0.25s; }
+    .stage { max-width: 980px; width: 100%; margin: 2rem auto; padding: 0 1.25rem; flex: 1; }
+    .slide-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 22px; padding: 2.5rem; box-shadow: var(--shadow); min-height: 470px; }
+    .slide { display: none; }
+    .slide.active { display: block; animation: fadeUp 0.3s ease; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .badge { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 700; background: var(--green-soft); color: var(--green); padding: 0.25rem 0.75rem; border-radius: 99px; margin-bottom: 0.85rem; }
+    h1 { font-size: 1.85rem; font-weight: 900; margin-bottom: 1rem; line-height: 1.35; }
+    p, li { color: var(--text-sec); font-size: 1rem; margin-bottom: 0.85rem; }
+    ul { padding-left: 1.35rem; margin-bottom: 1rem; }
+    .callout { background: var(--bg-sec); border-left: 4px solid var(--orange); padding: 1.15rem 1.35rem; border-radius: 12px; margin: 1.15rem 0; }
+    .callout-blue { background: var(--blue-soft); border-left: 4px solid var(--blue); padding: 1.15rem 1.35rem; border-radius: 12px; margin: 1.15rem 0; }
+    .code-block { background: #0F172A; color: #E2E8F0; font-family: 'JetBrains Mono', monospace; font-size: 0.86rem; padding: 1rem 1.25rem; border-radius: 10px; overflow-x: auto; margin: 1rem 0; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.92rem; }
+    th, td { border: 1px solid var(--border); padding: 0.75rem; text-align: left; }
+    th { background: var(--bg-sec); color: var(--blue); font-family: 'JetBrains Mono', monospace; }
+    .quiz-btn { display: block; width: 100%; text-align: left; background: var(--bg-sec); color: var(--text-main); border: 1px solid var(--border); padding: 0.8rem 1rem; border-radius: 10px; margin-bottom: 0.6rem; cursor: pointer; font-weight: 600; transition: 0.2s; }
+    .quiz-btn:hover { border-color: var(--orange); }
+    .footer-nav { max-width: 980px; width: 100%; margin: 0 auto 2rem; padding: 0 1.25rem; display: flex; justify-content: space-between; align-items: center; }
+    .nav-btn { background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); padding: 0.65rem 1.35rem; border-radius: 12px; font-weight: 700; cursor: pointer; font-family: 'JetBrains Mono', monospace; transition: 0.2s; }
+    .nav-btn:hover { background: var(--orange); color: #fff; border-color: var(--orange); }
+  </style>
+</head>
+<body>
+  <div>
+    <nav class="navbar">
+      <div class="nav-inner">
+        <a href="../index.html" class="back-btn">← 返回實驗室互動學習首頁</a>
+        <div class="dots">
+          <div class="dot active" onclick="goSlide(0)">1</div>
+          <div class="dot" onclick="goSlide(1)">2</div>
+          <div class="dot" onclick="goSlide(2)">3</div>
+          <div class="dot" onclick="goSlide(3)">4</div>
+        </div>
+        <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 切換暗房模式</button>
+      </div>
+    </nav>
+    <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+  </div>
+
+  <main class="stage">
+    <div class="slide-card">
+      <!-- Slide 1 -->
+      <section class="slide active">
+        <span class="badge">💻 MODULE 05 // SLIDE 1 OF 4</span>
+        <h1>1. 平衡光電探測器 (BPD)：為什麼要把干涉光分成兩路相減？</h1>
+        <p>從豬眼後鞏膜反射回來的樣品光極度微弱（通常只有幾十奈瓦 $\text{nW}$），如果直接用單一光電二極體接收，微弱的干涉訊號會被掃頻雷射本身的<strong>直流背景光（DC Term）</strong>與<strong>相對強度雜訊（Relative Intensity Noise, RIN）</strong>完全淹沒！</p>
+        <div class="callout-blue">
+          <strong>⚡ 差動相減放大機制（Balanced Detection）：</strong><br/>
+          當樣品光與參考光在 $50/50$ 光纖耦合器合光時，根據能量守恆與相位關係，兩條輸出光纖的干涉交流項（AC Term）剛好<strong>相位相差 $180^\circ$（一正一負）</strong>，而直流背景項則同號：
+          $$I_+(k) = I_{\text{DC}}(k) + 2\sqrt{I_R I_S}\cos(2k\Delta z)$$
+          $$I_-(k) = I_{\text{DC}}(k) - 2\sqrt{I_R I_S}\cos(2k\Delta z)$$
+          BPD 將兩路光電流直接相減 $\Delta I = I_+ - I_- = 4\sqrt{I_R I_S}\cos(2k\Delta z)$，一舉<strong>消除共模強度雜訊並將有用干涉訊號放大 2 倍</strong>！
+        </div>
+      </section>
+
+      <!-- Slide 2 -->
+      <section class="slide">
+        <span class="badge">💻 MODULE 05 // SLIDE 2 OF 4</span>
+        <h1>2. 波長 $\lambda$ 轉波數 $k$ 重取樣：為什麼直接做 FFT 會模糊？</h1>
+        <p>快速傅立葉轉換（FFT）要求輸入的干涉訊號必須在<strong>波數空間（Wavenumber, $k = \frac{2\pi}{\lambda}$）呈等間距線性分布</strong>，才能精確對應到空間深度 $z$。</p>
+        <p>然而，掃頻雷射隨時間 $t$ 掃描波長 $\lambda(t)$ 時是非線性的，且 $k$ 與 $\lambda$ 成反比關係（$\Delta k \approx -\frac{2\pi}{\lambda_0^2}\Delta\lambda$）：</p>
+        <table>
+          <thead>
+            <tr><th>解決方案</th><th>運作機制</th><th>優缺點比較</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>方法 A：硬體 k-clock 觸發</strong></td><td>利用雷射內建馬赫-曾德爾干涉儀產生等 $\Delta k$ 脈衝，直接作為 DAQ 外接取樣時脈</td><td>無須事後軟體插值、運算最快；但若時脈線接觸不良會產生橫向條紋偽影</td></tr>
+            <tr><td><strong>方法 B：軟體數值重取樣 (k-space Resampling)</strong></td><td>先以反射鏡校正檔提取非線性相位曲線，再用三次樣條插值（Cubic Spline）重取樣為等 $k$ 陣列</td><td>可精細修正非線性誤差，但每條 A-scan 皆需插值運算</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Slide 3 -->
+      <section class="slide">
+        <span class="badge">💻 MODULE 05 // SLIDE 3 OF 4</span>
+        <h1>3. 數值色散補償、漢寧窗與 MATLAB FFT 重建流程</h1>
+        <p>因為參考臂（空氣／光纖）與樣品臂（90D 透鏡＋眼球玻璃體＋角膜）的材質厚度不同，不同波長的光波傳播速度不一致，會造成<strong>色散展寬（Dispersion Broadening）</strong>，使斷層邊界變糊。我們在 MATLAB 中乘上複數相位補償項來抵消二階（$a_2$）與三階（$a_3$）色散：</p>
+        <div class="callout-blue" style="text-align:center;">
+          $$S_{\text{comp}}(k) = S(k) \cdot \exp\Big[-i\big(a_2(k-k_0)^2 + a_3(k-k_0)^3\big)\Big]$$
+        </div>
+        <div class="code-block">
+% MATLAB 實驗室 SS-PS-OCT 單通道深度重建核心流程
+win = hanning(N_k);                          % 1. 產生漢寧窗抑制旁瓣偽影 (Side-lobes)
+disp_phase = exp(-1i * (a2*dk.^2 + a3*dk.^3)); % 2. 建立數值色散補償相位陣列
+k_sig_H = (raw_H - mean(raw_H)) .* win .* disp_phase; % 3. 去直流、加窗與色散校正
+aline_H = fft(k_sig_H, N_fft);               % 4. 快速傅立葉轉換取得深度複數結構 E_H(z)
+        </div>
+      </section>
+
+      <!-- Slide 4 -->
+      <section class="slide">
+        <span class="badge">💻 MODULE 05 // SLIDE 4 OF 4</span>
+        <h1>4. 隨堂互動小測驗 &amp; 雙向連結延伸</h1>
+        <p>測試看看你是否掌握了從干涉條紋到斷層影像的重建關竅：</p>
+        <button class="quiz-btn" onclick="checkAns(this, false)">A. 掃頻雷射收到的原始電壓訊號直接丟進 fft() 就能得到最清晰的視網膜與鞏膜斷層影像。</button>
+        <button class="quiz-btn" onclick="checkAns(this, true)">B. 必須先經過 BPD 消除共模直流雜訊，並確保訊號在波數空間 k 等間距取樣與完成色散補償後，再做 FFT！</button>
+        <button class="quiz-btn" onclick="checkAns(this, false)">C. 平衡光電探測器 (BPD) 的作用是把兩路干涉訊號相加，讓直流背景光放大兩倍。</button>
+        <div id="quizFeedback" style="margin-top:0.85rem; font-weight:700;"></div>
+
+        <div class="callout" style="margin-top:1.5rem;">
+          <strong>🔗 下一站 Wiki 雙向連結：</strong><br/>
+          做完 FFT 重建出的 OCT 斷層圖，為什麼看起來總是有一顆一顆的斑點雜訊？看看如何用深度學習消除它：<br/>
+          👉 <a href="06-deep-learning-denoising.html" style="color:var(--orange); font-weight:700;">前往 Module 06：深度學習於 OCT 散斑雜訊抑制與防止資料洩漏 &rarr;</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer-nav">
+    <button class="nav-btn" onclick="stepSlide(-1)">← 上一頁 (Prev)</button>
+    <span style="color:var(--text-muted); font-size:0.85rem; font-family:'JetBrains Mono',monospace;">支援鍵盤 ← → 方向鍵翻頁</span>
+    <button class="nav-btn" onclick="stepSlide(1)">下一頁 (Next) →</button>
+  </footer>
+
+  <script>
+    let cur = 0;
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    const prog = document.getElementById('progFill');
+    function render() {
+      slides.forEach((s, i) => s.classList.toggle('active', i === cur));
+      dots.forEach((d, i) => d.classList.toggle('active', i === cur));
+      prog.style.width = `${((cur + 1) / slides.length) * 100}%`;
+    }
+    function stepSlide(delta) { cur = (cur + delta + slides.length) % slides.length; render(); }
+    function goSlide(idx) { cur = idx; render(); }
+    function toggleTheme() {
+      const root = document.documentElement;
+      const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      root.setAttribute('data-theme', next);
+      document.getElementById('themeBtn').textContent = next === 'light' ? '🌙 切換暗房模式' : '🌞 切換暖陽模式';
+    }
+    function checkAns(btn, ok) {
+      const fb = document.getElementById('quizFeedback');
+      if (ok) {
+        btn.style.background = 'var(--green-soft)'; btn.style.borderColor = 'var(--green)';
+        fb.style.color = 'var(--green)';
+        fb.textContent = '🎉 完全正確！BPD 差動降噪、等波數 k 取樣與色散補償是 OCT 訊號重建不可或缺的三大步驟！';
+      } else {
+        btn.style.background = 'var(--orange-soft)'; btn.style.borderColor = 'var(--orange)';
+        fb.style.color = 'var(--orange)';
+        fb.textContent = '💡 再想一下！提示：未做 k-space 等間距校正如直接做 FFT，深度峰會嚴重展寬模糊。';
+      }
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') stepSlide(1);
+      if (e.key === 'ArrowLeft') stepSlide(-1);
+    });
+  </script>
+</body>
+</html>
