@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Module 04 | LabVIEW 雙軸 Galvo 振鏡與 200kHz DAQ 高速時脈同步</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    :root[data-theme="light"] {
+      --bg-main: #FAF7F2; --bg-sec: #F3EFE6; --bg-card: #FFFFFF;
+      --text-main: #1E293B; --text-sec: #475569; --text-muted: #64748B;
+      --border: #E2E8F0; --orange: #EA580C; --orange-soft: #FFEDD5;
+      --blue: #0284C7; --blue-soft: #E0F2FE; --green: #059669; --green-soft: #D1FAE5;
+      --purple: #7C3AED; --purple-soft: #EDE9FE;
+      --shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+    }
+    :root[data-theme="dark"] {
+      --bg-main: #0B0F17; --bg-sec: #111827; --bg-card: #1E293B;
+      --text-main: #F8FAFC; --text-sec: #CBD5E1; --text-muted: #94A3B8;
+      --border: #334155; --orange: #F97316; --orange-soft: rgba(249, 115, 22, 0.18);
+      --blue: #38BDF8; --blue-soft: rgba(56, 189, 248, 0.16); --green: #34D399; --green-soft: rgba(52, 211, 153, 0.16);
+      --purple: #A78BFA; --purple-soft: rgba(167, 139, 250, 0.16);
+      --shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg-main); color: var(--text-main);
+      font-family: 'Noto Sans TC', sans-serif; line-height: 1.75;
+      min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between;
+      transition: background 0.25s, color 0.25s;
+    }
+    .navbar { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 0.85rem 1.5rem; position: sticky; top: 0; z-index: 20; }
+    .nav-inner { max-width: 980px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .back-btn { color: var(--blue); text-decoration: none; font-weight: 700; font-size: 0.92rem; }
+    .back-btn:hover { color: var(--orange); }
+    .dots { display: flex; gap: 0.5rem; align-items: center; }
+    .dot {
+      width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border);
+      background: var(--bg-sec); color: var(--text-muted); font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem; font-weight: 700; display: grid; place-items: center; cursor: pointer;
+    }
+    .dot.active { background: var(--orange); color: #fff; border-color: var(--orange); }
+    .theme-btn { background: var(--bg-sec); color: var(--text-main); border: 1px solid var(--border); padding: 0.4rem 0.85rem; border-radius: 99px; cursor: pointer; font-size: 0.82rem; font-weight: 700; }
+    .progress-track { max-width: 980px; width: 100%; margin: 0 auto; height: 5px; background: var(--border); }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--purple), var(--orange)); width: 25%; transition: width 0.25s; }
+    .stage { max-width: 980px; width: 100%; margin: 2rem auto; padding: 0 1.25rem; flex: 1; }
+    .slide-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 22px; padding: 2.5rem; box-shadow: var(--shadow); min-height: 470px; }
+    .slide { display: none; }
+    .slide.active { display: block; animation: fadeUp 0.3s ease; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .badge { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 700; background: var(--purple-soft); color: var(--purple); padding: 0.25rem 0.75rem; border-radius: 99px; margin-bottom: 0.85rem; }
+    h1 { font-size: 1.85rem; font-weight: 900; margin-bottom: 1rem; line-height: 1.35; }
+    p, li { color: var(--text-sec); font-size: 1rem; margin-bottom: 0.85rem; }
+    ul { padding-left: 1.35rem; margin-bottom: 1rem; }
+    .callout { background: var(--bg-sec); border-left: 4px solid var(--orange); padding: 1.15rem 1.35rem; border-radius: 12px; margin: 1.15rem 0; }
+    .callout-blue { background: var(--blue-soft); border-left: 4px solid var(--blue); padding: 1.15rem 1.35rem; border-radius: 12px; margin: 1.15rem 0; }
+    .wiki-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.84rem; background: var(--blue-soft); color: var(--blue); padding: 0.15rem 0.5rem; border-radius: 5px; font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.92rem; }
+    th, td { border: 1px solid var(--border); padding: 0.75rem; text-align: left; }
+    th { background: var(--bg-sec); color: var(--blue); font-family: 'JetBrains Mono', monospace; }
+    .quiz-btn { display: block; width: 100%; text-align: left; background: var(--bg-sec); color: var(--text-main); border: 1px solid var(--border); padding: 0.8rem 1rem; border-radius: 10px; margin-bottom: 0.6rem; cursor: pointer; font-weight: 600; transition: 0.2s; }
+    .quiz-btn:hover { border-color: var(--orange); }
+    .footer-nav { max-width: 980px; width: 100%; margin: 0 auto 2rem; padding: 0 1.25rem; display: flex; justify-content: space-between; align-items: center; }
+    .nav-btn { background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); padding: 0.65rem 1.35rem; border-radius: 12px; font-weight: 700; cursor: pointer; font-family: 'JetBrains Mono', monospace; transition: 0.2s; }
+    .nav-btn:hover { background: var(--orange); color: #fff; border-color: var(--orange); }
+  </style>
+</head>
+<body>
+  <div>
+    <nav class="navbar">
+      <div class="nav-inner">
+        <a href="../index.html" class="back-btn">← 返回實驗室互動學習首頁</a>
+        <div class="dots">
+          <div class="dot active" onclick="goSlide(0)">1</div>
+          <div class="dot" onclick="goSlide(1)">2</div>
+          <div class="dot" onclick="goSlide(2)">3</div>
+          <div class="dot" onclick="goSlide(3)">4</div>
+        </div>
+        <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 切換暗房模式</button>
+      </div>
+    </nav>
+    <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+  </div>
+
+  <main class="stage">
+    <div class="slide-card">
+      <!-- Slide 1 -->
+      <section class="slide active">
+        <span class="badge">⚡ MODULE 04 // SLIDE 1 OF 4</span>
+        <h1>1. 為什麼 B-scan 影像會左右晃動？軟體計時的致命傷</h1>
+        <p>在本實驗室的 $200\text{ kHz}$ 掃頻 OCT 系統中，雷射每秒鐘發射 20 萬次掃頻光脈衝，這代表每一條深度掃描線（A-line）的時間間隔只有極短的 <strong>5 微秒（$5\ \mu\text{s}$）</strong>：</p>
+        <div class="callout-blue" style="text-align:center;">
+          $$T_{\text{A-line}} = \frac{1}{f_{\text{sweep}}} = \frac{1}{200\times 10^3\text{ Hz}} = 5\ \mu\text{s}$$
+        </div>
+        <p>如果初學者在撰寫 LabVIEW 控制程式時，使用一般軟體迴圈（While Loop 搭配 `Wait (ms)` 計時器）去推動雙軸檢流計振鏡（Galvo Scanner），會因為 Windows 作業系統的背景排程延遲（毫秒級 Jitter），導致<strong>「振鏡轉動位置」與「DAQ 擷取卡收到的 A-line」失去對齊</strong>，掃出來的 B-scan 斷層影像就會出現嚴重的左右周期性晃動與錯位！</p>
+      </section>
+
+      <!-- Slide 2 -->
+      <section class="slide">
+        <span class="badge">⚡ MODULE 04 // SLIDE 2 OF 4</span>
+        <h1>2. 硬體 PFI0 Trigger 與 k-clock 同步觸發架構</h1>
+        <p>要徹底消除影像晃動，必須放棄軟體計時，改採<strong>全硬體時脈同步（Hardware-Timed Synchronization）</strong>：</p>
+        <table>
+          <thead>
+            <tr><th>訊號通道</th><th>硬體接腳與來源</th><th>在 OCT 系統中的同步角色</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>A-line Trigger (Sweep Trigger)</strong></td><td>雷射輸出 $\rightarrow$ DAQ <code>PFI0</code> 腳位</td><td>每條掃頻開始時發出 TTL 方波，同時觸發 DAQ 擷取與 Galvo 步進</td></tr>
+            <tr><td><strong>k-clock (光學波數時脈)</strong></td><td>雷射內建馬赫-曾德爾干涉儀輸出</td><td>作為高速數位化儀之外部取樣時脈（External Sample Clock），確保等波數 $k$ 取樣</td></tr>
+            <tr><td><strong>Galvo AO (類比電壓輸出)</strong></td><td>DAQ <code>AO0</code> (X軸) / <code>AO1</code> (Y軸)</td><td>共用 <code>PFI0</code> 作為 Sample Clock，每收到一個 Trigger 才輸出下一格電壓</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Slide 3 -->
+      <section class="slide">
+        <span class="badge">⚡ MODULE 04 // SLIDE 3 OF 4</span>
+        <h1>3. 雙軸振鏡掃描波形設計與 15% Flyback 回掃保護</h1>
+        <p>3D 光學同調斷層掃描（C-scan）由 X 軸快軸（Fast Axis）與 Y 軸慢軸（Slow Axis）共同完成：</p>
+        <ul>
+          <li><strong>X 軸（B-scan 掃描方向）</strong>：輸出線性遞增的<strong>鋸齒波（Sawtooth Wave）</strong>電壓，使光束等速劃過豬眼鞏膜樣本表面。</li>
+          <li><strong>Y 軸（C-scan 推進方向）</strong>：每完成一整張 B-scan，Y 軸才微幅躍升一階（Step Wave）。</li>
+        </ul>
+        <div class="callout">
+          <strong>⚠️ 實驗室硬體保護鐵則（15% Flyback 緩衝區）：</strong><br/>
+          當 X 軸振鏡掃到最右端要返回最左端起點時，<strong>絕對不可瞬間給予垂直落差階躍電壓（0 點回掃）</strong>！因為振鏡鏡片具有轉動慣量，瞬間反轉會造成高頻機械振盪、驅動板過流發燙甚至鏡片脫落。在 LabVIEW 波形陣列中，必須預留 <strong>15% 的平滑回掃緩衝點數（Flyback Points）</strong>，並在 MATLAB 重建時將這 15% 的回掃資料裁切捨棄。
+        </div>
+      </section>
+
+      <!-- Slide 4 -->
+      <section class="slide">
+        <span class="badge">⚡ MODULE 04 // SLIDE 4 OF 4</span>
+        <h1>4. 隨堂互動小測驗 &amp; 雙向連結延伸</h1>
+        <p>測試看看你是否能診斷實驗室的同步觸發異常：</p>
+        <button class="quiz-btn" onclick="checkAns(this, false)">A. 當 B-scan 影像左右晃動時，只要把 LabVIEW 裡面的軟體 Wait(ms) 數值改小一點就能解決。</button>
+        <button class="quiz-btn" onclick="checkAns(this, true)">B. 必須將雷射 A-line Trigger 接至 DAQ 的 PFI0 作為硬體同步時脈，且鋸齒波需預留 15% Flyback 平滑回掃區！</button>
+        <button class="quiz-btn" onclick="checkAns(this, false)">C. 為了節省掃描時間，X 軸鋸齒波從最右端回到左端起點時應該用 0 微秒瞬間跳回。</button>
+        <div id="quizFeedback" style="margin-top:0.85rem; font-weight:700;"></div>
+
+        <div class="callout" style="margin-top:1.5rem;">
+          <strong>🔗 下一站 Wiki 雙向連結：</strong><br/>
+          硬體同步擷取進來的原始干涉電壓訊號，要怎麼透過 BPD 降噪與 FFT 變成清晰的斷層影像？<br/>
+          👉 <a href="05-bpd-fft-reconstruction.html" style="color:var(--orange); font-weight:700;">前往 Module 05：從干涉條紋到斷層影像 — BPD 差動偵測、色散補償與 FFT &rarr;</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer-nav">
+    <button class="nav-btn" onclick="stepSlide(-1)">← 上一頁 (Prev)</button>
+    <span style="color:var(--text-muted); font-size:0.85rem; font-family:'JetBrains Mono',monospace;">支援鍵盤 ← → 方向鍵翻頁</span>
+    <button class="nav-btn" onclick="stepSlide(1)">下一頁 (Next) →</button>
+  </footer>
+
+  <script>
+    let cur = 0;
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    const prog = document.getElementById('progFill');
+    function render() {
+      slides.forEach((s, i) => s.classList.toggle('active', i === cur));
+      dots.forEach((d, i) => d.classList.toggle('active', i === cur));
+      prog.style.width = `${((cur + 1) / slides.length) * 100}%`;
+    }
+    function stepSlide(delta) { cur = (cur + delta + slides.length) % slides.length; render(); }
+    function goSlide(idx) { cur = idx; render(); }
+    function toggleTheme() {
+      const root = document.documentElement;
+      const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      root.setAttribute('data-theme', next);
+      document.getElementById('themeBtn').textContent = next === 'light' ? '🌙 切換暗房模式' : '🌞 切換暖陽模式';
+    }
+    function checkAns(btn, ok) {
+      const fb = document.getElementById('quizFeedback');
+      if (ok) {
+        btn.style.background = 'var(--green-soft)'; btn.style.borderColor = 'var(--green)';
+        fb.style.color = 'var(--green)';
+        fb.textContent = '🎉 完全正確！PFI0 硬體時脈綁定與 15% Flyback 緩衝是高速光學掃描系統穩定運作的核心！';
+      } else {
+        btn.style.background = 'var(--orange-soft)'; btn.style.borderColor = 'var(--orange)';
+        fb.style.color = 'var(--orange)';
+        fb.textContent = '💡 再想一下！提示：軟體計時無法達到 5 微秒精準度，且振鏡瞬間反轉會造成機械過沖與發燙。';
+      }
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') stepSlide(1);
+      if (e.key === 'ArrowLeft') stepSlide(-1);
+    });
+  </script>
+</body>
+</html>
