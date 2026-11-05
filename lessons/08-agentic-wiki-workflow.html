@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Module 08 | 用 AGENTS.md 打造實驗室 LLM Wiki 與自動進度回報 Agent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    :root[data-theme="light"] { --bg-main:#FAF7F2; --bg-sec:#F3EFE6; --bg-card:#FFFFFF; --text-main:#1E293B; --text-sec:#475569; --text-muted:#64748B; --border:#E2E8F0; --orange:#EA580C; --orange-soft:#FFEDD5; --blue:#0284C7; --blue-soft:#E0F2FE; --green:#059669; --green-soft:#D1FAE5; --purple:#7C3AED; --purple-soft:#EDE9FE; --shadow:0 12px 28px rgba(15,23,42,0.08); }
+    :root[data-theme="dark"] { --bg-main:#0B0F17; --bg-sec:#111827; --bg-card:#1E293B; --text-main:#F8FAFC; --text-sec:#CBD5E1; --text-muted:#94A3B8; --border:#334155; --orange:#F97316; --orange-soft:rgba(249,115,22,0.18); --blue:#38BDF8; --blue-soft:rgba(56,189,248,0.16); --green:#34D399; --green-soft:rgba(52,211,153,0.16); --purple:#A78BFA; --purple-soft:rgba(167,139,250,0.16); --shadow:0 14px 32px rgba(0,0,0,0.45); }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { background:var(--bg-main); color:var(--text-main); font-family:'Noto Sans TC',sans-serif; line-height:1.75; min-height:100vh; display:flex; flex-direction:column; justify-content:space-between; transition:background 0.25s,color 0.25s; }
+    .navbar { background:var(--bg-card); border-bottom:1px solid var(--border); padding:0.85rem 1.5rem; position:sticky; top:0; z-index:20; }
+    .nav-inner { max-width:980px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
+    .back-btn { color:var(--blue); text-decoration:none; font-weight:700; font-size:0.92rem; }
+    .back-btn:hover { color:var(--orange); }
+    .dots { display:flex; gap:0.5rem; align-items:center; }
+    .dot { width:28px; height:28px; border-radius:50%; border:1px solid var(--border); background:var(--bg-sec); color:var(--text-muted); font-family:'JetBrains Mono',monospace; font-size:0.8rem; font-weight:700; display:grid; place-items:center; cursor:pointer; }
+    .dot.active { background:var(--orange); color:#fff; border-color:var(--orange); }
+    .theme-btn { background:var(--bg-sec); color:var(--text-main); border:1px solid var(--border); padding:0.4rem 0.85rem; border-radius:99px; cursor:pointer; font-size:0.82rem; font-weight:700; }
+    .progress-track { max-width:980px; width:100%; margin:0 auto; height:5px; background:var(--border); }
+    .progress-fill { height:100%; background:linear-gradient(90deg,var(--purple),var(--orange)); width:25%; transition:width 0.25s; }
+    .stage { max-width:980px; width:100%; margin:2rem auto; padding:0 1.25rem; flex:1; }
+    .slide-card { background:var(--bg-card); border:1px solid var(--border); border-radius:22px; padding:2.5rem; box-shadow:var(--shadow); min-height:470px; }
+    .slide { display:none; }
+    .slide.active { display:block; animation:fadeUp 0.3s ease; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+    .badge { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:0.78rem; font-weight:700; background:var(--purple-soft); color:var(--purple); padding:0.25rem 0.75rem; border-radius:99px; margin-bottom:0.85rem; }
+    h1 { font-size:1.85rem; font-weight:900; margin-bottom:1rem; line-height:1.35; }
+    p, li { color:var(--text-sec); font-size:1rem; margin-bottom:0.85rem; }
+    ul { padding-left:1.35rem; margin-bottom:1rem; }
+    .callout { background:var(--bg-sec); border-left:4px solid var(--orange); padding:1.15rem 1.35rem; border-radius:12px; margin:1.15rem 0; }
+    .callout-blue { background:var(--blue-soft); border-left:4px solid var(--blue); padding:1.15rem 1.35rem; border-radius:12px; margin:1.15rem 0; }
+    table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.92rem; }
+    th, td { border:1px solid var(--border); padding:0.75rem; text-align:left; }
+    th { background:var(--bg-sec); color:var(--blue); font-family:'JetBrains Mono',monospace; }
+    .quiz-btn { display:block; width:100%; text-align:left; background:var(--bg-sec); color:var(--text-main); border:1px solid var(--border); padding:0.8rem 1rem; border-radius:10px; margin-bottom:0.6rem; cursor:pointer; font-weight:600; transition:0.2s; }
+    .quiz-btn:hover { border-color:var(--orange); }
+    .footer-nav { max-width:980px; width:100%; margin:0 auto 2rem; padding:0 1.25rem; display:flex; justify-content:space-between; align-items:center; }
+    .nav-btn { background:var(--bg-card); color:var(--text-main); border:1px solid var(--border); padding:0.65rem 1.35rem; border-radius:12px; font-weight:700; cursor:pointer; font-family:'JetBrains Mono',monospace; transition:0.2s; }
+    .nav-btn:hover { background:var(--orange); color:#fff; border-color:var(--orange); }
+  </style>
+</head>
+<body>
+  <div>
+    <nav class="navbar">
+      <div class="nav-inner">
+        <a href="../index.html" class="back-btn">← 返回實驗室互動學習首頁</a>
+        <div class="dots">
+          <div class="dot active" onclick="goSlide(0)">1</div>
+          <div class="dot" onclick="goSlide(1)">2</div>
+          <div class="dot" onclick="goSlide(2)">3</div>
+          <div class="dot" onclick="goSlide(3)">4</div>
+        </div>
+        <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 切換暗房模式</button>
+      </div>
+    </nav>
+    <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+  </div>
+
+  <main class="stage">
+    <div class="slide-card">
+      <section class="slide active">
+        <span class="badge">🤖 MODULE 08 // SLIDE 1 OF 4</span>
+        <h1>1. 從 Vibe Coding 到 AGENTS.md：為什麼實驗室需要員工手冊？</h1>
+        <p>在課程核心公式中，<strong>$\text{AI Agent} = \text{AI Model（大腦）} + \text{Harness（控制框架與工作裝備）}$</strong>。如果只依賴單次對話的 Vibe Coding，雖然能快速做出一個單頁網站，但當下週學弟妹要新增一篇新的實驗筆記時，AI 早就忘了先前的配色變數、目錄結構與公式渲染引擎。</p>
+        <div class="callout-blue">
+          <strong>📋 好老闆交辦工作的三大核心（定義於 <code>AGENTS.md</code>）：</strong><br/>
+          1. <strong>要什麼成品（Deliverables）</strong>：明確定義 <code>raw/</code>、<code>wiki/</code>、<code>lessons/</code> 三層路徑與 <code>kebab-case</code> 檔名規範。<br/>
+          2. <strong>有什麼限制（Constraints）</strong>：規定 <code>raw/</code> 唯讀不可竄改，且未提供實測值之物理參數強制標註 <code>[待實驗室實測補齊]</code>。<br/>
+          3. <strong>怎麼算做完（Definition of Done）</strong>：必須同步更新 <code>index.html</code> 首頁卡片、統計數字與 <code>log.md</code> 異動日誌才算完畢。
+        </div>
+      </section>
+
+      <section class="slide">
+        <span class="badge">🤖 MODULE 08 // SLIDE 2 OF 4</span>
+        <h1>2. Karpathy LLM Wiki 三層式知識編譯架構</h1>
+        <p>傳統 RAG 檢索系統每次回答問題時都必須從零碎片段重新拼湊知識；而 Andrej Karpathy 提出的 <strong>LLM Wiki 模式</strong>，則是讓 AI 扮演「知識庫維護員」，每次收到新文獻或實驗筆記時，持續將知識編譯並累積成結構化的百科全書：</p>
+        <table>
+          <thead>
+            <tr><th>知識層級</th><th>資料夾路徑</th><th>權限與 AI 負責動作</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Layer 1：原始證據層</strong></td><td><code>raw/YYYY-MM-DD-*.md</code></td><td><strong>唯讀不可變（Immutable）</strong>：完整保留研究人員輸入之實驗紀錄與數據</td></tr>
+            <tr><td><strong>Layer 2：概念圖譜層</strong></td><td><code>wiki/*.md</code></td><td><strong>AI 萃取與交叉連結</strong>：包含 YAML 標頭、LaTeX 公式、參數表與 <code>[[雙向連結]]</code></td></tr>
+            <tr><td><strong>Layer 3：互動展示層</strong></td><td><code>lessons/*.html</code> &amp; <code>index.html</code></td><td><strong>單檔獨立網頁</strong>：將 Wiki 轉化為初學者可翻頁互動、可測驗的教學投影片</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="slide">
+        <span class="badge">🤖 MODULE 08 // SLIDE 3 OF 4</span>
+        <h1>3. 生醫光電實驗室 AI 系統進化三部曲（Week 7 → Week 9）</h1>
+        <p>本網站完美串聯了我們在《生成式 AI：文字與圖像生成的原理與實務》連續三週打造的實驗室智慧化工具鏈：</p>
+        <ul>
+          <li><strong>第七週（RAG 檢索增強生成）</strong>：建立 10 份生醫光電 SOP 向量資料庫（FAISS），結合「橘福福大師姐」動態表情狀態機與零幻覺引文驗證。</li>
+          <li><strong>第八週（Two-Stage Planning Agent）</strong>：針對 Group Meeting 前夕的突發儀器異常，先由 Stage 1 規劃師拆解六點排查藍圖，支援人類專家（Human-in-the-Loop）修改路徑後，再由 Stage 2 撰寫合乎學術倫理的指導教授回報信。</li>
+          <li><strong>第九週（Agentic Work &amp; AGENTS.md）</strong>：將規則持久化為 <code>AGENTS.md</code> 員工手冊，實現「交辦一句話，自動完成五步 Ingest-to-Publish 擴充」的完整知識工程！</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <span class="badge">🤖 MODULE 08 // SLIDE 4 OF 4</span>
+        <h1>4. 隨堂互動小測驗 &amp; 結業檢核</h1>
+        <p>最後一題！檢查你是否掌握了 <code>AGENTS.md</code> 與 Agentic Work 的核心精髓：</p>
+        <button class="quiz-btn" onclick="checkAns(this, false)">A. 當原始實驗筆記沒有寫到某個雷射參數時，AI 應該自己上網隨便找一個差不多的數字填進去，版面才好看。</button>
+        <button class="quiz-btn" onclick="checkAns(this, true)">B. 透過 AGENTS.md 明確定義目錄結構、防幻覺紅線（未測參數標註待補齊）與五步驗收流程，能讓 AI 穩定且重複地擴充整個網站！</button>
+        <button class="quiz-btn" onclick="checkAns(this, false)">C. 新增一篇講義時，只需要產出 HTML 檔就好，首頁 index.html 跟 log.md 留給人類自己慢慢手寫修改。</button>
+        <div id="quizFeedback" style="margin-top:0.85rem; font-weight:700;"></div>
+
+        <div class="callout" style="margin-top:1.5rem;">
+          <strong>🎓 恭喜你完成全部 8 大模組的互動學習！</strong><br/>
+          👉 <a href="../index.html" style="color:var(--orange); font-weight:700;">點此返回實驗室互動學習首頁，把所有單元的「已讀完」打勾衝上 100% 進度吧！ &rarr;</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer-nav">
+    <button class="nav-btn" onclick="stepSlide(-1)">← 上一頁 (Prev)</button>
+    <span style="color:var(--text-muted); font-size:0.85rem; font-family:'JetBrains Mono',monospace;">支援鍵盤 ← → 方向鍵翻頁</span>
+    <button class="nav-btn" onclick="stepSlide(1)">下一頁 (Next) →</button>
+  </footer>
+
+  <script>
+    let cur = 0;
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    const prog = document.getElementById('progFill');
+    function render() {
+      slides.forEach((s, i) => s.classList.toggle('active', i === cur));
+      dots.forEach((d, i) => d.classList.toggle('active', i === cur));
+      prog.style.width = `${((cur + 1) / slides.length) * 100}%`;
+    }
+    function stepSlide(delta) { cur = (cur + delta + slides.length) % slides.length; render(); }
+    function goSlide(idx) { cur = idx; render(); }
+    function toggleTheme() {
+      const root = document.documentElement;
+      const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      root.setAttribute('data-theme', next);
+      document.getElementById('themeBtn').textContent = next === 'light' ? '🌙 切換暗房模式' : '🌞 切換暖陽模式';
+    }
+    function checkAns(btn, ok) {
+      const fb = document.getElementById('quizFeedback');
+      if (ok) {
+        btn.style.background = 'var(--green-soft)'; btn.style.borderColor = 'var(--green)';
+        fb.style.color = 'var(--green)';
+        fb.textContent = '🎉 完美通關！這正是本週作業「換你當老闆：用 AGENTS.md 教 AI 用你的方法做事」的最高境界！';
+      } else {
+        btn.style.background = 'var(--orange-soft)'; btn.style.borderColor = 'var(--orange)';
+        fb.style.color = 'var(--orange)';
+        fb.textContent = '💡 再想一下！提示：好老闆會在 AGENTS.md 中嚴格禁止捏造數據，並要求 AI 自動同步更新首頁與日誌。';
+      }
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') stepSlide(1);
+      if (e.key === 'ArrowLeft') stepSlide(-1);
+    });
+  </script>
+</body>
+</html>
