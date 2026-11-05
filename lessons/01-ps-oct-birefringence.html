@@ -1,175 +1,189 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-Hant" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lesson 01 | 1045nm SS-PS-OCT 雙折射與 k-clock 同步機制</title>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <title>Module 02 | 1045nm SS-PS-OCT 雙折射相位延遲與後鞏膜成像</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
     onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
   <style>
-    :root {
-      --bg-dark: #0d1117;
-      --bg-card: #161b22;
-      --border: #30363d;
-      --orange: #f97316;
-      --cyan: #38bdf8;
-      --text: #f0f6fc;
-      --muted: #8b949e;
+    :root[data-theme="light"] {
+      --bg-main: #FAF7F2; --bg-sec: #F3EFE6; --bg-card: #FFFFFF;
+      --text-main: #1E293B; --text-sec: #475569; --text-muted: #64748B;
+      --border: #E2E8F0; --orange: #EA580C; --orange-soft: #FFEDD5;
+      --blue: #0284C7; --blue-soft: #E0F2FE; --green: #059669; --green-soft: #D1FAE5;
+      --shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+    }
+    :root[data-theme="dark"] {
+      --bg-main: #0B0F17; --bg-sec: #111827; --bg-card: #1E293B;
+      --text-main: #F8FAFC; --text-sec: #CBD5E1; --text-muted: #94A3B8;
+      --border: #334155; --orange: #F97316; --orange-soft: rgba(249, 115, 22, 0.18);
+      --blue: #38BDF8; --blue-soft: rgba(56, 189, 248, 0.16); --green: #34D399; --green-soft: rgba(52, 211, 153, 0.16);
+      --shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: var(--bg-dark);
-      color: var(--text);
-      font-family: 'Noto Sans TC', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 1.5rem;
+      background: var(--bg-main); color: var(--text-main);
+      font-family: 'Noto Sans TC', sans-serif; line-height: 1.75;
+      min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between;
+      transition: background 0.25s, color 0.25s;
     }
-    .top-bar {
-      max-width: 920px;
-      width: 100%;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 1rem;
+    .navbar { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 0.85rem 1.5rem; position: sticky; top: 0; z-index: 20; }
+    .nav-inner { max-width: 980px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .back-btn { color: var(--blue); text-decoration: none; font-weight: 700; font-size: 0.92rem; }
+    .back-btn:hover { color: var(--orange); }
+    .dots { display: flex; gap: 0.5rem; align-items: center; }
+    .dot {
+      width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border);
+      background: var(--bg-sec); color: var(--text-muted); font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem; font-weight: 700; display: grid; place-items: center; cursor: pointer;
     }
-    .back-link { color: var(--cyan); text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; }
-    .progress-wrap { width: 100%; max-width: 920px; margin: 0.75rem auto 0; background: var(--border); height: 4px; border-radius: 2px; }
-    .progress-bar { height: 100%; background: var(--orange); width: 25%; transition: width 0.25s ease; }
-    .slide-container {
-      max-width: 920px;
-      width: 100%;
-      margin: 2rem auto;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 2.5rem;
-      min-height: 440px;
-    }
+    .dot.active { background: var(--orange); color: #fff; border-color: var(--orange); }
+    .theme-btn { background: var(--bg-sec); color: var(--text-main); border: 1px solid var(--border); padding: 0.4rem 0.85rem; border-radius: 99px; cursor: pointer; font-size: 0.82rem; font-weight: 700; }
+    .progress-track { max-width: 980px; width: 100%; margin: 0 auto; height: 5px; background: var(--border); }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--orange), var(--blue)); width: 25%; transition: width 0.25s; }
+    .stage { max-width: 980px; width: 100%; margin: 2rem auto; padding: 0 1.25rem; flex: 1; }
+    .slide-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 22px; padding: 2.5rem; box-shadow: var(--shadow); min-height: 470px; }
     .slide { display: none; }
-    .slide.active { display: block; }
-    .tag { font-family: 'JetBrains Mono', monospace; color: var(--orange); font-size: 0.82rem; margin-bottom: 0.5rem; display: block; }
-    h2 { font-size: 1.75rem; margin-bottom: 1.25rem; }
-    p, li { color: #d0d7de; line-height: 1.75; margin-bottom: 0.85rem; }
-    ul { padding-left: 1.25rem; }
-    .formula-box {
-      background: var(--bg-dark);
-      border-left: 4px solid var(--cyan);
-      padding: 1rem 1.25rem;
-      border-radius: 8px;
-      margin: 1.25rem 0;
-    }
-    table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.92rem; }
-    th, td { border: 1px solid var(--border); padding: 0.7rem; text-align: left; }
-    th { background: var(--bg-dark); color: var(--cyan); }
-    .controls {
-      max-width: 920px;
-      width: 100%;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    button {
-      background: var(--bg-card);
-      color: var(--text);
-      border: 1px solid var(--border);
-      padding: 0.6rem 1.25rem;
-      border-radius: 8px;
-      cursor: pointer;
-      font-family: 'JetBrains Mono', monospace;
-    }
-    button:hover { border-color: var(--orange); color: var(--orange); }
+    .slide.active { display: block; animation: fadeUp 0.3s ease; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .badge { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 700; background: var(--orange-soft); color: var(--orange); padding: 0.25rem 0.75rem; border-radius: 99px; margin-bottom: 0.85rem; }
+    h1 { font-size: 1.85rem; font-weight: 900; margin-bottom: 1rem; line-height: 1.35; }
+    p, li { color: var(--text-sec); font-size: 1rem; margin-bottom: 0.85rem; }
+    ul { padding-left: 1.35rem; margin-bottom: 1rem; }
+    .callout { background: var(--bg-sec); border-left: 4px solid var(--orange); padding: 1.15rem 1.35rem; border-radius: 12px; margin: 1.15rem 0; }
+    .callout-blue { background: var(--blue-soft); border-left: 4px solid var(--blue); padding: 1.15rem 1.35rem; border-radius: 12px; margin: 1.15rem 0; }
+    .tbd-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; background: var(--orange-soft); color: var(--orange); padding: 0.15rem 0.5rem; border-radius: 5px; font-weight: 700; }
+    .wiki-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.84rem; background: var(--blue-soft); color: var(--blue); padding: 0.15rem 0.5rem; border-radius: 5px; font-weight: 600; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.92rem; }
+    th, td { border: 1px solid var(--border); padding: 0.75rem; text-align: left; }
+    th { background: var(--bg-sec); color: var(--blue); font-family: 'JetBrains Mono', monospace; }
+    .footer-nav { max-width: 980px; width: 100%; margin: 0 auto 2rem; padding: 0 1.25rem; display: flex; justify-content: space-between; align-items: center; }
+    .nav-btn { background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); padding: 0.65rem 1.35rem; border-radius: 12px; font-weight: 700; cursor: pointer; font-family: 'JetBrains Mono', monospace; transition: 0.2s; }
+    .nav-btn:hover { background: var(--orange); color: #fff; border-color: var(--orange); }
   </style>
 </head>
 <body>
   <div>
-    <div class="top-bar">
-      <a class="back-link" href="../index.html">&larr; 返回實驗室 Wiki 首頁</a>
-      <span id="slide-indicator" style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--muted);">Slide 1 / 4</span>
-    </div>
-    <div class="progress-wrap"><div class="progress-bar" id="progress"></div></div>
+    <nav class="navbar">
+      <div class="nav-inner">
+        <a href="../index.html" class="back-btn">← 返回實驗室互動學習首頁</a>
+        <div class="dots">
+          <div class="dot active" onclick="goSlide(0)">1</div>
+          <div class="dot" onclick="goSlide(1)">2</div>
+          <div class="dot" onclick="goSlide(2)">3</div>
+          <div class="dot" onclick="goSlide(3)">4</div>
+        </div>
+        <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 切換暗房模式</button>
+      </div>
+    </nav>
+    <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
   </div>
 
-  <main class="slide-container">
-    <section class="slide active">
-      <span class="tag">SLIDE 01 // CORE CONCEPT</span>
-      <h2>1. 為什麼後鞏膜成像需要 1045nm SS-PS-OCT？</h2>
-      <p>在高度近視與病理性近視研究中，後鞏膜（Posterior Sclera）膠原纖維的排列與雙折射特性變化是評估眼球生物力學的關鍵指標。傳統 840nm 波段易受視網膜色素上皮層（RPE）散射衰減，因此本實驗室採用中心波長 $\lambda_0 = 1045\text{ nm}$、掃頻速率 $200\text{ kHz}$ 之掃頻光源。</p>
-      <div class="formula-box">
-        <strong>光學同調斷層掃描之理論軸向解析度：</strong>
-        $$\delta z = \frac{2 \ln 2}{\pi} \cdot \frac{\lambda_0^2}{\Delta \lambda}$$
-        <span>當中心波長 $\lambda_0 = 1045\text{ nm}$、頻譜半高寬 $\Delta\lambda \approx 100\text{ nm}$ 時，可兼顧深層鞏膜穿透力與次微米級軸向解析度。</span>
-      </div>
-    </section>
+  <main class="stage">
+    <div class="slide-card">
+      <!-- Slide 1 -->
+      <section class="slide active">
+        <span class="badge">🔦 MODULE 02 // SLIDE 1 OF 4</span>
+        <h1>1. 為什麼高度近視後鞏膜成像需要 1045nm SS-PS-OCT？</h1>
+        <p>在高度近視與病理性近視研究中，眼球最外層的<strong>後鞏膜（Posterior Sclera）</strong>膠原纖維重塑與排列變化，是決定眼軸異常拉長的關鍵指標。傳統眼科 OCT 常使用 $840\text{ nm}$ 光源，但容易被視網膜色素上皮層（RPE）強烈散射而無法看清深處。</p>
+        <div class="callout-blue">
+          <strong>🌟 1045nm 波段與 200kHz 掃頻光源優勢：</strong><br/>
+          本實驗室採用中心波長 $\lambda_0 = 1045\text{ nm}$、掃頻速率 $200\text{ kHz}$ 之掃頻雷射（Swept-Source Laser）搭配 90D 眼底鏡。$1045\text{ nm}$ 正好位於眼球玻璃體水吸收的低谷視窗，且對黑色素散射極小，能深入穿透至後鞏膜層！
+        </div>
+        <div class="callout">
+          <strong>📏 理論軸向解析度與 AGENTS.md 防幻覺檢核：</strong>
+          $$\delta z = \frac{2 \ln 2}{\pi} \cdot \frac{\lambda_0^2}{\Delta \lambda}$$
+          本系統 $\lambda_0 = 1045\text{ nm}$，而實際頻譜半高寬 $\Delta\lambda$ 目前於原始筆記中為 <span class="tbd-badge">[待實驗室實測補齊]</span>（嚴守 <code>AGENTS.md</code> 規範，未提供實測值時絕不自行瞎掰數據）。
+        </div>
+      </section>
 
-    <section class="slide">
-      <span class="tag">SLIDE 02 // POLARIZATION MATHEMATICS</span>
-      <h2>2. 雙通道偏振分集偵測與累積相位延遲重建</h2>
-      <p>系統透過被動偏振延遲單元與雙通道平衡光電探測器（BPD），同步擷取水平偏振態 $E_H(z)$ 與垂直偏振態 $E_V(z)$ 之複數干涉訊號。完成 k-space 線性插值與色散補償後，經快速傅立葉轉換（FFT）可由振幅比值計算累積相位延遲（Phase Retardation）：</p>
-      <div class="formula-box">
-        $$\delta(z) = \arctan\left(\frac{|E_V(z)|}{|E_H(z)|}\right), \quad \Delta n = \frac{\lambda_0}{2\pi} \frac{d\delta(z)}{dz}$$
-      </div>
-      <p>對深度方向進行線性擬合求斜率 $\frac{d\delta(z)}{dz}$，即可換算出後鞏膜組織之局部雙折射率 $\Delta n$。</p>
-    </section>
+      <!-- Slide 2 -->
+      <section class="slide">
+        <span class="badge">🔦 MODULE 02 // SLIDE 2 OF 4</span>
+        <h1>2. 偏振敏感 OCT (PS-OCT) 雙折射與相位延遲推導</h1>
+        <p>一般 OCT 只能看組織的「反射強度（黑白結構）」，但後鞏膜的膠原纖維具有<strong>光學雙折射（Birefringence）</strong>特性——平行與垂直於纖維走向的光波傳播速度不同！</p>
+        <p>我們利用被動偏振延遲單元與雙通道平衡光電探測器（BPD），同步接收水平偏振態 $E_H(z)$ 與垂直偏振態 $E_V(z)$ 之複數干涉訊號，經 FFT 後由振幅比值計算<strong>累積相位延遲（Phase Retardation, $\delta(z)$）</strong>：</p>
+        <div class="callout-blue" style="text-align:center;">
+          $$\delta(z) = \arctan\left(\frac{|E_V(z)|}{|E_H(z)|}\right), \quad \Delta n = \frac{\lambda_0}{2\pi} \frac{d\delta(z)}{dz}$$
+        </div>
+        <p>接著沿深度方向 $z$ 對相位延遲進行線性擬合求斜率 $\frac{d\delta(z)}{dz}$，即可定量算出後鞏膜膠原纖維之局部雙折射率 $\Delta n$！</p>
+      </section>
 
-    <section class="slide">
-      <span class="tag">SLIDE 03 // SYSTEM PARAMETERS</span>
-      <h2>3. 實驗室 1045nm 系統標準參數與環安衛邊界</h2>
-      <table>
-        <thead>
-          <tr><th>參數項目</th><th>實驗室標準設定值</th><th>安全與除錯規範 (Source: wiki/)</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>中心波長 / 掃頻速率</td><td>1045 nm / 200 kHz</td><td>每條 A-scan 週期為 5 $\mu$s，需以硬體 PFI0 Trigger 同步</td></tr>
-          <tr><td>樣品端入眼安全上限</td><td>&le; 1.8 mW (日常設 1.2~1.5 mW)</td><td>依 ANSI Z136.1 標準，量測前功率計務必切換至 1045nm 校正檔</td></tr>
-          <tr><td>BPD 單臂參考光功率</td><td>0.5 mW ~ 1.0 mW</td><td>若飽和紅燈閃爍，立即調降可調衰減器，嚴禁以衛生紙擦拭 APC 光纖</td></tr>
-          <tr><td>雷射防護護目鏡</td><td>OD 5+ (950nm - 1100nm)</td><td>進入暗房開啟 Class 3B 雷射鑰匙前必須全程配戴</td></tr>
-        </tbody>
-      </table>
-    </section>
+      <!-- Slide 3 -->
+      <section class="slide">
+        <span class="badge">🔦 MODULE 02 // SLIDE 3 OF 4</span>
+        <h1>3. 實驗室 1045nm SS-PS-OCT 系統標準參數表</h1>
+        <p>以下所有參數均 100% 萃取自 <code>raw/2026-11-05-ps-oct-birefringence.md</code> 原始實驗筆記：</p>
+        <table>
+          <thead>
+            <tr><th>參數名稱</th><th>實驗室標準數值</th><th>物理意義與安全規範</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>中心波長 ($\lambda_0$)</td><td>1045 nm</td><td>降低 RPE 散射，提升後鞏膜深層穿透力</td></tr>
+            <tr><td>掃頻速率 (A-line Rate)</td><td>200 kHz (週期 5 $\mu\text{s}$)</td><td>配合高速 DAQ 硬體 PFI0 觸發同步</td></tr>
+            <tr><td>實際頻譜半高寬 ($\Delta\lambda$)</td><td><span class="tbd-badge">[待實驗室實測補齊]</span></td><td>遵循 <code>AGENTS.md</code> 規定保留待光譜儀實測</td></tr>
+            <tr><td>BPD 單臂參考光功率</td><td>0.5 mW ~ 1.0 mW</td><td>避免平衡探測器飽和亮紅燈</td></tr>
+            <tr><td>樣品端入眼安全上限</td><td>$\le 1.8\text{ mW}$ (日常設 1.2~1.5 mW)</td><td>遵循 ANSI Z136.1 規範 <span class="wiki-tag">[[laser-safety-bpd]]</span></td></tr>
+          </tbody>
+        </table>
+      </section>
 
-    <section class="slide">
-      <span class="tag">SLIDE 04 // TROUBLESHOOTING LINKAGE</span>
-      <h2>4. 常見條紋偽影與硬體同步排查清單</h2>
-      <ul>
-        <li><strong>現象一：MATLAB 雙折射相位圖出現嚴重橫向條紋偽影</strong><br/>排查路徑：檢查掃頻雷射輸出的 k-clock 觸發訊號是否鬆脫，以及 k-space 重取樣陣列是否與 A-line Trigger 對齊。</li>
-        <li><strong>現象二：B-scan 結構影像出現周期性左右晃動錯位 (Jitter)</strong><br/>排查路徑：確認 LabVIEW 程式未使用軟體迴圈計時，必須將 Galvo 振鏡鋸齒波 AO 與高速 DAQ 卡綁定同一個硬體時脈，並預留 15% Flyback 緩衝點數。</li>
-      </ul>
-    </section>
+      <!-- Slide 4 -->
+      <section class="slide">
+        <span class="badge">🔦 MODULE 02 // SLIDE 4 OF 4</span>
+        <h1>4. 常見條紋偽影除錯與 Wiki 雙向連結拓樸</h1>
+        <ul>
+          <li>
+            <strong>異常現象一：MATLAB 重建出的雙折射相位圖佈滿橫向條紋偽影</strong><br/>
+            排查路徑：掃頻雷射輸出的 k-clock 觸發訊號未與高速 DAQ 卡的 <code>PFI0</code> 時脈對齊，導致 k-space 重取樣相位抖動。<br/>
+            關聯節點：<span class="wiki-tag">[[k-clock-trigger]]</span>
+          </li>
+          <li>
+            <strong>異常現象二：B-scan 結構影像出現周期性左右晃動錯位 (Jitter)</strong><br/>
+            排查路徑：LabVIEW 誤用軟體迴圈計時，必須改用硬體 Trigger 並預留 <code>15% Flyback</code> 振鏡回掃緩衝點數。<br/>
+            關聯節點：<span class="wiki-tag">[[galvo-daq-sync]]</span>
+          </li>
+        </ul>
+        <div class="callout">
+          <strong>🔗 下一站學習建議：</strong><br/>
+          👉 <a href="../index.html" style="color:var(--orange); font-weight:700;">返回首頁體驗「OCT 解析度與安全功率互動模擬器」或繼續閱讀 Module 03 &rarr;</a>
+        </div>
+      </section>
+    </div>
   </main>
 
-  <div class="controls">
-    <button onclick="moveSlide(-1)">&larr; 上一頁 (Prev)</button>
-    <span style="color: var(--muted); font-size: 0.85rem;">支援鍵盤 &larr; &rarr; 方向鍵翻頁</span>
-    <button onclick="moveSlide(1)">下一頁 (Next) &rarr;</button>
-  </div>
+  <footer class="footer-nav">
+    <button class="nav-btn" onclick="stepSlide(-1)">← 上一頁 (Prev)</button>
+    <span style="color:var(--text-muted); font-size:0.85rem; font-family:'JetBrains Mono',monospace;">支援鍵盤 ← → 方向鍵翻頁</span>
+    <button class="nav-btn" onclick="stepSlide(1)">下一頁 (Next) →</button>
+  </footer>
 
   <script>
-    let current = 0;
+    let cur = 0;
     const slides = document.querySelectorAll('.slide');
-    const indicator = document.getElementById('slide-indicator');
-    const progress = document.getElementById('progress');
-
-    function updateView() {
-      slides.forEach((s, i) => s.classList.toggle('active', i === current));
-      indicator.textContent = `Slide ${current + 1} / ${slides.length}`;
-      progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+    const dots = document.querySelectorAll('.dot');
+    const prog = document.getElementById('progFill');
+    function render() {
+      slides.forEach((s, i) => s.classList.toggle('active', i === cur));
+      dots.forEach((d, i) => d.classList.toggle('active', i === cur));
+      prog.style.width = `${((cur + 1) / slides.length) * 100}%`;
     }
-    function moveSlide(step) {
-      current = (current + step + slides.length) % slides.length;
-      updateView();
+    function stepSlide(delta) { cur = (cur + delta + slides.length) % slides.length; render(); }
+    function goSlide(idx) { cur = idx; render(); }
+    function toggleTheme() {
+      const root = document.documentElement;
+      const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      root.setAttribute('data-theme', next);
+      document.getElementById('themeBtn').textContent = next === 'light' ? '🌙 切換暗房模式' : '🌞 切換暖陽模式';
     }
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight') moveSlide(1);
-      if (e.key === 'ArrowLeft') moveSlide(-1);
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') stepSlide(1);
+      if (e.key === 'ArrowLeft') stepSlide(-1);
     });
   </script>
 </body>
