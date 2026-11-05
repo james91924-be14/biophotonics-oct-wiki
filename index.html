@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NYCU 生醫光電實驗室 | OCT 互動學習百科</title>
+  <title>NYCU 生醫光電實驗室 | OCT 互動學習網與 LLM Wiki 知識庫 v3.0</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
@@ -12,436 +12,892 @@
     onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
   <style>
     :root[data-theme="light"] {
-      --bg-main: #FAF7F2; --bg-sec: #F3EFE6; --bg-card: #FFFFFF;
-      --text-main: #1E293B; --text-sec: #475569; --text-muted: #64748B;
-      --border: #E2E8F0; --orange: #EA580C; --orange-soft: #FFEDD5;
-      --blue: #0284C7; --blue-soft: #E0F2FE; --green: #059669; --green-soft: #D1FAE5;
-      --purple: #7C3AED; --purple-soft: #EDE9FE;
-      --shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+      --bg-main: #FAF7F2; --bg-secondary: #F3EFE6; --bg-card: #FFFFFF; --bg-card-hover: #FFFDF9;
+      --text-primary: #1E293B; --text-secondary: #475569; --text-muted: #64748B;
+      --border-color: #E2E8F0; --accent-primary: #EA580C; --accent-soft: #FFEDD5;
+      --accent-blue: #0284C7; --accent-blue-soft: #E0F2FE;
+      --accent-green: #059669; --accent-green-soft: #D1FAE5;
+      --accent-purple: #7C3AED; --accent-purple-soft: #EDE9FE;
+      --shadow-sm: 0 4px 12px rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 12px 28px rgba(15, 23, 42, 0.09);
       --hero-grad: linear-gradient(135deg, #FFF7ED 0%, #E0F2FE 55%, #EDE9FE 100%);
     }
     :root[data-theme="dark"] {
-      --bg-main: #0B0F17; --bg-sec: #111827; --bg-card: #1E293B;
-      --text-main: #F8FAFC; --text-sec: #CBD5E1; --text-muted: #94A3B8;
-      --border: #334155; --orange: #F97316; --orange-soft: rgba(249, 115, 22, 0.18);
-      --blue: #38BDF8; --blue-soft: rgba(56, 189, 248, 0.16); --green: #34D399; --green-soft: rgba(52, 211, 153, 0.16);
-      --purple: #A78BFA; --purple-soft: rgba(167, 139, 250, 0.16);
-      --shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+      --bg-main: #0B0F17; --bg-secondary: #111827; --bg-card: #1E293B; --bg-card-hover: #263449;
+      --text-primary: #F8FAFC; --text-secondary: #CBD5E1; --text-muted: #94A3B8;
+      --border-color: #334155; --accent-primary: #F97316; --accent-soft: rgba(249, 115, 22, 0.18);
+      --accent-blue: #38BDF8; --accent-blue-soft: rgba(56, 189, 248, 0.16);
+      --accent-green: #34D399; --accent-green-soft: rgba(52, 211, 153, 0.16);
+      --accent-purple: #A78BFA; --accent-purple-soft: rgba(167, 139, 250, 0.16);
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 14px 32px rgba(0, 0, 0, 0.45);
       --hero-grad: linear-gradient(135deg, #1E1B4B 0%, #0F172A 55%, #1F2937 100%);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { background: var(--bg-main); color: var(--text-main); font-family: 'Noto Sans TC', sans-serif; line-height: 1.7; transition: background 0.25s, color 0.25s; }
-    .navbar { position: sticky; top: 0; z-index: 50; background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 0.75rem 1.5rem; box-shadow: var(--shadow); }
-    .nav-inner { max-width: 1160px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; }
-    .brand { display: flex; align-items: center; gap: 0.6rem; font-weight: 900; font-size: 1.1rem; color: var(--text-main); text-decoration: none; }
-    .brand-icon { background: var(--orange); color: #fff; width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; font-family: 'JetBrains Mono', monospace; font-weight: 700; }
-    .nav-links { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
-    .nav-links a { color: var(--text-sec); text-decoration: none; font-size: 0.88rem; font-weight: 600; padding: 0.35rem 0.65rem; border-radius: 8px; }
-    .nav-links a:hover { background: var(--orange-soft); color: var(--orange); }
-    .pill-btn { background: var(--bg-sec); color: var(--text-main); border: 1px solid var(--border); padding: 0.38rem 0.85rem; border-radius: 99px; cursor: pointer; font-size: 0.82rem; font-weight: 700; }
-    .pill-btn.active { background: var(--orange); color: #fff; border-color: var(--orange); }
-    .container { max-width: 1160px; margin: 0 auto; padding: 1.75rem 1.25rem 4rem; }
-    .music-bar { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 0.75rem 1.25rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; box-shadow: var(--shadow); }
-    .hero { background: var(--hero-grad); border: 1px solid var(--border); border-radius: 22px; padding: 2.25rem; margin-bottom: 2.25rem; display: grid; grid-template-columns: 1.35fr 0.85fr; gap: 1.75rem; align-items: center; box-shadow: var(--shadow); }
-    @media (max-width: 860px) { .hero { grid-template-columns: 1fr; } }
-    .badge { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; font-weight: 700; background: var(--orange-soft); color: var(--orange); padding: 0.25rem 0.75rem; border-radius: 99px; margin-bottom: 0.75rem; }
-    .hero h1 { font-size: 2.1rem; font-weight: 900; line-height: 1.3; margin-bottom: 0.85rem; }
-    .hero p { color: var(--text-sec); font-size: 0.98rem; margin-bottom: 1.25rem; }
-    .btn-primary { background: var(--orange); color: #fff; border: none; padding: 0.65rem 1.25rem; border-radius: 10px; font-weight: 700; cursor: pointer; text-decoration: none; font-size: 0.9rem; display: inline-block; }
-    .btn-outline { background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); padding: 0.65rem 1.15rem; border-radius: 10px; font-weight: 700; cursor: pointer; text-decoration: none; font-size: 0.9rem; display: inline-block; }
-    .hero-panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.35rem; }
-    .prog-track { height: 10px; background: var(--bg-sec); border-radius: 99px; overflow: hidden; margin: 0.5rem 0 1rem; }
-    .prog-fill { height: 100%; background: linear-gradient(90deg, var(--orange), var(--blue)); width: 25%; transition: width 0.3s; }
-    .mini-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
-    .mini-stat { background: var(--bg-sec); padding: 0.65rem 0.85rem; border-radius: 10px; }
-    .mini-stat .num { font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; font-weight: 700; color: var(--blue); }
-    .mini-stat .lbl { font-size: 0.75rem; color: var(--text-muted); }
-    .sec-head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; margin: 2.5rem 0 1.1rem; }
-    .sec-head h2 { font-size: 1.45rem; font-weight: 900; }
-    .sec-head p { color: var(--text-muted); font-size: 0.9rem; }
-    .toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem; }
-    .search-box { background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); padding: 0.45rem 0.95rem; border-radius: 99px; min-width: 220px; font-size: 0.86rem; }
-    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 1.25rem; }
-    .lesson-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.4rem; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow); transition: transform 0.2s, border-color 0.2s; }
-    .lesson-card:hover { transform: translateY(-3px); border-color: var(--orange); }
-    .card-top { display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; margin-bottom: 0.7rem; }
-    .tag { padding: 0.2rem 0.55rem; border-radius: 6px; font-weight: 700; }
-    .t-opt { background: var(--blue-soft); color: var(--blue); }
-    .t-ps { background: var(--orange-soft); color: var(--orange); }
-    .t-hw { background: var(--purple-soft); color: var(--purple); }
-    .t-ai { background: var(--green-soft); color: var(--green); }
-    .lesson-card h3 { font-size: 1.14rem; font-weight: 800; margin-bottom: 0.55rem; }
-    .lesson-card p { color: var(--text-sec); font-size: 0.88rem; margin-bottom: 0.9rem; }
-    .pts { list-style: none; background: var(--bg-sec); padding: 0.7rem 0.9rem; border-radius: 10px; font-size: 0.81rem; margin-bottom: 1rem; color: var(--text-sec); }
-    .pts li { margin-bottom: 0.2rem; }
-    .card-foot { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 0.8rem; }
-    .btn-sm { background: var(--orange-soft); color: var(--orange); border: none; padding: 0.38rem 0.75rem; border-radius: 8px; font-weight: 700; font-size: 0.8rem; cursor: pointer; text-decoration: none; }
-    .btn-sm:hover { background: var(--orange); color: #fff; }
-    .btn-sm-out { background: var(--bg-sec); color: var(--text-main); border: 1px solid var(--border); padding: 0.38rem 0.75rem; border-radius: 8px; font-weight: 700; font-size: 0.8rem; text-decoration: none; }
-    .btn-sm-out:hover { border-color: var(--orange); color: var(--orange); }
-    .sim-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; padding: 1.65rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; box-shadow: var(--shadow); }
-    @media (max-width: 860px) { .sim-box { grid-template-columns: 1fr; } }
-    .s-row { margin-bottom: 1rem; }
-    .s-row label { display: flex; justify-content: space-between; font-weight: 700; font-size: 0.88rem; margin-bottom: 0.25rem; }
-    .s-row input { width: 100%; accent-color: var(--orange); }
-    .quiz-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.15rem; }
-    .q-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.35rem; box-shadow: var(--shadow); }
-    .q-opt { display: block; width: 100%; text-align: left; background: var(--bg-sec); color: var(--text-main); border: 1px solid var(--border); padding: 0.6rem 0.85rem; border-radius: 8px; margin-top: 0.45rem; cursor: pointer; font-size: 0.85rem; font-weight: 600; }
-    .q-opt:hover { border-color: var(--orange); }
-    .table-wrap { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; overflow-x: auto; box-shadow: var(--shadow); }
-    table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
-    th, td { border-bottom: 1px solid var(--border); padding: 0.75rem; text-align: left; }
-    th { font-family: 'JetBrains Mono', monospace; color: var(--blue); }
-    code { font-family: 'JetBrains Mono', monospace; background: var(--bg-sec); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.8rem; }
-    .mascot { position: fixed; right: 20px; bottom: 20px; z-index: 70; display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; }
-    .m-bubble { background: var(--bg-card); border: 2px solid var(--orange); border-radius: 14px; padding: 0.8rem 1rem; max-width: 270px; box-shadow: var(--shadow); font-size: 0.82rem; }
-    .m-avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--orange); color: #fff; display: grid; place-items: center; font-size: 1.7rem; cursor: pointer; box-shadow: var(--shadow); }
-    .modal-bg { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); display: none; place-items: center; z-index: 100; padding: 1rem; }
-    .modal-bg.open { display: grid; }
-    .modal-box { background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border); border-radius: 18px; max-width: 760px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 1.75rem; }
-    footer { text-align: center; padding: 2rem 1rem; color: var(--text-muted); font-size: 0.84rem; border-top: 1px solid var(--border); margin-top: 2.5rem; }
+    body {
+      background-color: var(--bg-main); color: var(--text-primary);
+      font-family: 'Noto Sans TC', sans-serif; line-height: 1.7;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+    /* Sticky Navbar + Music Bar */
+    .navbar {
+      position: sticky; top: 0; z-index: 60;
+      background: var(--bg-card); border-bottom: 1px solid var(--border-color);
+      padding: 0.75rem 1.5rem; box-shadow: var(--shadow-sm);
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 0.65rem;
+      font-weight: 900; font-size: 1.1rem; color: var(--text-primary); text-decoration: none;
+    }
+    .brand-icon {
+      background: var(--accent-primary); color: #fff; width: 34px; height: 34px;
+      border-radius: 9px; display: grid; place-items: center;
+      font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 0.9rem;
+    }
+    .nav-links { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+    .nav-links a {
+      color: var(--text-secondary); text-decoration: none; font-size: 0.86rem;
+      font-weight: 600; padding: 0.35rem 0.6rem; border-radius: 8px; transition: 0.2s;
+    }
+    .nav-links a:hover { background: var(--accent-soft); color: var(--accent-primary); }
+    .music-pill {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      background: var(--bg-secondary); border: 1px solid var(--border-color);
+      padding: 0.3rem 0.75rem; border-radius: 99px; font-size: 0.8rem;
+    }
+    .music-btn {
+      background: var(--accent-primary); color: #fff; border: none;
+      padding: 0.22rem 0.65rem; border-radius: 99px; cursor: pointer; font-weight: 700; font-size: 0.78rem;
+    }
+    .music-select {
+      background: transparent; color: var(--text-primary); border: none;
+      font-size: 0.78rem; font-weight: 600; outline: none; cursor: pointer;
+    }
+    .eq-bars { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
+    .eq-bar { width: 3px; background: var(--accent-primary); height: 3px; border-radius: 1px; transition: height 0.15s; }
+    .playing .eq-bar:nth-child(1) { animation: eq 0.5s infinite alternate; }
+    .playing .eq-bar:nth-child(2) { animation: eq 0.35s infinite alternate 0.15s; }
+    .playing .eq-bar:nth-child(3) { animation: eq 0.45s infinite alternate 0.3s; }
+    @keyframes eq { from { height: 3px; } to { height: 12px; } }
+    .theme-btn {
+      background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-color);
+      padding: 0.38rem 0.8rem; border-radius: 99px; cursor: pointer; font-size: 0.82rem; font-weight: 700;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem 6rem; }
+    /* Hero */
+    .hero {
+      background: var(--hero-grad); border: 1px solid var(--border-color);
+      border-radius: 24px; padding: 2.5rem; margin-bottom: 2.25rem;
+      box-shadow: var(--shadow-sm); display: grid; grid-template-columns: 1.35fr 0.85fr; gap: 2rem; align-items: center;
+    }
+    @media (max-width: 880px) { .hero { grid-template-columns: 1fr; padding: 1.75rem; } }
+    .pill-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 700;
+      background: var(--accent-soft); color: var(--accent-primary);
+      padding: 0.28rem 0.85rem; border-radius: 99px; margin-bottom: 0.9rem;
+    }
+    .hero h1 { font-size: 2.2rem; font-weight: 900; line-height: 1.25; margin-bottom: 0.9rem; }
+    .hero p { color: var(--text-secondary); font-size: 1rem; margin-bottom: 1.4rem; }
+    .hero-actions { display: flex; gap: 0.7rem; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--accent-primary); color: #fff; border: none;
+      padding: 0.65rem 1.25rem; border-radius: 12px; font-weight: 700;
+      cursor: pointer; text-decoration: none; font-size: 0.92rem; transition: transform 0.15s;
+    }
+    .btn-primary:hover { transform: translateY(-2px); }
+    .btn-outline {
+      background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-color);
+      padding: 0.65rem 1.15rem; border-radius: 12px; font-weight: 600;
+      cursor: pointer; text-decoration: none; font-size: 0.92rem;
+    }
+    .hero-panel {
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: 18px; padding: 1.4rem; box-shadow: var(--shadow-sm);
+    }
+    .progress-header { display: flex; justify-content: space-between; font-size: 0.88rem; font-weight: 700; margin-bottom: 0.45rem; }
+    .progress-bar-bg { height: 10px; background: var(--bg-secondary); border-radius: 99px; overflow: hidden; margin-bottom: 1.1rem; }
+    .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent-primary), var(--accent-blue)); width: 25%; transition: width 0.3s; }
+    .mini-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.7rem; }
+    .mini-stat { background: var(--bg-secondary); padding: 0.7rem 0.95rem; border-radius: 12px; }
+    .mini-stat .num { font-family: 'JetBrains Mono', monospace; font-size: 1.25rem; font-weight: 700; color: var(--accent-blue); }
+    .mini-stat .lbl { font-size: 0.76rem; color: var(--text-muted); }
+
+    /* 3 Visual Gallery Cards (The 3 Featured Illustrations/Images) */
+    .gallery-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.25rem; margin-bottom: 2.5rem;
+    }
+    .gallery-card {
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: 18px; padding: 1.25rem; box-shadow: var(--shadow-sm);
+      display: flex; flex-direction: column; gap: 0.75rem;
+    }
+    .gallery-img-wrap {
+      width: 100%; height: 175px; background: var(--bg-secondary);
+      border-radius: 12px; overflow: hidden; display: grid; place-items: center;
+      border: 1px solid var(--border-color); position: relative;
+    }
+    .gallery-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* Section Headers */
+    .section-head {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      flex-wrap: wrap; gap: 1rem; margin: 2.8rem 0 1.25rem;
+    }
+    .section-head h2 { font-size: 1.5rem; font-weight: 900; }
+    .section-head p { color: var(--text-muted); font-size: 0.92rem; }
+
+    /* Filter & Search */
+    .toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.4rem; }
+    .filter-tabs { display: flex; gap: 0.45rem; flex-wrap: wrap; }
+    .tab-btn {
+      background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border-color);
+      padding: 0.42rem 0.9rem; border-radius: 99px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.2s;
+    }
+    .tab-btn.active, .tab-btn:hover { background: var(--accent-primary); color: #fff; border-color: var(--accent-primary); }
+    .search-input {
+      background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-color);
+      padding: 0.5rem 1rem; border-radius: 99px; min-width: 240px; font-size: 0.88rem;
+    }
+
+    /* 8 Lesson Cards Grid */
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.35rem; }
+    .lesson-card {
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: 18px; padding: 1.45rem; display: flex; flex-direction: column;
+      justify-content: space-between; box-shadow: var(--shadow-sm); transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+    .lesson-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--accent-primary); }
+    .card-top {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 0.8rem; font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; gap: 0.5rem;
+    }
+    .cat-tag { padding: 0.22rem 0.6rem; border-radius: 6px; font-weight: 700; white-space: nowrap; }
+    .cat-optics { background: var(--accent-blue-soft); color: var(--accent-blue); }
+    .cat-psoct { background: var(--accent-soft); color: var(--accent-primary); }
+    .cat-hardware { background: var(--accent-purple-soft); color: var(--accent-purple); }
+    .cat-ai { background: var(--accent-green-soft); color: var(--accent-green); }
+    .lesson-card h3 { font-size: 1.16rem; font-weight: 800; margin-bottom: 0.6rem; line-height: 1.4; }
+    .lesson-card p { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem; }
+    .key-points {
+      list-style: none; background: var(--bg-secondary); padding: 0.75rem 0.95rem;
+      border-radius: 10px; font-size: 0.82rem; margin-bottom: 1.15rem; color: var(--text-secondary);
+    }
+    .key-points li { margin-bottom: 0.25rem; }
+    .card-actions {
+      display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid var(--border-color); padding-top: 0.85rem; gap: 0.5rem; flex-wrap: nowrap;
+    }
+    .check-done {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      font-size: 0.82rem; color: var(--text-muted); cursor: pointer; white-space: nowrap;
+    }
+    .btn-group { display: flex; gap: 0.4rem; flex-wrap: nowrap; }
+    .open-btn {
+      background: var(--accent-soft); color: var(--accent-primary); border: 1px solid transparent;
+      padding: 0.4rem 0.75rem; border-radius: 8px; font-weight: 700; font-size: 0.8rem;
+      cursor: pointer; text-decoration: none; white-space: nowrap; transition: 0.2s;
+    }
+    .open-btn:hover { background: var(--accent-primary); color: #fff; }
+    .open-btn-page {
+      background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-color);
+      padding: 0.4rem 0.75rem; border-radius: 8px; font-weight: 700; font-size: 0.8rem;
+      cursor: pointer; text-decoration: none; white-space: nowrap; transition: 0.2s;
+    }
+    .open-btn-page:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
+
+    /* Interactive Mini-Game & Simulator Box */
+    .two-col-box {
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: 20px; padding: 1.85rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.85rem; box-shadow: var(--shadow-sm);
+    }
+    @media (max-width: 880px) { .two-col-box { grid-template-columns: 1fr; } }
+    .slider-group { margin-bottom: 1.1rem; }
+    .slider-group label { display: flex; justify-content: space-between; font-weight: 700; font-size: 0.88rem; margin-bottom: 0.3rem; }
+    .slider-group input[type="range"] { width: 100%; accent-color: var(--accent-primary); }
+    .sim-result {
+      background: var(--bg-secondary); border-radius: 14px; padding: 1.25rem;
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .big-metric { font-family: 'JetBrains Mono', monospace; font-size: 1.85rem; font-weight: 800; color: var(--accent-primary); }
+    canvas#gameCanvas {
+      width: 100%; height: 195px; background: #090D16; border-radius: 12px; border: 1px solid var(--border-color); display: block;
+    }
+
+    /* Flashcards & Treehole Wall */
+    .flash-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.1rem; }
+    .flashcard {
+      background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px;
+      padding: 1.3rem; min-height: 180px; cursor: pointer; display: flex; flex-direction: column;
+      justify-content: space-between; transition: transform 0.2s, border-color 0.2s; box-shadow: var(--shadow-sm);
+    }
+    .flashcard:hover { transform: translateY(-3px); border-color: var(--accent-blue); }
+    .flashcard .a-text { display: none; color: var(--accent-green); font-weight: 600; font-size: 0.9rem; }
+    .flashcard.flipped .q-text { display: none; }
+    .flashcard.flipped .a-text { display: block; }
+
+    /* External Learning Links Grid */
+    .ext-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.15rem; }
+    .ext-card {
+      background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px;
+      padding: 1.3rem; text-decoration: none; color: inherit; display: flex; flex-direction: column;
+      justify-content: space-between; transition: 0.2s; box-shadow: var(--shadow-sm);
+    }
+    .ext-card:hover { transform: translateY(-3px); border-color: var(--accent-blue); box-shadow: var(--shadow-md); }
+    .ext-card h4 { font-size: 1.05rem; font-weight: 800; margin-bottom: 0.4rem; color: var(--accent-blue); }
+    .ext-card p { font-size: 0.86rem; color: var(--text-secondary); margin-bottom: 0.8rem; }
+    .ext-url { font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; color: var(--text-muted); }
+
+    /* Treehole Notes */
+    .treehole-notes { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.9rem; margin-top: 1rem; }
+    .note-item {
+      background: var(--bg-secondary); border-left: 4px solid var(--accent-primary);
+      padding: 0.9rem 1rem; border-radius: 10px; font-size: 0.88rem;
+    }
+    .note-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.45rem; font-family: 'JetBrains Mono', monospace; }
+
+    /* Wiki Table */
+    .table-wrap {
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: 18px; padding: 1.4rem; overflow-x: auto; box-shadow: var(--shadow-sm);
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th, td { border-bottom: 1px solid var(--border-color); padding: 0.8rem; text-align: left; }
+    th { font-family: 'JetBrains Mono', monospace; color: var(--accent-blue); font-size: 0.8rem; }
+    code { font-family: 'JetBrains Mono', monospace; background: var(--bg-secondary); padding: 0.15rem 0.45rem; border-radius: 5px; font-size: 0.82rem; }
+
+    /* Interactive Walking Desktop Pet (3 States + Image Switcher) */
+    .mascot-widget {
+      position: fixed; right: 24px; bottom: 18px; z-index: 80;
+      display: flex; flex-direction: column; align-items: flex-end; gap: 0.55rem;
+      transition: right 0.6s ease;
+    }
+    .mascot-bubble {
+      background: var(--bg-card); color: var(--text-primary); border: 2px solid var(--accent-primary);
+      border-radius: 18px 18px 4px 18px; padding: 0.9rem 1.1rem; max-width: 310px;
+      box-shadow: var(--shadow-md); font-size: 0.84rem; line-height: 1.55;
+    }
+    .pet-state-tabs {
+      display: flex; gap: 0.3rem; margin: 0.45rem 0;
+    }
+    .pet-tab {
+      flex: 1; text-align: center; font-size: 0.72rem; padding: 0.2rem 0.3rem;
+      border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-secondary);
+      cursor: pointer; font-weight: 700; color: var(--text-secondary);
+    }
+    .pet-tab.active { background: var(--accent-primary); color: #fff; border-color: var(--accent-primary); }
+    .mascot-controls { display: flex; gap: 0.35rem; margin-top: 0.5rem; flex-wrap: wrap; }
+    .m-btn {
+      background: var(--accent-soft); color: var(--accent-primary); border: none;
+      padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer;
+    }
+    .m-btn:hover { background: var(--accent-primary); color: #fff; }
+    .mascot-avatar-box {
+      width: 78px; height: 78px; border-radius: 50%;
+      background: linear-gradient(135deg, #FFF7ED, #FFEDD5);
+      border: 3px solid var(--accent-primary); box-shadow: var(--shadow-md);
+      display: grid; place-items: center; cursor: pointer; overflow: hidden;
+      animation: petBob 2.4s ease-in-out infinite; position: relative;
+    }
+    @keyframes petBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(5px); display: none; place-items: center; z-index: 100; padding: 1.25rem;
+    }
+    .modal-backdrop.open { display: grid; }
+    .modal-card {
+      background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-color);
+      border-radius: 20px; max-width: 820px; width: 100%; max-height: 88vh; overflow-y: auto; padding: 2rem; box-shadow: var(--shadow-md);
+    }
+    .modal-header {
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.25rem;
+    }
+    .close-btn { background: var(--bg-secondary); border: none; color: var(--text-primary); padding: 0.4rem 0.85rem; border-radius: 8px; cursor: pointer; font-weight: 700; }
+    footer { text-align: center; padding: 2.5rem 1rem; color: var(--text-muted); font-size: 0.86rem; border-top: 1px solid var(--border-color); margin-top: 3rem; }
   </style>
 </head>
 <body>
   <nav class="navbar">
     <div class="nav-inner">
-      <a href="#" class="brand"><span class="brand-icon">OCT</span><span>NYCU 生醫光電實驗室・互動學習百科</span></a>
+      <a href="#" class="brand">
+        <span class="brand-icon">OCT</span>
+        <span>NYCU 生醫光電實驗室・互動學習百科</span>
+      </a>
       <div class="nav-links">
-        <a href="#lessons-sec">📚 8 大互動講義</a>
-        <a href="#simulator-sec">🔬 解析度模擬器</a>
-        <a href="#quiz-sec">🎯 觀念闖關測驗</a>
-        <a href="#links-sec">🔗 精選教學網</a>
-        <a href="#wiki-sec">🗂️ LLM Wiki 庫</a>
-        <button class="pill-btn" onclick="toggleTheme()" id="themeBtn">🌙 切換暗房模式</button>
+        <a href="#lessons-sec">📚 8 大講義</a>
+        <a href="#game-sec">🎮 暗房對光小遊戲</a>
+        <a href="#simulator-sec">🔬 解析度模擬</a>
+        <a href="#treehole-sec">🌱 實驗室樹洞</a>
+        <a href="#links-sec">🔗 學習資源</a>
+        <a href="#wiki-sec">🗂️ Wiki 節點</a>
+        <div class="music-pill" id="musicPill">
+          <div class="eq-bars"><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span></div>
+          <select class="music-select" id="bgmMode" onchange="changeBgm()">
+            <option value="musicbox">🎵 麻糬八音盒輕快旋律</option>
+            <option value="lofi">🎹 暗房溫暖爵士和弦</option>
+            <option value="rain">🌧️ 陽明山午後雨聲</option>
+          </select>
+          <button class="music-btn" id="bgmBtn" onclick="toggleBgm()">▶ 播放音樂</button>
+          <input type="range" id="bgmVol" min="0.05" max="0.5" step="0.05" value="0.25" style="width:55px; accent-color:var(--accent-primary);" title="調整音樂音量" />
+        </div>
+        <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 暗房模式</button>
       </div>
     </div>
   </nav>
 
   <div class="container">
-    <!-- Built-in Web Audio Music Bar -->
-    <div class="music-bar">
-      <div style="font-size:0.88rem; font-weight:700;">
-        🎵 內建專注背景音效（點擊按鈕立即發聲）：<span id="bgmStatus" style="color:var(--orange);">目前靜音</span>
-      </div>
-      <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
-        <button class="pill-btn" id="btnLofi" onclick="startSound('lofi')">🎹 暗房 Lo-Fi 鋼琴和弦</button>
-        <button class="pill-btn" id="btnRain" onclick="startSound('rain')">🌧️ 陽明山夜雨白噪音</button>
-        <button class="pill-btn" onclick="stopSound()">⏹ 停止音效</button>
-      </div>
-    </div>
-
     <!-- Hero -->
     <section class="hero">
       <div>
-        <span class="badge">✨ AGENTS.md Driven Knowledge Portal</span>
+        <span class="pill-badge">✨ AGENTS.md Driven Knowledge Portal v3.0 (Mochi-Treehole Edition)</span>
         <h1>從零看懂光學同調斷層掃描 (OCT) 與生醫 AI 實務</h1>
-        <p>歡迎來到國立陽明交通大學生醫光電研究所（許浩哲）建立的互動式知識庫！我們將複雜的 <strong>1045nm 掃頻偏振 OCT、麥克森干涉儀、GRIN 微探頭、LabVIEW 高速同步與深度學習降噪</strong>，轉化為初學者 5 分鐘就能輕鬆看懂的互動講義與模擬器。</p>
-        <div style="display:flex; gap:0.65rem; flex-wrap:wrap;">
+        <p>
+          歡迎來到國立陽明交通大學生醫光電研究所（許浩哲）建立的互動式知識庫！
+          本網站結合 <strong>Karpathy LLM Wiki 三層架構</strong>與 <strong>Mochi-Treehole 療癒系互動體驗</strong>，收錄 8 篇獨立翻頁講義、暗房對光尋峰小遊戲、八音盒電台、實驗室樹洞與三態桌面小寵物。
+        </p>
+        <div class="hero-actions">
           <a href="#lessons-sec" class="btn-primary">🚀 瀏覽 8 大互動講義</a>
+          <a href="#game-sec" class="btn-outline">🎮 挑戰暗房對光小遊戲</a>
           <button class="btn-outline" onclick="openModal('agents_spec')">📜 檢視 AGENTS.md 規格書</button>
         </div>
       </div>
+
       <div class="hero-panel">
-        <div style="display:flex; justify-content:space-between; font-size:0.86rem; font-weight:700;">
+        <div class="progress-header">
           <span>🎯 你的生醫光電學習進度</span>
           <span id="progText">2 / 8 單元已完成 (25%)</span>
         </div>
-        <div class="prog-track"><div class="prog-fill" id="progBar"></div></div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progBar"></div>
+        </div>
         <div class="mini-stats">
-          <div class="mini-stat"><div class="num">8 篇獨立頁</div><div class="lbl">lessons/*.html 投影片</div></div>
-          <div class="mini-stat"><div class="num">8 個節點</div><div class="lbl">wiki/*.md 結構化筆記</div></div>
-          <div class="mini-stat"><div class="num">1045 nm</div><div class="lbl">200kHz 後鞏膜穿透波段</div></div>
-          <div class="mini-stat"><div class="num" id="quizScore">0 / 3 題</div><div class="lbl">觀念闖關測驗得分</div></div>
+          <div class="mini-stat">
+            <div class="num">8 篇獨立頁</div>
+            <div class="lbl">lessons/*.html 全數支援翻頁</div>
+          </div>
+          <div class="mini-stat">
+            <div class="num">8 個節點</div>
+            <div class="lbl">wiki/*.md 雙向連結知識庫</div>
+          </div>
+          <div class="mini-stat">
+            <div class="num">1045 nm</div>
+            <div class="lbl">200kHz 後鞏膜深層穿透波段</div>
+          </div>
+          <div class="mini-stat">
+            <div class="num" id="petLv">Lv.1 實習生</div>
+            <div class="lbl">橘福福守護神好感度等級</div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Section 1: 8 Modules -->
-    <div class="sec-head" id="lessons-sec">
+    <!-- Featured 3 Images / Visual Diagrams Showcase -->
+    <section class="gallery-grid">
+      <div class="gallery-card">
+        <div class="gallery-img-wrap">
+          <svg viewBox="0 0 320 160" width="100%" height="100%">
+            <rect width="320" height="160" fill="#0F172A"/>
+            <circle cx="45" cy="80" r="18" fill="#EA580C"/>
+            <text x="45" y="84" fill="#fff" font-size="10" text-anchor="middle" font-weight="bold">1045nm</text>
+            <line x1="63" y1="80" x2="145" y2="80" stroke="#F97316" stroke-width="3"/>
+            <rect x="145" y="65" width="30" height="30" fill="none" stroke="#38BDF8" stroke-width="2" transform="rotate(45 160 80)"/>
+            <line x1="160" y1="58" x2="160" y2="22" stroke="#38BDF8" stroke-width="2.5" stroke-dasharray="4 2"/>
+            <rect x="135" y="14" width="50" height="8" fill="#94A3B8"/>
+            <text x="200" y="24" fill="#38BDF8" font-size="10">參考鏡 (Ref)</text>
+            <line x1="182" y1="80" x2="265" y2="80" stroke="#F97316" stroke-width="3"/>
+            <ellipse cx="280" cy="80" rx="18" ry="26" fill="none" stroke="#34D399" stroke-width="2.5"/>
+            <text x="275" y="122" fill="#34D399" font-size="10" text-anchor="middle">豬眼後鞏膜</text>
+            <line x1="160" y1="102" x2="160" y2="140" stroke="#A78BFA" stroke-width="2.5"/>
+            <text x="160" y="152" fill="#A78BFA" font-size="10" text-anchor="middle">BPD 平衡探測器</text>
+          </svg>
+        </div>
+        <div style="font-weight:800; font-size:0.95rem;">圖一：1045nm 麥克森低同調干涉光路架構</div>
+        <p style="font-size:0.82rem; color:var(--text-secondary);">將掃頻雷射分為參考臂與樣品臂，當兩臂光程差小於同調長度時產生微米級干涉條紋。</p>
+      </div>
+
+      <div class="gallery-card">
+        <div class="gallery-img-wrap">
+          <svg viewBox="0 0 320 160" width="100%" height="100%">
+            <rect width="320" height="160" fill="#0F172A"/>
+            <path d="M 20 80 Q 45 20, 70 80 T 120 80 T 170 80" fill="none" stroke="#38BDF8" stroke-width="2.5"/>
+            <path d="M 20 80 Q 45 130, 70 80 T 120 80 T 170 80" fill="none" stroke="#F97316" stroke-width="2.5" stroke-dasharray="4 2"/>
+            <text x="95" y="28" fill="#38BDF8" font-size="10" text-anchor="middle">水平偏振 E_H(z) 與垂直偏振 E_V(z)</text>
+            <rect x="195" y="35" width="105" height="90" rx="8" fill="#1E293B" stroke="#34D399" stroke-width="2"/>
+            <text x="247" y="65" fill="#34D399" font-size="11" text-anchor="middle" font-weight="bold">雙折射相位延遲</text>
+            <text x="247" y="88" fill="#F8FAFC" font-size="11" text-anchor="middle">δ(z) = arctan</text>
+            <text x="247" y="106" fill="#F97316" font-size="11" text-anchor="middle">(|E_V| / |E_H|)</text>
+          </svg>
+        </div>
+        <div style="font-weight:800; font-size:0.95rem;">圖二：SS-PS-OCT 雙通道偏振相位延遲重建</div>
+        <p style="font-size:0.82rem; color:var(--text-secondary);">透過雙通道 BPD 同步擷取正交偏振態振幅比值，定量計算後鞏膜膠原纖維雙折射率 $\Delta n$。</p>
+      </div>
+
+      <div class="gallery-card">
+        <div class="gallery-img-wrap">
+          <svg viewBox="0 0 320 160" width="100%" height="100%">
+            <rect width="320" height="160" fill="#0F172A"/>
+            <rect x="18" y="45" width="75" height="70" rx="8" fill="#1E293B" stroke="#F97316" stroke-width="2"/>
+            <text x="55" y="75" fill="#F97316" font-size="11" text-anchor="middle" font-weight="bold">raw/</text>
+            <text x="55" y="95" fill="#CBD5E1" font-size="9" text-anchor="middle">唯讀實驗筆記</text>
+            <text x="108" y="84" fill="#38BDF8" font-size="16" font-weight="bold">&rarr;</text>
+            <rect x="122" y="45" width="75" height="70" rx="8" fill="#1E293B" stroke="#38BDF8" stroke-width="2"/>
+            <text x="160" y="75" fill="#38BDF8" font-size="11" text-anchor="middle" font-weight="bold">wiki/</text>
+            <text x="160" y="95" fill="#CBD5E1" font-size="9" text-anchor="middle">[[雙向連結]]節點</text>
+            <text x="212" y="84" fill="#34D399" font-size="16" font-weight="bold">&rarr;</text>
+            <rect x="226" y="45" width="76" height="70" rx="8" fill="#1E293B" stroke="#34D399" stroke-width="2"/>
+            <text x="264" y="75" fill="#34D399" font-size="11" text-anchor="middle" font-weight="bold">lessons/</text>
+            <text x="264" y="95" fill="#CBD5E1" font-size="9" text-anchor="middle">8篇獨立HTML講義</text>
+          </svg>
+        </div>
+        <div style="font-weight:800; font-size:0.95rem;">圖三：AGENTS.md 驅動之三層式 LLM Wiki 管線</div>
+        <p style="font-size:0.82rem; color:var(--text-secondary);">嚴格分離唯讀原始證據（raw）、結構化概念節點（wiki）與互動式單檔教學網頁（lessons）。</p>
+      </div>
+    </section>
+
+    <!-- Section 1: 8 Interactive Lessons (All with Standalone HTML Links!) -->
+    <div class="section-head" id="lessons-sec">
       <div>
-        <h2>📚 8 大互動式主題講義庫 (Standalone Lessons &amp; Quick Read)</h2>
-        <p>每張卡片皆支援「✨ 互動速讀（直接彈出視窗）」與「📄 開啟獨立頁（進入 4 頁完整投影片）」！</p>
+        <h2>📚 8 大互動式主題講義庫 (Interactive Learning Modules)</h2>
+        <p>每一張卡片皆提供「✨ 互動速讀」與「📄 獨立講義 →（4 頁投影片＋隨堂測驗）」，勾選左下角可追蹤學習進度！</p>
       </div>
     </div>
 
     <div class="toolbar">
-      <div style="display:flex; gap:0.4rem; flex-wrap:wrap;">
-        <button class="pill-btn active" onclick="filterCards('ALL', this)">全部主題 (8)</button>
-        <button class="pill-btn" onclick="filterCards('Optics', this)">🌱 光學與微探頭 (2)</button>
-        <button class="pill-btn" onclick="filterCards('PSOCT', this)">🔦 偏振與硬體同步 (2)</button>
-        <button class="pill-btn" onclick="filterCards('AI', this)">🤖 訊號與 AI 降噪 (2)</button>
-        <button class="pill-btn" onclick="filterCards('Safety', this)">🛡️ 環安衛與 Agent (2)</button>
+      <div class="filter-tabs">
+        <button class="tab-btn active" onclick="filterLessons('ALL', this)">全部主題 (8)</button>
+        <button class="tab-btn" onclick="filterLessons('Optics-101', this)">🌱 光學與微探頭 (2)</button>
+        <button class="tab-btn" onclick="filterLessons('SS-PS-OCT', this)">🔦 偏振與硬體同步 (2)</button>
+        <button class="tab-btn" onclick="filterLessons('Signal-AI', this)">🤖 訊號與 AI 降噪 (2)</button>
+        <button class="tab-btn" onclick="filterLessons('Safety-Agent', this)">🛡️ 環安衛與 Agent (2)</button>
       </div>
-      <input type="text" class="search-box" id="searchInput" placeholder="🔍 搜尋關鍵字 (如：干涉、雙折射、CNN)..." oninput="searchCards()" />
+      <input type="text" class="search-input" id="searchInput" placeholder="🔍 搜尋關鍵字 (如：干涉、雙折射、CNN、護目鏡)..." oninput="searchLessons()" />
     </div>
 
-    <div class="cards-grid">
-      <article class="lesson-card" data-cat="Optics">
+    <div class="cards-grid" id="lessonsGrid">
+      <!-- Card 1 -->
+      <article class="lesson-card" data-cat="Optics-101">
         <div>
-          <div class="card-top"><span class="tag t-opt">🌱 MODULE 01 // 光學基礎</span><span>⏱️ 5 min</span></div>
+          <div class="card-top">
+            <span class="cat-tag cat-optics">🌱 MODULE 01 // 光學基礎入門</span>
+            <span>⏱️ 5 min</span>
+          </div>
           <h3>認識 OCT：為什麼它是「光學界的超音波」？</h3>
-          <p>用最直白的回音與水波比喻，帶初學者一次搞懂麥克森干涉儀與微米級活體視網膜光學切片原理。</p>
-          <ul class="pts">
-            <li>🔹 超音波 vs. OCT vs. 顯微鏡的解析度與穿透深度比較</li>
-            <li>🔹 為什麼光源頻譜寬度 $\Delta\lambda$ 越寬，軸向解析度越高？</li>
+          <p>不用背複雜的電磁學！用最直白的水波與回音比喻，帶你一次搞懂麥克森干涉儀（Michelson Interferometer）與微米級視網膜切片原理。</p>
+          <ul class="key-points">
+            <li>🔹 超音波 vs. OCT vs. 顯微鏡的穿透深度與解析度比較</li>
+            <li>🔹 什麼是「低同調干涉」？為什麼頻寬 $\Delta\lambda$ 越寬解析度越好？</li>
+            <li>🔹 A-scan（深度線）、B-scan（2D 切面）與 C-scan（3D 體積）圖解</li>
           </ul>
         </div>
-        <div class="card-foot">
-          <label style="font-size:0.8rem;"><input type="checkbox" class="chk" checked onchange="calcProg()"> 已讀完</label>
-          <div style="display:flex; gap:0.4rem;">
-            <button class="btn-sm" onclick="openModal('m1')">✨ 互動速讀</button>
-            <a class="btn-sm-out" href="lessons/01-oct-intro.html">📄 開啟獨立頁 &rarr;</a>
+        <div class="card-actions">
+          <label class="check-done"><input type="checkbox" checked onchange="updateProgress()"> 已讀完</label>
+          <div class="btn-group">
+            <button class="open-btn" onclick="openModal('m1')">✨ 互動速讀</button>
+            <a class="open-btn-page" href="lessons/01-oct-intro.html">📄 獨立講義 &rarr;</a>
           </div>
         </div>
       </article>
 
-      <article class="lesson-card" data-cat="PSOCT">
+      <!-- Card 2 -->
+      <article class="lesson-card" data-cat="SS-PS-OCT">
         <div>
-          <div class="card-top"><span class="tag t-ps">🔦 MODULE 02 // 偏振系統</span><span>⏱️ 8 min</span></div>
+          <div class="card-top">
+            <span class="cat-tag cat-psoct">🔦 MODULE 02 // 掃頻與偏振系統</span>
+            <span>⏱️ 8 min</span>
+          </div>
           <h3>1045nm SS-PS-OCT 雙折射相位延遲與後鞏膜成像</h3>
-          <p>解析 1045nm 波段穿透視網膜色素層（RPE）的優勢，以及後鞏膜膠原纖維雙折射率 $\Delta n$ 重建公式。</p>
-          <ul class="pts">
-            <li>🔹 雙通道偏振干涉與累積相位延遲 $\delta(z)=\arctan(|E_V|/|E_H|)$</li>
-            <li>🔹 常見橫向條紋偽影與 k-clock 時脈對齊排查</li>
+          <p>為什麼高度近視研究要看眼球最深處的「後鞏膜」？解析 1045nm 波段穿透視網膜色素層的優勢，以及膠原纖維雙折射率 $\Delta n$ 計算。</p>
+          <ul class="key-points">
+            <li>🔹 840nm vs. 1045nm 波段在眼底組織的散射衰減差異</li>
+            <li>🔹 雙通道水平/垂直偏振干涉與累積相位延遲 $\delta(z)=\arctan(|E_V|/|E_H|)$</li>
+            <li>🔹 常見條紋偽影與 PFI0 硬體時脈對齊排查流程</li>
           </ul>
         </div>
-        <div class="card-foot">
-          <label style="font-size:0.8rem;"><input type="checkbox" class="chk" checked onchange="calcProg()"> 已讀完</label>
-          <div style="display:flex; gap:0.4rem;">
-            <button class="btn-sm" onclick="openModal('m2')">✨ 互動速讀</button>
-            <a class="btn-sm-out" href="lessons/01-ps-oct-birefringence.html">📄 開啟獨立頁 &rarr;</a>
+        <div class="card-actions">
+          <label class="check-done"><input type="checkbox" checked onchange="updateProgress()"> 已讀完</label>
+          <div class="btn-group">
+            <button class="open-btn" onclick="openModal('m2')">✨ 互動速讀</button>
+            <a class="open-btn-page" href="lessons/01-ps-oct-birefringence.html">📄 獨立講義 &rarr;</a>
           </div>
         </div>
       </article>
 
-      <article class="lesson-card" data-cat="Optics">
+      <!-- Card 3 -->
+      <article class="lesson-card" data-cat="Optics-101">
         <div>
-          <div class="card-top"><span class="tag t-opt">🌱 MODULE 03 // 微光學設計</span><span>⏱️ 6 min</span></div>
-          <h3>GRIN 梯度折射率透鏡微探頭與 OpenSCAD 3D 列印</h3>
-          <p>介紹內視鏡 GRIN Lens 徑向拋物線折射率自聚焦原理、UV 膠固化規範與 OpenSCAD 參數化光機建模。</p>
-          <ul class="pts">
-            <li>🔹 GRIN 透鏡節距 (Pitch) 與非金屬鑷子夾持規範</li>
-            <li>🔹 OpenSCAD <code>$fn=120</code> 圓弧細分與 +0.18mm 公差設定</li>
+          <div class="card-top">
+            <span class="cat-tag cat-optics">🌱 MODULE 03 // 微探頭與光機設計</span>
+            <span>⏱️ 6 min</span>
+          </div>
+          <h3>GRIN 梯度折射率透鏡微探頭與 OpenSCAD 3D 列印光機</h3>
+          <p>如何把龐大的光學桌縮小成直徑不到 2mm 的內視鏡探頭？介紹 GRIN Lens 自聚焦原理、UV 光學膠固化，以及參數化 3D 列印轉接座。</p>
+          <ul class="key-points">
+            <li>🔹 梯度折射率透鏡 (GRIN Lens) 節距 (Pitch) 與工作距離設計</li>
+            <li>🔹 UV 光學膠點膠防溢膠技巧與非金屬鑷子夾取規範</li>
+            <li>🔹 OpenSCAD 參數化建模：<code>$fn=120</code> 圓弧細分與 +0.18mm 公差</li>
           </ul>
         </div>
-        <div class="card-foot">
-          <label style="font-size:0.8rem;"><input type="checkbox" class="chk" onchange="calcProg()"> 已讀完</label>
-          <div style="display:flex; gap:0.4rem;">
-            <button class="btn-sm" onclick="openModal('m3')">✨ 互動速讀</button>
-            <a class="btn-sm-out" href="lessons/03-grin-lens-openscad.html">📄 開啟獨立頁 &rarr;</a>
+        <div class="card-actions">
+          <label class="check-done"><input type="checkbox" onchange="updateProgress()"> 已讀完</label>
+          <div class="btn-group">
+            <button class="open-btn" onclick="openModal('m3')">✨ 互動速讀</button>
+            <a class="open-btn-page" href="lessons/03-grin-lens-openscad.html">📄 獨立講義 &rarr;</a>
           </div>
         </div>
       </article>
 
-      <article class="lesson-card" data-cat="PSOCT">
+      <!-- Card 4 -->
+      <article class="lesson-card" data-cat="SS-PS-OCT">
         <div>
-          <div class="card-top"><span class="tag t-hw">⚡ MODULE 04 // 硬體同步</span><span>⏱️ 7 min</span></div>
-          <h3>LabVIEW 雙軸 Galvo 振鏡與 200kHz DAQ 時脈同步</h3>
-          <p>為什麼 B-scan 影像會左右晃動 (Jitter)？看懂 PFI0 硬體 Trigger 同步與 15% Flyback 振鏡回掃保護。</p>
-          <ul class="pts">
-            <li>🔹 5 微秒 A-line 週期下為何嚴禁使用軟體迴圈計時？</li>
-            <li>🔹 鋸齒波預留 15% Flyback 平滑回掃點數避免振鏡過熱</li>
+          <div class="card-top">
+            <span class="cat-tag cat-hardware">⚡ MODULE 04 // 儀控與硬體同步</span>
+            <span>⏱️ 7 min</span>
+          </div>
+          <h3>LabVIEW 雙軸 Galvo 振鏡與 200kHz DAQ 高速時脈同步</h3>
+          <p>為什麼掃出來的 OCT 影像會左右晃動錯位 (Jitter)？帶你看懂硬體 PFI0 Trigger 觸發、k-clock 等波數取樣與振鏡回掃 (Flyback) 保護。</p>
+          <ul class="key-points">
+            <li>🔹 每秒 20 萬條 A-scan（週期僅 5 $\mu\text{s}$）為何不能用軟體計時？</li>
+            <li>🔹 掃頻雷射 A-line Trigger 與高速擷取卡共用硬體時脈接線圖</li>
+            <li>🔹 鋸齒波 (Sawtooth) 預留 15% Flyback 緩衝區避免振鏡過熱失步</li>
           </ul>
         </div>
-        <div class="card-foot">
-          <label style="font-size:0.8rem;"><input type="checkbox" class="chk" onchange="calcProg()"> 已讀完</label>
-          <div style="display:flex; gap:0.4rem;">
-            <button class="btn-sm" onclick="openModal('m4')">✨ 互動速讀</button>
-            <a class="btn-sm-out" href="lessons/04-galvo-daq-sync.html">📄 開啟獨立頁 &rarr;</a>
+        <div class="card-actions">
+          <label class="check-done"><input type="checkbox" onchange="updateProgress()"> 已讀完</label>
+          <div class="btn-group">
+            <button class="open-btn" onclick="openModal('m4')">✨ 互動速讀</button>
+            <a class="open-btn-page" href="lessons/04-galvo-daq-sync.html">📄 獨立講義 &rarr;</a>
           </div>
         </div>
       </article>
 
-      <article class="lesson-card" data-cat="AI">
+      <!-- Card 5 -->
+      <article class="lesson-card" data-cat="Signal-AI">
         <div>
-          <div class="card-top"><span class="tag t-ai">💻 MODULE 05 // 訊號重建</span><span>⏱️ 8 min</span></div>
+          <div class="card-top">
+            <span class="cat-tag cat-ai">💻 MODULE 05 // 訊號與影像重建</span>
+            <span>⏱️ 8 min</span>
+          </div>
           <h3>從干涉條紋到斷層影像：BPD 差動偵測、色散補償與 FFT</h3>
-          <p>拆解 MATLAB 訊號處理流程：了解平衡光電探測器（BPD）共模拒斥比、k-space 重取樣與傅立葉轉換。</p>
-          <ul class="pts">
-            <li>🔹 BPD 雙臂相減抵消雷射相對強度雜訊 (RIN)</li>
-            <li>🔹 波數空間 $k=2\pi/\lambda$ 等間距插值與數值色散補償</li>
+          <p>一步步拆解 MATLAB 訊號重建黑盒子！了解平衡光電探測器（BPD）如何抵消共模雜訊，以及如何透過傅立葉轉換還原深度結構。</p>
+          <ul class="key-points">
+            <li>🔹 平衡光電探測器 (BPD) 雙臂相減抑制相對強度雜訊 (RIN)</li>
+            <li>🔹 波長 $\lambda$ 轉波數 $k = 2\pi/\lambda$ 之非線性重取樣與數值色散補償</li>
+            <li>🔹 漢寧窗 (Hanning Window) 旁瓣抑制與快速傅立葉轉換 (FFT)</li>
           </ul>
         </div>
-        <div class="card-foot">
-          <label style="font-size:0.8rem;"><input type="checkbox" class="chk" onchange="calcProg()"> 已讀完</label>
-          <div style="display:flex; gap:0.4rem;">
-            <button class="btn-sm" onclick="openModal('m5')">✨ 互動速讀</button>
-            <a class="btn-sm-out" href="lessons/05-bpd-fft-reconstruction.html">📄 開啟獨立頁 &rarr;</a>
+        <div class="card-actions">
+          <label class="check-done"><input type="checkbox" onchange="updateProgress()"> 已讀完</label>
+          <div class="btn-group">
+            <button class="open-btn" onclick="openModal('m5')">✨ 互動速讀</button>
+            <a class="open-btn-page" href="lessons/05-bpd-fft-reconstruction.html">📄 獨立講義 &rarr;</a>
           </div>
         </div>
       </article>
 
-      <article class="lesson-card" data-cat="AI">
+      <!-- Card 6 -->
+      <article class="lesson-card" data-cat="Signal-AI">
         <div>
-          <div class="card-top"><span class="tag t-ai">🤖 MODULE 06 // 生醫 AI</span><span>⏱️ 7 min</span></div>
-          <h3>深度學習於 OCT 散斑雜訊抑制與防止資料洩漏</h3>
-          <p>結合 U-Net 與卷積神經網路消除同調散斑雜訊（Speckle Noise），並掌握 Subject-level Split 防洩漏鐵則。</p>
-          <ul class="pts">
-            <li>🔹 單張高雜訊 B-scan 映射至多張平均乾淨影像之訓練架構</li>
-            <li>🔹 嚴禁同一顆眼球的相鄰切片同時混入訓練集與測試集</li>
+          <div class="card-top">
+            <span class="cat-tag cat-ai">🤖 MODULE 06 // 生醫 AI 與深度學習</span>
+            <span>⏱️ 7 min</span>
+          </div>
+          <h3>深度學習於 OCT 散斑雜訊抑制與防止資料洩漏 (Data Leakage)</h3>
+          <p>結合生成式 AI 與卷積神經網路（CNN / U-Net），消除生物組織棘手的散斑雜訊（Speckle Noise），並掌握醫學影像訓練最重要的防洩漏鐵則。</p>
+          <ul class="key-points">
+            <li>🔹 為什麼 OCT 影像會有顆粒狀的同調散斑雜訊 (Speckle)？</li>
+            <li>🔹 單張推理 vs. 多張 B-scan 平均法 (Frame Averaging) 之監督式學習</li>
+            <li>🔹 嚴禁同一顆眼球的相鄰切片同時出現在訓練集與測試集 (Subject-level Split)</li>
           </ul>
         </div>
-        <div class="card-foot">
-          <label style="font-size:0.8rem;"><input type="checkbox" class="chk" onchange="calcProg()"> 已讀完</label>
-          <div style="display:flex; gap:0.4rem;">
-            <button class="btn-sm" onclick="openModal('m6')">✨ 互動速讀</button>
-            <a class="btn-sm-out" href="lessons/06-deep-learning-denoising.html">📄 開啟獨立頁 &rarr;</a>
+        <div class="card-actions">
+          <label class="check-done"><input type="checkbox" onchange="updateProgress()"> 已讀完</label>
+          <div class="btn-group">
+            <button class="open-btn" onclick="openModal('m6')">✨ 互動速讀</button>
+            <a class="open-btn-page" href="lessons/06-deep-learning-denoising.html">📄 獨立講義 &rarr;</a>
           </div>
         </div>
       </article>
 
-      <article class="lesson-card" data-cat="Safety">
+      <!-- Card 7 -->
+      <article class="lesson-card" data-cat="Safety-Agent">
         <div>
-          <div class="card-top"><span class="tag t-ps">🛡️ MODULE 07 // 雷射環安衛</span><span>⏱️ 6 min</span></div>
-          <h3>1045nm Class 3B 掃頻雷射安全、ANSI 上限與光纖清潔</h3>
-          <p>整理進暗房必戴的 OD 5+ 護目鏡規範、角膜平面 1.8 mW 安全功率實測，以及 Cletop 光纖單向清潔。</p>
-          <ul class="pts">
-            <li>🔹 1045nm 近紅外光無眨眼反射，全程配戴 OD 5+ 護目鏡</li>
-            <li>🔹 APC 斜面光纖使用 Cletop 單向清潔，嚴禁用衛生紙擦拭</li>
+          <div class="card-top">
+            <span class="cat-tag cat-psoct">🛡️ MODULE 07 // 雷射安全與環安衛</span>
+            <span>⏱️ 6 min</span>
+          </div>
+          <h3>1045nm Class 3B 掃頻雷射安全、ANSI 入眼上限與光纖清潔</h3>
+          <p>看不見的近紅外光最危險！整理進暗房必戴的 OD 5+ 護目鏡規範、角膜平面 1.8 mW 安全功率實測，以及 APC 光纖端面清潔標準流程。</p>
+          <ul class="key-points">
+            <li>🔹 1045nm 近紅外光無眨眼反射，全程配戴 OD 5+ (950-1100nm) 護目鏡</li>
+            <li>🔹 ANSI Z136.1 規範：量測前將功率計由 633nm 切換至 1045nm 檔位</li>
+            <li>🔹 平衡探測器飽和排除與 Cletop 單向清潔規範</li>
           </ul>
         </div>
-        <div class="card-foot">
-          <label style="font-size:0.8rem;"><input type="checkbox" class="chk" onchange="calcProg()"> 已讀完</label>
-          <div style="display:flex; gap:0.4rem;">
-            <button class="btn-sm" onclick="openModal('m7')">✨ 互動速讀</button>
-            <a class="btn-sm-out" href="lessons/02-laser-safety-bpd.html">📄 開啟獨立頁 &rarr;</a>
+        <div class="card-actions">
+          <label class="check-done"><input type="checkbox" onchange="updateProgress()"> 已讀完</label>
+          <div class="btn-group">
+            <button class="open-btn" onclick="openModal('m7')">✨ 互動速讀</button>
+            <a class="open-btn-page" href="lessons/02-laser-safety-bpd.html">📄 獨立講義 &rarr;</a>
           </div>
         </div>
       </article>
 
-      <article class="lesson-card" data-cat="Safety">
+      <!-- Card 8 -->
+      <article class="lesson-card" data-cat="Safety-Agent">
         <div>
-          <div class="card-top"><span class="tag t-hw">🤖 MODULE 08 // 知識工程</span><span>⏱️ 6 min</span></div>
-          <h3>用 AGENTS.md 打造實驗室 LLM Wiki 與自動回報 Agent</h3>
-          <p>串聯第 7～9 週實作精華：從 RAG 交接系統、Two-Stage Planning 危機回報器，到由 <code>AGENTS.md</code> 驅動的知識庫。</p>
-          <ul class="pts">
-            <li>🔹 AI Agent = AI Model + Harness：好老闆交辦三原則</li>
-            <li>🔹 防幻覺紅線：未測物理參數強制標註 <code>[待實驗室實測補齊]</code></li>
+          <div class="card-top">
+            <span class="cat-tag cat-hardware">🤖 MODULE 08 // AI Agent 與知識工程</span>
+            <span>⏱️ 6 min</span>
+          </div>
+          <h3>用 AGENTS.md 打造實驗室 LLM Wiki 與自動進度回報 Agent</h3>
+          <p>串聯本課程第 7～9 週實作精華：從橘福福 RAG 交接系統、Two-Stage Planning 危機回報器，到由 <code>AGENTS.md</code> 驅動的自動化知識庫。</p>
+          <ul class="key-points">
+            <li>🔹 AI Agent = AI Model + Harness：為什麼員工手冊比單次 Prompt 更重要？</li>
+            <li>🔹 Karpathy 三層式架構：<code>raw/</code> 唯讀證據 $\rightarrow$ <code>wiki/</code> 雙向連結 $\rightarrow$ <code>lessons/</code></li>
+            <li>🔹 防幻覺紅線設計：未實測物理參數強制標註 <code>[待實驗室實測補齊]</code></li>
           </ul>
         </div>
-        <div class="card-foot">
-          <label style="font-size:0.8rem;"><input type="checkbox" class="chk" onchange="calcProg()"> 已讀完</label>
-          <div style="display:flex; gap:0.4rem;">
-            <button class="btn-sm" onclick="openModal('m8')">✨ 互動速讀</button>
-            <a class="btn-sm-out" href="lessons/08-agentic-wiki-workflow.html">📄 開啟獨立頁 &rarr;</a>
+        <div class="card-actions">
+          <label class="check-done"><input type="checkbox" onchange="updateProgress()"> 已讀完</label>
+          <div class="btn-group">
+            <button class="open-btn" onclick="openModal('m8')">✨ 互動速讀</button>
+            <a class="open-btn-page" href="lessons/08-agentic-wiki-workflow.html">📄 獨立講義 &rarr;</a>
           </div>
         </div>
       </article>
     </div>
 
-    <!-- Section 2: Resolution Simulator -->
-    <div class="sec-head" id="simulator-sec">
+    <!-- Section 2: Interactive Mini-Game (Darkroom Alignment Challenge) -->
+    <div class="section-head" id="game-sec">
       <div>
-        <h2>🔬 動手玩光學：OCT 軸向解析度與雷射安全互動計算機</h2>
-        <p>拉動滑桿，即時體驗中心波長 $\lambda_0$、頻譜半高寬 $\Delta\lambda$ 如何決定微米級軸向解析度 $\delta z$ 與入眼安全狀態！</p>
+        <h2>🎮 暗房實戰小遊戲：麥克森干涉尋峰與 BPD 防飽和挑戰</h2>
+        <p>任務目標：拉動下方「參考臂反射鏡微米旋鈕」使光程差 $\Delta L \rightarrow 0\ \mu\text{m}$，同時控制「參考光功率」在 $0.5 \sim 1.0\text{ mW}$ 內，達成 SNR &ge; 90% 即可破關！</p>
+      </div>
+      <button class="btn-outline" onclick="randomizeGame()">🎲 隨機重設光路偏移</button>
+    </div>
+
+    <div class="two-col-box">
+      <div>
+        <div class="slider-group">
+          <label>
+            <span>🔧 1. 參考臂平移台微調位置 ($\Delta L$ 光程差)</span>
+            <span id="gamePosText" style="color:var(--accent-primary);">+25 μm</span>
+          </label>
+          <input type="range" id="gamePos" min="-60" max="60" step="1" value="25" oninput="updateGame()">
+        </div>
+        <div class="slider-group">
+          <label>
+            <span>🔦 2. 可調光衰減器 (BPD 參考臂功率)</span>
+            <span id="gamePwrText" style="color:var(--accent-blue);">0.85 mW</span>
+          </label>
+          <input type="range" id="gamePwr" min="0.1" max="1.6" step="0.05" value="0.85" oninput="updateGame()">
+        </div>
+        <div id="gameStatusBox" style="padding:1rem; border-radius:12px; background:var(--bg-secondary); font-weight:700; font-size:0.9rem;">
+          🔍 請將第一條滑桿拉向 0 μm，觀察右方示波器的干涉條紋振幅變化！
+        </div>
+      </div>
+
+      <div>
+        <div style="display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:0.8rem; margin-bottom:0.4rem; color:var(--text-muted);">
+          <span>LIVE OSCILLOSCOPE // 200kHz BPD CH1</span>
+          <span id="gameSnrText" style="color:var(--accent-green); font-weight:700;">耦合訊噪比 SNR: 58%</span>
+        </div>
+        <canvas id="gameCanvas" width="520" height="195"></canvas>
       </div>
     </div>
 
-    <div class="sim-box">
+    <!-- Section 3: Interactive OCT Resolution & MPE Simulator -->
+    <div class="section-head" id="simulator-sec">
       <div>
-        <div class="s-row">
-          <label><span>1. 雷射中心波長 $\lambda_0$ (nm)</span><span id="valLam" style="color:var(--orange);">1045 nm</span></label>
-          <input type="range" id="simLam" min="800" max="1350" step="5" value="1045" oninput="runSim()">
+        <h2>🔬 動手玩光學：OCT 軸向解析度與雷射安全互動模擬器</h2>
+        <p>拉動下方滑桿，即時體驗中心波長 $\lambda_0$、頻譜半高寬 $\Delta\lambda$ 如何決定微米級軸向解析度 $\delta z$ 與入眼安全狀態！</p>
+      </div>
+    </div>
+
+    <div class="two-col-box">
+      <div>
+        <div class="slider-group">
+          <label>
+            <span>1. 雷射中心波長 $\lambda_0$ (nm)</span>
+            <span id="valLambda" style="color:var(--accent-primary);">1045 nm (深層鞏膜波段)</span>
+          </label>
+          <input type="range" id="simLambda" min="800" max="1350" step="5" value="1045" oninput="runSim()">
         </div>
-        <div class="s-row">
-          <label><span>2. 光源頻譜半高寬 $\Delta\lambda$ (nm)</span><span id="valBw" style="color:var(--blue);">100 nm</span></label>
+        <div class="slider-group">
+          <label>
+            <span>2. 光源頻譜半高寬 $\Delta\lambda$ (nm)</span>
+            <span id="valBw" style="color:var(--accent-blue);">100 nm</span>
+          </label>
           <input type="range" id="simBw" min="30" max="180" step="5" value="100" oninput="runSim()">
         </div>
-        <div class="s-row">
-          <label><span>3. 樣品端入眼雷射功率 $P$ (mW)</span><span id="valPwr" style="color:var(--green);">1.4 mW</span></label>
-          <input type="range" id="simPwr" min="0.5" max="3.0" step="0.1" value="1.4" oninput="runSim()">
+        <div class="slider-group">
+          <label>
+            <span>3. 樣品端入眼雷射功率 $P$ (mW)</span>
+            <span id="valPower" style="color:var(--accent-green);">1.4 mW</span>
+          </label>
+          <input type="range" id="simPower" min="0.5" max="3.5" step="0.1" value="1.4" oninput="runSim()">
         </div>
-        <p style="font-size:0.82rem; color:var(--text-muted);">公式：$\delta z = \frac{2\ln 2}{\pi}\frac{\lambda_0^2}{\Delta\lambda}$，生物組織折射率取 $n \approx 1.38$。</p>
+        <p style="font-size:0.84rem; color:var(--text-muted);">
+          💡 公式依據：空氣中理論軸向解析度 $\delta z = \frac{2\ln 2}{\pi}\frac{\lambda_0^2}{\Delta\lambda}$，生物組織折射率取 $n \approx 1.38$。
+        </p>
       </div>
-      <div style="background:var(--bg-sec); padding:1.25rem; border-radius:14px; display:flex; flex-direction:column; justify-content:space-between;">
+
+      <div class="sim-result">
         <div>
-          <div style="font-size:0.84rem; color:var(--text-muted); font-weight:700;">生物組織內理論軸向解析度 ($\delta z / n$)</div>
-          <div id="outRes" style="font-family:'JetBrains Mono',monospace; font-size:1.9rem; font-weight:900; color:var(--orange);">3.49 μm</div>
-          <p id="outNote" style="font-size:0.88rem; color:var(--text-sec); margin-top:0.35rem;">🌟 1045nm 波段兼具低 RPE 散射與 3.5 微米級高解析度，最適合後鞏膜雙折射成像！</p>
+          <div style="font-size:0.85rem; color:var(--text-muted); font-weight:700;">計算結果 // 生物組織內軸向解析度 ($\delta z / n$)</div>
+          <div class="big-metric" id="outRes">3.49 μm</div>
+          <p id="outComment" style="font-size:0.9rem; color:var(--text-secondary); margin-top:0.4rem;">
+            🌟 1045nm 波段兼具低 RPE 散射與 3.5 微米級高解析度，非常適合後鞏膜雙折射層析！
+          </p>
         </div>
-        <div id="outSafe" style="margin-top:0.85rem; padding:0.75rem 1rem; border-radius:10px; background:var(--green-soft); color:var(--green); font-weight:700; font-size:0.88rem;">
-          ✅ 環安衛檢核通過：入眼功率 1.4 mW 符合 ANSI Z136.1 安全上限 (≤ 1.8 mW)。
+        <div id="safetyAlert" style="margin-top:1rem; padding:0.85rem 1rem; border-radius:10px; background:var(--accent-green-soft); color:var(--accent-green); font-weight:700; font-size:0.9rem;">
+          ✅ 環安衛檢核通過：入眼功率 1.4 mW 低於 ANSI Z136.1 安全上限 (1.8 mW)。
         </div>
       </div>
     </div>
 
-    <!-- Section 3: Interactive 3-Question Quiz Challenge -->
-    <div class="sec-head" id="quiz-sec">
+    <!-- Section 4: Flashcards & Mochi Lab Treehole Wall -->
+    <div class="section-head" id="treehole-sec">
       <div>
-        <h2>🎯 初學者 3 分鐘觀念闖關測驗 (Interactive OCT Quiz)</h2>
-        <p>點擊選項立即批改並顯示物理詳解，看看你能不能拿到 3 題滿分！</p>
+        <h2>💡 新手快問快答翻翻卡 &amp; 🌱 實驗室麻糬樹洞許願牆</h2>
+        <p>點擊上方卡片可翻面看解答；下方樹洞可寫下你的實驗室心情或學習筆記（自動儲存於瀏覽器）！</p>
       </div>
     </div>
 
-    <div class="quiz-grid">
-      <div class="q-card">
-        <span class="badge">Q1 // 解析度原理</span>
-        <h4>想要讓 OCT 的縱向切面解析度變得更精細（$\delta z$ 更小），應該選擇哪一種光源？</h4>
-        <button class="q-opt" onclick="ansQuiz(1, false, this)">A. 頻譜寬度 $\Delta\lambda$ 越窄的單頻雷射</button>
-        <button class="q-opt" onclick="ansQuiz(1, true, this)">B. 頻譜半高寬 $\Delta\lambda$ 越寬的寬頻或掃頻光源</button>
-        <p id="fb1" style="font-size:0.82rem; margin-top:0.5rem; font-weight:700;"></p>
+    <div class="flash-grid" style="margin-bottom:1.75rem;">
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="q-text">
+          <span class="pill-badge">Q1 // 雷射安全</span>
+          <h4>為什麼 1045nm 雷射明明看不見光，進暗房卻規定一定要戴 OD 5+ 護目鏡？</h4>
+        </div>
+        <div class="a-text">
+          ✅ 解答：因為 1045nm 是近紅外光（NIR），可穿透角膜直達視網膜與後鞏膜，但人眼視覺感知不到，被照到時「不會觸發眨眼反射」，極易造成永久視網膜熱損傷！
+        </div>
+        <span style="font-size:0.78rem; color:var(--text-muted);">👆 點擊卡片翻面看解答</span>
       </div>
 
-      <div class="q-card">
-        <span class="badge">Q2 // 暗房環安衛</span>
-        <h4>當電腦畫面干涉訊號突然變成水平直線且 BPD 亮紅燈時，正確的第一步處置為何？</h4>
-        <button class="q-opt" onclick="ansQuiz(2, true, this)">A. 調降參考臂可調光衰減器，使功率回到 0.5~1.0 mW</button>
-        <button class="q-opt" onclick="ansQuiz(2, false, this)">B. 拿一般衛生紙沾酒精用力擦拭 APC 光纖端面</button>
-        <p id="fb2" style="font-size:0.82rem; margin-top:0.5rem; font-weight:700;"></p>
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="q-text">
+          <span class="pill-badge">Q2 // 光機維護</span>
+          <h4>APC 斜面光纖跳線端面髒了，可以用一般衛生紙沾酒精擦拭嗎？</h4>
+        </div>
+        <div class="a-text">
+          ✅ 解答：絕對不行！衛生紙纖維粗糙且會殘留微粒刮傷 8 度角斜面鍍膜。必須使用 Cletop 光纖專用清潔盒，沿同一方向單向輕推一次！
+        </div>
+        <span style="font-size:0.78rem; color:var(--text-muted);">👆 點擊卡片翻面看解答</span>
       </div>
 
-      <div class="q-card">
-        <span class="badge">Q3 // 生醫 AI 訓練</span>
-        <h4>訓練 OCT 影像降噪模型時，如何切分資料集才能避免「資料洩漏 (Data Leakage)」？</h4>
-        <button class="q-opt" onclick="ansQuiz(3, false, this)">A. 把同一顆豬眼的 200 張切片隨機打散分給訓練與測試集</button>
-        <button class="q-opt" onclick="ansQuiz(3, true, this)">B. 嚴格以「不同眼球樣本個體 (Subject-level)」為單位切分</button>
-        <p id="fb3" style="font-size:0.82rem; margin-top:0.5rem; font-weight:700;"></p>
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="q-text">
+          <span class="pill-badge">Q3 // 訊號除錯</span>
+          <h4>電腦畫面上的干涉波形突然變成一條水平直線，且 BPD 亮紅燈怎麼辦？</h4>
+        </div>
+        <div class="a-text">
+          ✅ 解答：這是平衡光電探測器（BPD）飽和了！請立即調降參考臂的可調光衰減器，使單臂功率回到 0.5 ~ 1.0 mW，切勿直接調大雷射主電流。
+        </div>
+        <span style="font-size:0.78rem; color:var(--text-muted);">👆 點擊卡片翻面看解答</span>
+      </div>
+
+      <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="q-text">
+          <span class="pill-badge">Q4 // AI 訓練禁忌</span>
+          <h4>訓練 OCT 影像降噪模型時，把同一顆豬眼的 200 張切片隨機分給訓練集與測試集可以嗎？</h4>
+        </div>
+        <div class="a-text">
+          ✅ 解答：嚴格禁止！相鄰 B-scan 切片解剖結構高度相似，隨機切分會造成嚴重的「資料洩漏 (Data Leakage)」，必須以「不同樣本個體」為單位切分！
+        </div>
+        <span style="font-size:0.78rem; color:var(--text-muted);">👆 點擊卡片翻面看解答</span>
       </div>
     </div>
 
-    <!-- Section 4: 3 Truly Useful External Learning Links -->
-    <div class="sec-head" id="links-sec">
+    <div class="table-wrap">
+      <div style="display:flex; gap:0.75rem; flex-wrap:wrap; margin-bottom:1rem;">
+        <input type="text" id="treeholeAuthor" class="search-input" style="min-width:150px;" placeholder="你的暱稱 (如：碩二浩哲)" />
+        <input type="text" id="treeholeInput" class="search-input" style="flex:1;" placeholder="🌱 在實驗室樹洞種下一張心情紙條或對光許願吧..." />
+        <button class="btn-primary" onclick="addTreeholeNote()">✨ 投遞紙條</button>
+      </div>
+      <div class="treehole-notes" id="treeholeList"></div>
+    </div>
+
+    <!-- Section 5: External Learning Resources Hub (Updated First Link to Real Optical Tutorial!) -->
+    <div class="section-head" id="links-sec">
       <div>
-        <h2>🔗 精選 3 大光學與專案實作教學網 (Curated Learning Resources)</h2>
-        <p>去蕪存菁，只保留真正能學到 OCT 硬體架設、干涉物理公式與本週 LLM Wiki 架構的核心網站：</p>
+        <h2>🔗 國內外生醫光電與 OCT 權威學習資源傳送門 (External Learning Hub)</h2>
+        <p>精選真正能學到微透鏡成像、干涉物理公式、光機元件實務與 LLM Wiki 架構的核心知識庫：</p>
       </div>
     </div>
 
-    <div class="quiz-grid">
-      <a class="lesson-card" href="https://www.thorlabs.com/newgrouppage9.cfm?objectgroup_id=10759" target="_blank" rel="noopener" style="text-decoration:none; color:inherit;">
+    <div class="ext-grid">
+      <a class="ext-card" href="https://www.edmundoptics.com/knowledge-center/application-notes/optics/gradient-index-grin-lenses/" target="_blank" rel="noopener">
         <div>
-          <span class="badge">🔦 光機大廠圖解教學</span>
-          <h3>Thorlabs — OCT 系統光路與元件指南</h3>
-          <p>詳盡圖解掃頻 OCT (SS-OCT)、平衡光電探測器、偏振控制器與 LSM02 掃描物鏡之實體光路架設教學。</p>
+          <span class="pill-badge">🔬 微光學圖解教材 // Edmund Optics</span>
+          <h4>Edmund Optics — GRIN 梯度折射率透鏡與生醫光學指南</h4>
+          <p>用淺顯易懂的幾何光學圖表，詳盡解析 GRIN 透鏡徑向折射率分布、節距（Pitch）計算與內視鏡 OCT 聚焦設計。</p>
         </div>
-        <span style="color:var(--orange); font-weight:700; font-size:0.85rem;">前往 Thorlabs 教學庫 &nearr;</span>
+        <span class="ext-url">edmundoptics.com/knowledge-center &nearr;</span>
       </a>
 
-      <a class="lesson-card" href="https://www.rp-photonics.com/optical_coherence_tomography.html" target="_blank" rel="noopener" style="text-decoration:none; color:inherit;">
+      <a class="ext-card" href="https://www.rp-photonics.com/optical_coherence_tomography.html" target="_blank" rel="noopener">
         <div>
-          <span class="badge">📘 國際光電物理百科</span>
-          <h3>RP Photonics — 光學同調與雙折射百科</h3>
-          <p>查詢同調長度公式、群速度色散補償、雙折射（Birefringence）與超寬頻雷射原理最權威的線上物理百科。</p>
+          <span class="pill-badge">📘 國際光學百科 // RP Photonics</span>
+          <h4>RP Photonics Encyclopedia: OCT &amp; Interferometry</h4>
+          <p>全球最權威的雷射與光電物理百科全書，詳細推導同調長度、掃頻雷射（Swept-Source）與平衡光電偵測原理。</p>
         </div>
-        <span style="color:var(--orange); font-weight:700; font-size:0.85rem;">前往 RP Photonics &nearr;</span>
+        <span class="ext-url">rp-photonics.com &nearr;</span>
       </a>
 
-      <a class="lesson-card" href="https://diveai-lab.github.io/diveai-lessons/" target="_blank" rel="noopener" style="text-decoration:none; color:inherit;">
+      <a class="ext-card" href="https://www.thorlabs.com/newgrouppage9.cfm?objectgroup_id=10759" target="_blank" rel="noopener">
         <div>
-          <span class="badge">🎓 課堂核心範例</span>
-          <h3>政大蔡炎龍老師 DIVE AI Lab — 呆一布講義</h3>
-          <p>本週作業設計標竿：示範如何透過 CLAUDE.md / AGENTS.md 規範，讓 AI 自動維護並生成翻頁互動講義。</p>
+          <span class="pill-badge">🔧 光機實務指南 // Thorlabs</span>
+          <h4>Thorlabs OCT &amp; Polarization Optics Tutorials</h4>
+          <p>涵蓋 LSM02-BB 掃描物鏡、四分之一波片（QWP）對準、APC 光纖清潔與平衡探測器（BPD）實務手冊。</p>
         </div>
-        <span style="color:var(--orange); font-weight:700; font-size:0.85rem;">前往呆一布講義網 &nearr;</span>
+        <span class="ext-url">thorlabs.com &nearr;</span>
+      </a>
+
+      <a class="ext-card" href="https://opg.optica.org/boe/home.cfm" target="_blank" rel="noopener">
+        <div>
+          <span class="pill-badge">📄 頂尖光學期刊 // Optica</span>
+          <h4>Biomedical Optics Express (Optica Publishing)</h4>
+          <p>收錄最新偏振敏感 PS-OCT、後鞏膜生物力學成像以及深度學習散斑降噪（Speckle Reduction）之開源論文。</p>
+        </div>
+        <span class="ext-url">opg.optica.org/boe &nearr;</span>
+      </a>
+
+      <a class="ext-card" href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f" target="_blank" rel="noopener">
+        <div>
+          <span class="pill-badge">🧠 知識庫架構 // Andrej Karpathy</span>
+          <h4>Karpathy LLM Wiki Pattern (GitHub Gist)</h4>
+          <p>本專案所採用的三層式知識庫設計原型：透過 raw/、wiki/ 與 AGENTS.md 打造可持續累積的個人 Wikipedia。</p>
+        </div>
+        <span class="ext-url">gist.github.com/karpathy &nearr;</span>
+      </a>
+
+      <a class="ext-card" href="https://github.com/james91924-be14/biophotonics-oct-wiki" target="_blank" rel="noopener">
+        <div>
+          <span class="pill-badge">💻 專案原始碼 // GitHub Repo</span>
+          <h4>biophotonics-oct-wiki 專案完整檔案庫</h4>
+          <p>檢視本網站之 AGENTS.md 員工手冊、log.md 維護日誌、raw/ 原始筆記、wiki/ 知識節點與 8 份獨立講義原始碼。</p>
+        </div>
+        <span class="ext-url">github.com/james91924-be14/biophotonics-oct-wiki &nearr;</span>
       </a>
     </div>
 
-    <!-- Section 5: Complete 8-Row Wiki Mapping Table -->
-    <div class="sec-head" id="wiki-sec">
+    <!-- Section 6: Structured Wiki Nodes & AGENTS.md Mapping Table -->
+    <div class="section-head" id="wiki-sec">
       <div>
-        <h2>🗂️ LLM Wiki 知識節點總覽與 AGENTS.md 規則對應表 (全 8 節點)</h2>
-        <p>完整對應專案 <code>raw/</code>、<code>wiki/</code> 與 <code>lessons/</code> 三層式架構，支援視窗速讀與獨立頁面跳轉：</p>
+        <h2>🗂️ LLM Wiki 知識節點總覽與 AGENTS.md 規則對應表</h2>
+        <p>完整對應專案 <code>raw/</code>、<code>wiki/</code> 與 <code>lessons/</code> 三層式架構，點擊右側按鈕可開啟獨立講義或線上檢視節點！</p>
       </div>
       <button class="btn-primary" onclick="openModal('agents_spec')">📜 檢視 AGENTS.md 完整規則書</button>
     </div>
@@ -449,195 +905,567 @@
     <div class="table-wrap">
       <table>
         <thead>
-          <tr><th>編號</th><th>Wiki 概念節點路徑 (wiki/)</th><th>獨立講義路徑 (lessons/)</th><th>雙向連結 ([[Wiki Links]])</th><th>防幻覺檢核</th><th>操作</th></tr>
+          <tr>
+            <th>編號</th>
+            <th>Wiki 概念節點路徑 (wiki/)</th>
+            <th>獨立講義路徑 (lessons/)</th>
+            <th>雙向連結 ([[Wiki Links]])</th>
+            <th>防幻覺待補標記檢查</th>
+            <th>操作</th>
+          </tr>
         </thead>
         <tbody>
-          <tr><td>01</td><td><code>wiki/oct-basic-principle.md</code></td><td><a href="lessons/01-oct-intro.html" style="color:var(--blue);font-weight:700;">01-oct-intro.html</a></td><td><code>[[ps-oct-birefringence]]</code></td><td>✅ 無捏造參數</td><td><button class="btn-sm" onclick="openModal('m1')">速讀</button></td></tr>
-          <tr><td>02</td><td><code>wiki/ps-oct-birefringence.md</code></td><td><a href="lessons/01-ps-oct-birefringence.html" style="color:var(--blue);font-weight:700;">01-ps-oct-birefringence.html</a></td><td><code>[[k-clock-trigger]]</code></td><td>🟠 已標註 $\Delta\lambda$ 待補齊</td><td><button class="btn-sm" onclick="openModal('m2')">速讀</button></td></tr>
-          <tr><td>03</td><td><code>wiki/grin-lens-openscad.md</code></td><td><a href="lessons/03-grin-lens-openscad.html" style="color:var(--blue);font-weight:700;">03-grin-lens-openscad.html</a></td><td><code>[[oct-basic-principle]]</code></td><td>✅ 含 $fn=120 公差規範</td><td><button class="btn-sm" onclick="openModal('m3')">速讀</button></td></tr>
-          <tr><td>04</td><td><code>wiki/galvo-daq-sync.md</code></td><td><a href="lessons/04-galvo-daq-sync.html" style="color:var(--blue);font-weight:700;">04-galvo-daq-sync.html</a></td><td><code>[[ps-oct-birefringence]]</code></td><td>✅ 含 15% Flyback 規範</td><td><button class="btn-sm" onclick="openModal('m4')">速讀</button></td></tr>
-          <tr><td>05</td><td><code>wiki/bpd-signal-processing.md</code></td><td><a href="lessons/05-bpd-fft-reconstruction.html" style="color:var(--blue);font-weight:700;">05-bpd-fft-reconstruction.html</a></td><td><code>[[laser-safety-bpd]]</code></td><td>✅ 含 0.5-1.0 mW 規範</td><td><button class="btn-sm" onclick="openModal('m5')">速讀</button></td></tr>
-          <tr><td>06</td><td><code>wiki/deep-learning-denoising.md</code></td><td><a href="lessons/06-deep-learning-denoising.html" style="color:var(--blue);font-weight:700;">06-deep-learning-denoising.html</a></td><td><code>[[bpd-signal-processing]]</code></td><td>✅ 含 Subject-level Split</td><td><button class="btn-sm" onclick="openModal('m6')">速讀</button></td></tr>
-          <tr><td>07</td><td><code>wiki/laser-safety-bpd.md</code></td><td><a href="lessons/02-laser-safety-bpd.html" style="color:var(--blue);font-weight:700;">02-laser-safety-bpd.html</a></td><td><code>[[ps-oct-birefringence]]</code></td><td>🟠 已標註光斑 $d$ 待補齊</td><td><button class="btn-sm" onclick="openModal('m7')">速讀</button></td></tr>
-          <tr><td>08</td><td><code>wiki/agentic-wiki-workflow.md</code></td><td><a href="lessons/08-agentic-wiki-workflow.html" style="color:var(--blue);font-weight:700;">08-agentic-wiki-workflow.html</a></td><td><code>[[AGENTS.md]]</code>, <code>[[log.md]]</code></td><td>✅ 五步 Ingest-to-Publish</td><td><button class="btn-sm" onclick="openModal('m8')">速讀</button></td></tr>
+          <tr>
+            <td>01</td>
+            <td><code>wiki/oct-basic-principle.md</code></td>
+            <td><a href="lessons/01-oct-intro.html" style="color:var(--accent-blue); font-weight:700;">01-oct-intro.html &rarr;</a></td>
+            <td><code>[[ps-oct-birefringence]]</code></td>
+            <td>✅ 無捏造參數</td>
+            <td><button class="open-btn" onclick="openModal('m1')">速讀</button></td>
+          </tr>
+          <tr>
+            <td>02</td>
+            <td><code>wiki/ps-oct-birefringence.md</code></td>
+            <td><a href="lessons/01-ps-oct-birefringence.html" style="color:var(--accent-blue); font-weight:700;">01-ps-oct-birefringence.html &rarr;</a></td>
+            <td><code>[[k-clock-trigger]]</code>, <code>[[laser-safety-bpd]]</code></td>
+            <td>🟠 已標註 $\Delta\lambda$ <code>[待實驗室實測補齊]</code></td>
+            <td><button class="open-btn" onclick="openModal('m2')">速讀</button></td>
+          </tr>
+          <tr>
+            <td>03</td>
+            <td><code>wiki/grin-lens-openscad.md</code></td>
+            <td><a href="lessons/03-grin-lens-openscad.html" style="color:var(--accent-blue); font-weight:700;">03-grin-lens-openscad.html &rarr;</a></td>
+            <td><code>[[oct-basic-principle]]</code></td>
+            <td>✅ 含 OpenSCAD 公差規範</td>
+            <td><button class="open-btn" onclick="openModal('m3')">速讀</button></td>
+          </tr>
+          <tr>
+            <td>04</td>
+            <td><code>wiki/galvo-daq-sync.md</code></td>
+            <td><a href="lessons/04-galvo-daq-sync.html" style="color:var(--accent-blue); font-weight:700;">04-galvo-daq-sync.html &rarr;</a></td>
+            <td><code>[[ps-oct-birefringence]]</code></td>
+            <td>✅ 含 15% Flyback 規範</td>
+            <td><button class="open-btn" onclick="openModal('m4')">速讀</button></td>
+          </tr>
+          <tr>
+            <td>05</td>
+            <td><code>wiki/bpd-signal-processing.md</code></td>
+            <td><a href="lessons/05-bpd-fft-reconstruction.html" style="color:var(--accent-blue); font-weight:700;">05-bpd-fft-reconstruction.html &rarr;</a></td>
+            <td><code>[[laser-safety-bpd]]</code></td>
+            <td>✅ 含 0.5-1.0 mW 規範</td>
+            <td><button class="open-btn" onclick="openModal('m5')">速讀</button></td>
+          </tr>
+          <tr>
+            <td>06</td>
+            <td><code>wiki/deep-learning-denoising.md</code></td>
+            <td><a href="lessons/06-deep-learning-denoising.html" style="color:var(--accent-blue); font-weight:700;">06-deep-learning-denoising.html &rarr;</a></td>
+            <td><code>[[bpd-signal-processing]]</code></td>
+            <td>✅ 含 Subject-level Split</td>
+            <td><button class="open-btn" onclick="openModal('m6')">速讀</button></td>
+          </tr>
+          <tr>
+            <td>07</td>
+            <td><code>wiki/laser-safety-bpd.md</code></td>
+            <td><a href="lessons/02-laser-safety-bpd.html" style="color:var(--accent-blue); font-weight:700;">02-laser-safety-bpd.html &rarr;</a></td>
+            <td><code>[[ps-oct-birefringence]]</code></td>
+            <td>🟠 已標註光斑直徑 $d$ <code>[待實驗室實測補齊]</code></td>
+            <td><button class="open-btn" onclick="openModal('m7')">速讀</button></td>
+          </tr>
+          <tr>
+            <td>08</td>
+            <td><code>wiki/agentic-wiki-workflow.md</code></td>
+            <td><a href="lessons/08-agentic-wiki-workflow.html" style="color:var(--accent-blue); font-weight:700;">08-agentic-wiki-workflow.html &rarr;</a></td>
+            <td><code>[[AGENTS.md]]</code>, <code>[[log.md]]</code></td>
+            <td>✅ 定義五步 Ingest-to-Publish</td>
+            <td><button class="open-btn" onclick="openModal('m8')">速讀</button></td>
+          </tr>
         </tbody>
       </table>
     </div>
 
     <footer>
       TAICA 生成式 AI：文字與圖像生成的原理與實務（第九週作業：建立自己的 AGENTS.md）<br/>
-      國立陽明交通大學 生醫光電研究所 碩二 314264011 許浩哲
+      國立陽明交通大學 生醫光電研究所 碩二 314264011 許浩哲 ｜ GitHub Pages 靜態知識庫展示系統 v3.0
     </footer>
   </div>
 
-  <!-- Desktop Mascot -->
-  <div class="mascot">
-    <div class="m-bubble" id="mBubble">
-      <strong style="color:var(--orange);">🐯 駐站小幫手・橘福福師姐</strong>
-      <div id="mText" style="margin:0.35rem 0;">「點下方的按鈕，師姐立刻抽考你一題 OCT 實驗室口試重點喔！」</div>
-      <button class="btn-sm" onclick="nextTip()">🎲 換一題重點提示</button>
+  <!-- Interactive Desktop Pet (3 Visual States + Roaming Walk) -->
+  <div class="mascot-widget" id="mascotWidget">
+    <div class="mascot-bubble" id="mascotBubble">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
+        <strong style="color:var(--accent-primary);">🐯 桌面小寵物・橘福福師姐</strong>
+        <span id="mascotExp" style="font-family:'JetBrains Mono',monospace; font-size:0.74rem; color:var(--text-muted);">EXP 20/100</span>
+      </div>
+      <div class="pet-state-tabs">
+        <span class="pet-tab active" id="ptab1" onclick="setPetState(1)">① 呆萌陪伴</span>
+        <span class="pet-tab" id="ptab2" onclick="setPetState(2)">② 撒嬌餵食</span>
+        <span class="pet-tab" id="ptab3" onclick="setPetState(3)">③ 嚴格口試</span>
+      </div>
+      <div id="mascotText">「雲巋山上有猛虎！小師弟，進暗房調 1045nm 光路前，戴好 OD 5+ 護目鏡了沒呀？嗷——！」</div>
+      <div class="mascot-controls">
+        <button class="m-btn" onclick="petMascot()">👋 摸摸頭</button>
+        <button class="m-btn" onclick="feedMascot()">🍿 餵爆米花</button>
+        <button class="m-btn" onclick="quizMascot()">🎲 抽考口試</button>
+        <button class="m-btn" onclick="walkMascot()">🐾 散步移動</button>
+      </div>
     </div>
-    <div class="m-avatar" onclick="toggleMascot()" title="點擊開關小幫手">🐯</div>
+    <div class="mascot-avatar-box" onclick="toggleMascotBubble()" title="點擊切換小寵物對話框">
+      <div id="petSvgContainer" style="width:100%; height:100%; display:grid; place-items:center;"></div>
+    </div>
   </div>
 
-  <!-- Modal -->
-  <div class="modal-bg" id="modalBg" onclick="if(event.target===this)closeModal()">
-    <div class="modal-box">
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:0.8rem; margin-bottom:1rem;">
-        <h3 id="modalTitle">單元速讀</h3>
-        <button class="pill-btn" onclick="closeModal()">✕ 關閉</button>
+  <!-- Interactive Modal Drawer -->
+  <div class="modal-backdrop" id="modalBackdrop" onclick="if(event.target===this)closeModal()">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalTitle">講義與 Wiki 節點檢視器</h3>
+        <button class="close-btn" onclick="closeModal()">✕ 關閉視窗 (ESC)</button>
       </div>
-      <div id="modalBody" style="line-height:1.8; color:var(--text-sec);"></div>
+      <div id="modalBody" style="line-height:1.8; color:var(--text-secondary);"></div>
     </div>
   </div>
 
   <script>
-    // 1. Theme Toggle
+    // 1. Dark / Light Theme Toggle
     function toggleTheme() {
-      const root = document.documentElement;
-      const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-      root.setAttribute('data-theme', next);
-      document.getElementById('themeBtn').textContent = next === 'light' ? '🌙 切換暗房模式' : '🌞 切換暖陽模式';
+      const html = document.documentElement;
+      const btn = document.getElementById('themeBtn');
+      if (html.getAttribute('data-theme') === 'light') {
+        html.setAttribute('data-theme', 'dark');
+        btn.textContent = '🌞 暖陽模式';
+      } else {
+        html.setAttribute('data-theme', 'light');
+        btn.textContent = '🌙 暗房模式';
+      }
     }
 
-    // 2. Built-in Web Audio Synthesizer (Loud & Clear!)
-    let actx = null, timer = null, noise = null;
-    function stopSound() {
-      if (timer) { clearInterval(timer); timer = null; }
-      if (noise) { try { noise.stop(); noise.disconnect(); } catch(e){} noise = null; }
-      document.getElementById('btnLofi').classList.remove('active');
-      document.getElementById('btnRain').classList.remove('active');
-      document.getElementById('bgmStatus').textContent = '目前靜音';
+    // 2. Upgraded Built-in Music Box & Ambient Synthesizer (Loud, Clear & Melodic!)
+    let audioCtx = null;
+    let isPlaying = false;
+    let bgmInterval = null;
+    let noiseNode = null;
+
+    function stopAudioNodes() {
+      if (bgmInterval) { clearInterval(bgmInterval); bgmInterval = null; }
+      if (noiseNode) { try { noiseNode.stop(); noiseNode.disconnect(); } catch(e){} noiseNode = null; }
     }
-    function startSound(mode) {
-      stopSound();
-      if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
-      if (actx.state === 'suspended') actx.resume();
-      if (mode === 'lofi') {
-        document.getElementById('btnLofi').classList.add('active');
-        document.getElementById('bgmStatus').textContent = '播放中：🎹 暗房 Lo-Fi 鋼琴和弦';
-        const chords = [[261.6, 329.6, 392.0], [220.0, 261.6, 329.6], [174.6, 220.0, 261.6], [196.0, 246.9, 293.7]];
-        let idx = 0;
-        const play = () => {
-          const now = actx.currentTime;
-          chords[idx % chords.length].forEach(f => {
-            const osc = actx.createOscillator(), g = actx.createGain();
-            osc.type = 'triangle'; osc.frequency.setValueAtTime(f, now);
-            g.gain.setValueAtTime(0.01, now);
-            g.gain.linearRampToValueAtTime(0.12, now + 0.15);
-            g.gain.exponentialRampToValueAtTime(0.001, now + 1.8);
-            osc.connect(g); g.connect(actx.destination);
-            osc.start(now); osc.stop(now + 1.9);
-          });
-          idx++;
+
+    function startBgmEngine() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      stopAudioNodes();
+      const mode = document.getElementById('bgmMode').value;
+      const getVol = () => parseFloat(document.getElementById('bgmVol').value || 0.25);
+
+      if (mode === 'musicbox') {
+        // Cheerful Pentatonic Music Box Melody
+        const notes = [523.25, 659.25, 783.99, 1046.50, 783.99, 659.25, 587.33, 698.46, 880.00, 698.46, 587.33, 493.88];
+        let step = 0;
+        const playNote = () => {
+          if (!isPlaying) return;
+          const now = audioCtx.currentTime;
+          const freq = notes[step % notes.length];
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now);
+          gain.gain.setValueAtTime(0.01, now);
+          gain.gain.linearRampToValueAtTime(getVol(), now + 0.04);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
+          osc.connect(gain); gain.connect(audioCtx.destination);
+          osc.start(now); osc.stop(now + 0.7);
+          step++;
         };
-        play(); timer = setInterval(play, 2000);
+        playNote();
+        bgmInterval = setInterval(playNote, 420);
+      } else if (mode === 'lofi') {
+        const chords = [
+          [261.63, 329.63, 392.00, 493.88],
+          [220.00, 261.63, 329.63, 392.00],
+          [174.61, 220.00, 261.63, 349.23],
+          [196.00, 246.94, 293.66, 392.00]
+        ];
+        let step = 0;
+        const playChord = () => {
+          if (!isPlaying) return;
+          const now = audioCtx.currentTime;
+          chords[step % chords.length].forEach(freq => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now);
+            gain.gain.setValueAtTime(0.005, now);
+            gain.gain.linearRampToValueAtTime(getVol() * 0.45, now + 0.15);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 1.9);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(now); osc.stop(now + 2.0);
+          });
+          step++;
+        };
+        playChord();
+        bgmInterval = setInterval(playChord, 2100);
       } else {
-        document.getElementById('btnRain').classList.add('active');
-        document.getElementById('bgmStatus').textContent = '播放中：🌧️ 陽明山夜雨白噪音';
-        const len = actx.sampleRate * 2, buf = actx.createBuffer(1, len, actx.sampleRate), d = buf.getChannelData(0);
-        let last = 0;
-        for (let i = 0; i < len; i++) { const w = Math.random() * 2 - 1; d[i] = (last + 0.05 * w) / 1.05; last = d[i]; d[i] *= 0.35; }
-        noise = actx.createBufferSource(); noise.buffer = buf; noise.loop = true;
-        noise.connect(actx.destination); noise.start();
+        const bufferSize = audioCtx.sampleRate * 2;
+        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const data = buffer.getChannelData(0);
+        let lastOut = 0.0;
+        for (let i = 0; i < bufferSize; i++) {
+          const white = Math.random() * 2 - 1;
+          data[i] = (lastOut + (0.04 * white)) / 1.04;
+          lastOut = data[i];
+          data[i] *= getVol() * 1.4;
+        }
+        noiseNode = audioCtx.createBufferSource();
+        noiseNode.buffer = buffer;
+        noiseNode.loop = true;
+        noiseNode.connect(audioCtx.destination);
+        noiseNode.start();
       }
     }
 
-    // 3. Filter & Search & Progress
-    function calcProg() {
-      const all = document.querySelectorAll('.chk');
-      let c = 0; all.forEach(x => { if (x.checked) c++; });
-      const p = Math.round((c / all.length) * 100);
-      document.getElementById('progText').textContent = `${c} / ${all.length} 單元已完成 (${p}%)`;
-      document.getElementById('progBar').style.width = `${p}%`;
+    function toggleBgm() {
+      const btn = document.getElementById('bgmBtn');
+      const pill = document.getElementById('musicPill');
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        startBgmEngine();
+        btn.textContent = '⏸ 暫停';
+        pill.classList.add('playing');
+      } else {
+        stopAudioNodes();
+        btn.textContent = '▶ 播放音樂';
+        pill.classList.remove('playing');
+      }
     }
-    function filterCards(cat, btn) {
-      document.querySelectorAll('.toolbar .pill-btn').forEach(b => b.classList.remove('active'));
+    function changeBgm() { if (isPlaying) startBgmEngine(); }
+
+    // 3. Progress Bar Tracker
+    function updateProgress() {
+      const checks = document.querySelectorAll('.check-done input');
+      let done = 0;
+      checks.forEach(c => { if (c.checked) done++; });
+      const pct = Math.round((done / checks.length) * 100);
+      document.getElementById('progText').textContent = `${done} / ${checks.length} 單元已完成 (${pct}%)`;
+      document.getElementById('progBar').style.width = `${pct}%`;
+    }
+
+    // 4. Category Filter & Search
+    function filterLessons(cat, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      document.querySelectorAll('.cards-grid .lesson-card').forEach(c => {
-        c.style.display = (cat === 'ALL' || c.dataset.cat === cat) ? 'flex' : 'none';
+      document.querySelectorAll('.lesson-card').forEach(card => {
+        card.style.display = (cat === 'ALL' || card.dataset.cat === cat) ? 'flex' : 'none';
       });
     }
-    function searchCards() {
+    function searchLessons() {
       const q = document.getElementById('searchInput').value.toLowerCase();
-      document.querySelectorAll('.cards-grid .lesson-card').forEach(c => {
-        c.style.display = c.innerText.toLowerCase().includes(q) ? 'flex' : 'none';
+      document.querySelectorAll('.lesson-card').forEach(card => {
+        card.style.display = card.innerText.toLowerCase().includes(q) ? 'flex' : 'none';
       });
     }
 
-    // 4. Resolution Simulator
+    // 5. Animated 60FPS Darkroom Alignment Mini-Game (Never a Black Screen!)
+    let phaseOffset = 0;
+    function updateGame() {
+      const pos = parseFloat(document.getElementById('gamePos').value);
+      const pwr = parseFloat(document.getElementById('gamePwr').value);
+      document.getElementById('gamePosText').textContent = `${pos > 0 ? '+' : ''}${pos} μm`;
+      document.getElementById('gamePwrText').textContent = `${pwr.toFixed(2)} mW`;
+
+      const coherenceEnv = Math.exp(-(pos * pos) / 180);
+      const saturated = pwr > 1.05;
+      const snr = saturated ? 0 : Math.min(100, Math.round(coherenceEnv * (pwr / 0.85) * 100));
+
+      const snrEl = document.getElementById('gameSnrText');
+      const statusEl = document.getElementById('gameStatusBox');
+
+      if (saturated) {
+        snrEl.style.color = '#EF4444';
+        snrEl.textContent = '⚠️ BPD 飽和紅燈 (SATURATED!)';
+        statusEl.textContent = '🚨 警告：參考臂功率超過 1.0 mW，平衡探測器發生飽和變成水平直線！請立即調降可調光衰減器！';
+      } else if (snr >= 90) {
+        snrEl.style.color = 'var(--accent-green)';
+        snrEl.textContent = `🎉 耦合訊噪比 SNR: ${snr}% (完美尋峰!)`;
+        statusEl.textContent = '🏆 恭喜破關！光程差已進入同調長度峰值（ΔL ≈ 0）且 BPD 功率完美平衡！橘福福師姐獎勵你一顆大雞腿！';
+        addMascotExp(5);
+      } else {
+        snrEl.style.color = 'var(--accent-blue)';
+        snrEl.textContent = `耦合訊噪比 SNR: ${snr}%`;
+        statusEl.textContent = '🔍 繼續微調：請將光程差 ΔL 拉近 0 μm，並將功率調整至 0.75 ~ 0.95 mW 取得最強干涉包絡線！';
+      }
+    }
+
+    function animateOscilloscope() {
+      const canvas = document.getElementById('gameCanvas');
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        const w = canvas.width, h = canvas.height;
+        const pos = parseFloat(document.getElementById('gamePos').value || 25);
+        const pwr = parseFloat(document.getElementById('gamePwr').value || 0.85);
+        const saturated = pwr > 1.05;
+        const env = Math.exp(-(pos * pos) / 180);
+
+        ctx.fillStyle = '#090D16';
+        ctx.fillRect(0, 0, w, h);
+
+        // Grid
+        ctx.strokeStyle = 'rgba(148, 163, 184, 0.16)';
+        ctx.lineWidth = 1;
+        for (let x = 0; x < w; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+        for (let y = 0; y < h; y += 38) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+
+        // Center Reference Line
+        ctx.strokeStyle = 'rgba(249, 115, 22, 0.35)';
+        ctx.beginPath(); ctx.moveTo(w / 2, 0); ctx.lineTo(w / 2, h); ctx.stroke();
+
+        // Live Interferogram Waveform
+        ctx.beginPath();
+        ctx.lineWidth = 2.4;
+        ctx.strokeStyle = saturated ? '#EF4444' : (env > 0.85 ? '#34D399' : '#38BDF8');
+
+        for (let x = 0; x < w; x++) {
+          const normX = (x - w / 2 - pos * 2.5) / 55;
+          let y;
+          if (saturated) {
+            y = 24 + (Math.random() - 0.5) * 4;
+          } else {
+            const packet = Math.exp(-(normX * normX)) * (0.25 + 0.75 * env) * (pwr / 0.85);
+            const carrier = Math.cos(x * 0.45 + phaseOffset);
+            const noise = (Math.random() - 0.5) * 3;
+            y = h / 2 - packet * carrier * (h * 0.42) + noise;
+          }
+          if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        phaseOffset += 0.12;
+      }
+      requestAnimationFrame(animateOscilloscope);
+    }
+
+    function randomizeGame() {
+      document.getElementById('gamePos').value = Math.floor(Math.random() * 90) - 45;
+      document.getElementById('gamePwr').value = (0.35 + Math.random() * 1.05).toFixed(2);
+      updateGame();
+    }
+
+    // 6. Interactive OCT Resolution & MPE Simulator
     function runSim() {
-      const lam = +document.getElementById('simLam').value;
-      const bw = +document.getElementById('simBw').value;
-      const pwr = +document.getElementById('simPwr').value;
-      document.getElementById('valLam').textContent = lam + ' nm';
-      document.getElementById('valBw').textContent = bw + ' nm';
-      document.getElementById('valPwr').textContent = pwr.toFixed(1) + ' mW';
-      const air = (0.44 * lam * lam) / bw / 1000;
-      document.getElementById('outRes').textContent = (air / 1.38).toFixed(2) + ' μm (空氣中 ' + air.toFixed(2) + ' μm)';
-      const s = document.getElementById('outSafe');
+      const lam = parseFloat(document.getElementById('simLambda').value);
+      const bw = parseFloat(document.getElementById('simBw').value);
+      const pwr = parseFloat(document.getElementById('simPower').value);
+
+      document.getElementById('valLambda').textContent = `${lam} nm`;
+      document.getElementById('valBw').textContent = `${bw} nm`;
+      document.getElementById('valPower').textContent = `${pwr.toFixed(1)} mW`;
+
+      const dz_air = (0.44 * lam * lam) / bw / 1000;
+      const dz_tissue = (dz_air / 1.38).toFixed(2);
+      document.getElementById('outRes').textContent = `${dz_tissue} μm (空氣中 ${dz_air.toFixed(2)} μm)`;
+
+      const comment = document.getElementById('outComment');
+      if (lam >= 1000 && lam <= 1100) {
+        comment.textContent = '🌟 1045nm 黃金眼科深層波段：水吸收極小且能穿透視網膜色素層 (RPE)，最適合後鞏膜雙折射成像！';
+      } else if (lam < 900) {
+        comment.textContent = 'ℹ️ 840nm 傳統視網膜波段：軸向解析度極高，但容易被 RPE 層散射，較難看清深層後鞏膜。';
+      } else {
+        comment.textContent = 'ℹ️ 1310nm 皮膚/前房波段：散射極低、穿透最深，但水分吸收較強，不適合穿過整個眼球玻璃體。';
+      }
+
+      const alertBox = document.getElementById('safetyAlert');
       if (pwr <= 1.8) {
-        s.style.background = 'var(--green-soft)'; s.style.color = 'var(--green)';
-        s.textContent = '✅ 環安衛檢核通過：入眼功率 ' + pwr.toFixed(1) + ' mW 符合 ANSI Z136.1 安全上限 (≤ 1.8 mW)。';
+        alertBox.style.background = 'var(--accent-green-soft)';
+        alertBox.style.color = 'var(--accent-green)';
+        alertBox.textContent = `✅ 環安衛檢核通過：入眼功率 ${pwr.toFixed(1)} mW 符合 ANSI Z136.1 安全上限 (≤ 1.8 mW)。`;
       } else {
-        s.style.background = 'var(--orange-soft)'; s.style.color = 'var(--orange)';
-        s.textContent = '⚠️ 超標警告：入眼功率 ' + pwr.toFixed(1) + ' mW 已超過 1.8 mW 安全上限！請立即調降衰減器！';
+        alertBox.style.background = 'var(--accent-soft)';
+        alertBox.style.color = 'var(--accent-primary)';
+        alertBox.textContent = `⚠️ 環安衛超標警告：入眼功率 ${pwr.toFixed(1)} mW 已超過 ANSI 1.8 mW 上限！請立即調降光衰減器！`;
       }
     }
 
-    // 5. Quiz Logic
-    const solved = {1: false, 2: false, 3: false};
-    function ansQuiz(q, ok, btn) {
-      const fb = document.getElementById('fb' + q);
-      if (ok) {
-        solved[q] = true;
-        btn.style.background = 'var(--green-soft)'; btn.style.borderColor = 'var(--green)';
-        fb.style.color = 'var(--green)'; fb.textContent = '🎉 答對了！觀念非常清楚！';
-      } else {
-        btn.style.background = 'var(--orange-soft)'; btn.style.borderColor = 'var(--orange)';
-        fb.style.color = 'var(--orange)'; fb.textContent = '💡 再想一下，試試看另一個選項！';
-      }
-      const total = (solved[1]?1:0) + (solved[2]?1:0) + (solved[3]?1:0);
-      document.getElementById('quizScore').textContent = total + ' / 3 題';
-    }
-
-    // 6. Mascot Tips
-    const tips = [
-      "「口試重點：1045nm 波段比 840nm 更能穿透視網膜色素上皮層（RPE），最適合拍後鞏膜！」",
-      "「暗房守則：開啟 Class 3B 雷射鑰匙前，一定要戴好 OD 5+ 護目鏡並取下手錶戒指！」",
-      "「訊號重點：B-scan 如果左右晃動，要把 LabVIEW 改接 PFI0 硬體 Trigger 並留 15% Flyback！」",
-      "「AGENTS.md 守則：筆記沒寫到的雷射參數一律標註 [待實驗室實測補齊]，絕不自己瞎掰數據！」"
+    // 7. Mochi Lab Treehole Wall
+    const defaultNotes = [
+      { author: "碩二 浩哲", text: "今晚 1045nm SS-PS-OCT 的干涉訊號超穩！雙折射相位延遲圖終於沒有橫向偽影了！", time: "2026-11-05" },
+      { author: "橘福福大師姐", text: "老虎不發威別當我是橘貓！記得進暗房一定要戴 OD 5+ 護目鏡，不准用衛生紙擦光纖！", time: "2026-11-05" },
+      { author: "博班學姐", text: "跑 MATLAB 色散補償前記得先確認 k-clock Trigger 有接進 PFI0 喔，祝大家 Group Meeting 順利！", time: "2026-11-05" }
     ];
-    let tIdx = 0;
-    function nextTip() { tIdx = (tIdx + 1) % tips.length; document.getElementById('mText').textContent = tips[tIdx]; }
-    function toggleMascot() {
-      const b = document.getElementById('mBubble');
+
+    function renderTreehole() {
+      let saved = defaultNotes;
+      try {
+        const local = JSON.parse(localStorage.getItem('oct_treehole_notes'));
+        if (Array.isArray(local) && local.length) saved = local;
+      } catch(e) {}
+      const box = document.getElementById('treeholeList');
+      box.innerHTML = saved.map(n => `
+        <div class="note-item">
+          <div>「${n.text}」</div>
+          <div class="note-meta">— ${n.author} · ${n.time}</div>
+        </div>
+      `).join('');
+    }
+
+    function addTreeholeNote() {
+      const author = document.getElementById('treeholeAuthor').value.trim() || '匿名研究生';
+      const text = document.getElementById('treeholeInput').value.trim();
+      if (!text) return;
+      let saved = defaultNotes.slice();
+      try {
+        const local = JSON.parse(localStorage.getItem('oct_treehole_notes'));
+        if (Array.isArray(local)) saved = local;
+      } catch(e) {}
+      saved.unshift({ author, text, time: new Date().toISOString().slice(0, 10) });
+      try { localStorage.setItem('oct_treehole_notes', JSON.stringify(saved.slice(0, 8))); } catch(e) {}
+      document.getElementById('treeholeInput').value = '';
+      renderTreehole();
+      addMascotExp(10);
+    }
+
+    // 8. Desktop Pet (3 Visual States + Walking Roam)
+    let exp = 20;
+    let petPosRight = 24;
+    const petSvgs = {
+      1: `<svg viewBox="0 0 80 80" width="70" height="70">
+            <circle cx="40" cy="42" r="28" fill="#FB923C"/>
+            <polygon points="16,24 24,8 34,20" fill="#EA580C"/>
+            <polygon points="64,24 56,8 46,20" fill="#EA580C"/>
+            <circle cx="30" cy="38" r="4" fill="#1E293B"/>
+            <circle cx="50" cy="38" r="4" fill="#1E293B"/>
+            <ellipse cx="40" cy="46" rx="6" ry="4" fill="#FFF7ED"/>
+            <path d="M 35 48 Q 40 53 45 48" fill="none" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="36" y1="22" x2="44" y2="22" stroke="#7C2D12" stroke-width="3" stroke-linecap="round"/>
+            <line x1="40" y1="18" x2="40" y2="27" stroke="#7C2D12" stroke-width="3" stroke-linecap="round"/>
+          </svg>`,
+      2: `<svg viewBox="0 0 80 80" width="70" height="70">
+            <circle cx="40" cy="42" r="28" fill="#FB923C"/>
+            <polygon points="16,24 24,8 34,20" fill="#EA580C"/>
+            <polygon points="64,24 56,8 46,20" fill="#EA580C"/>
+            <path d="M 25 38 Q 30 32 35 38" fill="none" stroke="#1E293B" stroke-width="3" stroke-linecap="round"/>
+            <path d="M 45 38 Q 50 32 55 38" fill="none" stroke="#1E293B" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="23" cy="45" r="4.5" fill="#F43F5E" opacity="0.6"/>
+            <circle cx="57" cy="45" r="4.5" fill="#F43F5E" opacity="0.6"/>
+            <path d="M 34 47 Q 40 56 46 47 Z" fill="#F43F5E"/>
+            <text x="56" y="22" font-size="14">💖</text>
+          </svg>`,
+      3: `<svg viewBox="0 0 80 80" width="70" height="70">
+            <circle cx="40" cy="42" r="28" fill="#FB923C"/>
+            <polygon points="16,24 24,8 34,20" fill="#EA580C"/>
+            <polygon points="64,24 56,8 46,20" fill="#EA580C"/>
+            <rect x="20" y="31" width="17" height="12" rx="3" fill="#0284C7" opacity="0.85" stroke="#fff" stroke-width="1.5"/>
+            <rect x="43" y="31" width="17" height="12" rx="3" fill="#0284C7" opacity="0.85" stroke="#fff" stroke-width="1.5"/>
+            <line x1="37" y1="36" x2="43" y2="36" stroke="#fff" stroke-width="2"/>
+            <path d="M 35 51 L 45 51" stroke="#1E293B" stroke-width="3" stroke-linecap="round"/>
+            <text x="40" y="20" font-size="10" fill="#fff" text-anchor="middle" font-weight="bold">OD5+</text>
+          </svg>`
+    };
+
+    function setPetState(st) {
+      [1, 2, 3].forEach(i => document.getElementById('ptab' + i).classList.toggle('active', i === st));
+      document.getElementById('petSvgContainer').innerHTML = petSvgs[st];
+    }
+
+    function addMascotExp(val) {
+      exp = Math.min(100, exp + val);
+      document.getElementById('mascotExp').textContent = `EXP ${exp}/100`;
+      const lvEl = document.getElementById('petLv');
+      if (exp >= 80) lvEl.textContent = 'Lv.3 首席守護神';
+      else if (exp >= 50) lvEl.textContent = 'Lv.2 光學大師姐';
+    }
+    function petMascot() {
+      setPetState(1);
+      const quotes = [
+        "「……老虎不發威，別當我是胖橘貓啊！嗷——！快去溫習 Module 02 的雙折射公式！」",
+        "「修煉光學術法著實不易，師姐助你一爪之力！記得 OpenSCAD 的 $fn 要設 120 喔！」"
+      ];
+      document.getElementById('mascotText').textContent = quotes[Math.floor(Math.random() * quotes.length)];
+      addMascotExp(10);
+    }
+    function feedMascot() {
+      setPetState(2);
+      document.getElementById('mascotText').textContent = "「嗷嗚！是香噴噴的大雞腿跟焦糖爆米花！師姐最喜歡你了，祝你實驗一次對光成功！」";
+      addMascotExp(15);
+    }
+    function quizMascot() {
+      setPetState(3);
+      const quizTips = [
+        "🎲 口試抽考：為什麼 200kHz OCT 鋸齒波要留 15% Flyback？答：保護 Galvo 振鏡避免瞬間反轉過熱失步！",
+        "🎲 口試抽考：訓練 OCT 降噪 CNN 最怕什麼？答：把同一顆眼球的相鄰 B-scan 同時分進訓練與測試集（Data Leakage）！",
+        "🎲 口試抽考：量測 1045nm 樣品臂功率前要做什麼？答：把功率計波長檔位從 633nm 切換到 1045nm，並確認 ≤ 1.8 mW！"
+      ];
+      document.getElementById('mascotText').textContent = quizTips[Math.floor(Math.random() * quizTips.length)];
+      addMascotExp(10);
+    }
+    function walkMascot() {
+      const widget = document.getElementById('mascotWidget');
+      petPosRight = petPosRight < 180 ? Math.floor(Math.random() * 240) + 120 : 24;
+      widget.style.right = petPosRight + 'px';
+      document.getElementById('mascotText').textContent = "「噠噠噠……師姐在光學桌旁邊巡邏中！沒有人忘記戴護目鏡吧？」";
+    }
+    function toggleMascotBubble() {
+      const b = document.getElementById('mascotBubble');
       b.style.display = b.style.display === 'none' ? 'block' : 'none';
     }
 
-    // 7. Modal Quick Read Content
-    const modals = {
-      m1: ["🌱 Module 01 // 認識 OCT：光學界的超音波", "<p>OCT 發射近紅外光進入生物組織，並利用<strong>麥克森干涉儀</strong>將參考臂與樣品臂反射光進行干涉。當兩臂光程差小於同調長度時即產生干涉條紋，軸向解析度約為 1～10 微米（比超音波高出百倍）。</p><p style='margin-top:1rem;'><a class='btn-primary' href='lessons/01-oct-intro.html'>📄 前往 Module 01 完整 4 頁投影片 &rarr;</a></p>"],
-      m2: ["🔦 Module 02 // 1045nm SS-PS-OCT 雙折射與後鞏膜成像", "<p>採用 1045nm 200kHz 掃頻雷射穿透 RPE 層，透過雙通道平衡光電探測器（BPD）同步接收水平與垂直偏振訊號，計算累積相位延遲 $\\delta(z)=\\arctan(|E_V|/|E_H|)$，進而求得後鞏膜膠原纖維雙折射率 $\\Delta n$。</p><p style='margin-top:1rem;'><a class='btn-primary' href='lessons/01-ps-oct-birefringence.html'>📄 前往 Module 02 完整 4 頁投影片 &rarr;</a></p>"],
-      m3: ["🌱 Module 03 // GRIN 微探頭與 OpenSCAD 3D 列印光機", "<p>GRIN 透鏡利用徑向拋物線折射率實現自聚焦。組裝時須使用非金屬鑷子與 UV 膠同軸固化；OpenSCAD 建模需設定 <code>$fn=120</code> 與 +0.18mm 公差，並以消光黑材料列印防止雜散光。</p><p style='margin-top:1rem;'><a class='btn-primary' href='lessons/03-grin-lens-openscad.html'>📄 前往 Module 03 完整 4 頁投影片 &rarr;</a></p>"],
-      m4: ["⚡ Module 04 // LabVIEW 振鏡與 200kHz DAQ 高速同步", "<p>200kHz 下每條 A-line 僅 5 微秒，必須將雷射 A-line Trigger 接入 DAQ <code>PFI0</code> 作為硬體同步時脈，且鋸齒波需預留 15% Flyback 平滑回掃點數以保護振鏡。</p><p style='margin-top:1rem;'><a class='btn-primary' href='lessons/04-galvo-daq-sync.html'>📄 前往 Module 04 完整 4 頁投影片 &rarr;</a></p>"],
-      m5: ["💻 Module 05 // BPD 差動偵測、色散補償與 FFT", "<p>平衡光電探測器（BPD）將兩道反相干涉光相減以消除共模強度雜訊（RIN），再經 k-space 等波數重取樣、數值色散補償與漢寧窗 FFT 重建出深度結構。</p><p style='margin-top:1rem;'><a class='btn-primary' href='lessons/05-bpd-fft-reconstruction.html'>📄 前往 Module 05 完整 4 頁投影片 &rarr;</a></p>"],
-      m6: ["🤖 Module 06 // 深度學習於 OCT 散斑降噪與防洩漏", "<p>利用 U-Net / CNN 濾除同調散斑雜訊（Speckle Noise）。切分訓練集與測試集時，必須嚴格遵守 Subject-level Split（以不同眼球個體切分），防止相鄰切片造成資料洩漏。</p><p style='margin-top:1rem;'><a class='btn-primary' href='lessons/06-deep-learning-denoising.html'>📄 前往 Module 06 完整 4 頁投影片 &rarr;</a></p>"],
-      m7: ["🛡️ Module 07 // 1045nm 雷射環安衛與光纖清潔", "<p>進暗房必戴 OD 5+ (950-1100nm) 護目鏡；依 ANSI Z136.1 標準樣品端功率須 ≤ 1.8 mW（量測前功率計切至 1045nm）；APC 光纖嚴禁用衛生紙擦拭，須用 Cletop 單向推拭。</p><p style='margin-top:1rem;'><a class='btn-primary' href='lessons/02-laser-safety-bpd.html'>📄 前往 Module 07 完整 4 頁投影片 &rarr;</a></p>"],
-      m8: ["🤖 Module 08 // 用 AGENTS.md 打造實驗室 LLM Wiki", "<p>遵循 AI Agent = AI Model + Harness，透過 <code>AGENTS.md</code> 定義三層目錄（<code>raw/</code> 唯讀、<code>wiki/</code> 雙向連結、<code>lessons/</code> 獨立網頁）、防幻覺標記與五步驗收標準。</p><p style='margin-top:1rem;'><a class='btn-primary' href='lessons/08-agentic-wiki-workflow.html'>📄 前往 Module 08 完整 4 頁投影片 &rarr;</a></p>"],
-      agents_spec: ["📜 AGENTS.md — 專案員工手冊與自動化擴充規則", "<p><strong>1. 要什麼成品：</strong>定義 <code>raw/</code>（原始筆記）、<code>wiki/</code>（Markdown 概念節點）、<code>lessons/</code>（8 份獨立互動投影片）與 <code>index.html</code> 首頁。</p><p><strong>2. 有什麼限制：</strong><code>raw/</code> 唯讀不可修改；所有未提供實測值之物理參數（如 $\\Delta\\lambda$、光斑直徑 $d$）強制標註為 <code>[待實驗室實測補齊]</code>，嚴禁 AI 捏造數據。</p><p><strong>3. 怎麼算做完：</strong>每次新增內容必須走完 Save Raw &rarr; Compile Wiki &rarr; Build HTML &rarr; Sync Index &rarr; Update <code>log.md</code> 五步流程。</p>"]
+    // 9. Modal Content Dictionary
+    const modalData = {
+      m1: {
+        title: "🌱 Module 01 // 認識 OCT：光學界的超音波與低同調干涉",
+        body: `<p>OCT 利用近紅外光與麥克森干涉儀測量組織內部微米級結構。軸向解析度公式為 $\\delta z = \\frac{2\\ln 2}{\\pi}\\frac{\\lambda_0^2}{\\Delta\\lambda}$，頻譜越寬解析度越高。</p><p><a href="lessons/01-oct-intro.html" class="btn-primary" style="display:inline-block; margin-top:0.75rem;">📄 開啟 Module 01 完整 4 頁獨立講義 &rarr;</a></p>`
+      },
+      m2: {
+        title: "🔦 Module 02 // 1045nm SS-PS-OCT 雙折射與後鞏膜成像",
+        body: `<p>採用 $\\lambda_0 = 1045\\text{ nm}$、$200\\text{ kHz}$ 掃頻光源穿透視網膜色素層，透過雙通道 BPD 計算累積相位延遲 $\\delta(z) = \\arctan(|E_V|/|E_H|)$ 與後鞏膜雙折射率 $\\Delta n$。</p><p><a href="lessons/01-ps-oct-birefringence.html" class="btn-primary" style="display:inline-block; margin-top:0.75rem;">📄 開啟 Module 02 完整 4 頁獨立講義 &rarr;</a></p>`
+      },
+      m3: {
+        title: "🔬 Module 03 // GRIN 梯度折射率微探頭與 OpenSCAD 3D 列印光機",
+        body: `<p>介紹 GRIN Lens 拋物線折射率自聚焦原理、非金屬鑷子與 UV 膠固化規範，以及 OpenSCAD <code>$fn=120</code> 與 +0.18mm 3D 列印公差設計。</p><p><a href="lessons/03-grin-lens-openscad.html" class="btn-primary" style="display:inline-block; margin-top:0.75rem;">📄 開啟 Module 03 完整 4 頁獨立講義 &rarr;</a></p>`
+      },
+      m4: {
+        title: "⚡ Module 04 // LabVIEW 雙軸振鏡與 200kHz DAQ 高速同步觸發",
+        body: `<p>解析 5 微秒 A-line 週期下為何必須使用 PFI0 硬體 Trigger 同步 Galvo 與 DAQ，以及鋸齒波預留 15% Flyback 回掃緩衝區之保護機制。</p><p><a href="lessons/04-galvo-daq-sync.html" class="btn-primary" style="display:inline-block; margin-top:0.75rem;">📄 開啟 Module 04 完整 4 頁獨立講義 &rarr;</a></p>`
+      },
+      m5: {
+        title: "💻 Module 05 // BPD 平衡光電探測器、k-space 重取樣與 FFT",
+        body: `<p>說明雙臂相減共模拒斥比（CMRR）、波數空間 $k=2\\pi/\\lambda$ 等間距重取樣、數值色散補償相角陣列與漢寧窗 FFT 斷層重建流程。</p><p><a href="lessons/05-bpd-fft-reconstruction.html" class="btn-primary" style="display:inline-block; margin-top:0.75rem;">📄 開啟 Module 05 完整 4 頁獨立講義 &rarr;</a></p>`
+      },
+      m6: {
+        title: "🤖 Module 06 // 深度學習於 OCT 散斑雜訊抑制與防止資料洩漏",
+        body: `<p>探討同調散斑雜訊（Speckle Noise）成因、U-Net 監督式降噪架構，以及醫學影像訓練最重要的 Subject-level Split 防洩漏鐵則。</p><p><a href="lessons/06-deep-learning-denoising.html" class="btn-primary" style="display:inline-block; margin-top:0.75rem;">📄 開啟 Module 06 完整 4 頁獨立講義 &rarr;</a></p>`
+      },
+      m7: {
+        title: "🛡️ Module 07 // Class 3B 掃頻雷射安全、ANSI MPE 與光纖清潔",
+        body: `<p>涵蓋 OD 5+ (950-1100nm) 護目鏡規範、ANSI Z136.1 角膜平面 1.8 mW 安全上限實測，以及 Cletop 光纖單向清潔標準。</p><p><a href="lessons/02-laser-safety-bpd.html" class="btn-primary" style="display:inline-block; margin-top:0.75rem;">📄 開啟 Module 07 完整 4 頁獨立講義 &rarr;</a></p>`
+      },
+      m8: {
+        title: "🤖 Module 08 // 用 AGENTS.md 打造實驗室 LLM Wiki 與自動進度回報",
+        body: `<p>總結 AI Agent = AI Model + Harness 核心公式、Karpathy 三層式 LLM Wiki 架構與五步 Ingest-to-Publish 驗收標準。</p><p><a href="lessons/08-agentic-wiki-workflow.html" class="btn-primary" style="display:inline-block; margin-top:0.75rem;">📄 開啟 Module 08 完整 4 頁獨立講義 &rarr;</a></p>`
+      },
+      agents_spec: {
+        title: "📜 AGENTS.md — 專案員工手冊與自動化擴充規則 v3.0",
+        body: `<p><strong>1. 專案定位：</strong>結合 Karpathy LLM Wiki 三層架構（<code>raw/</code> &rarr; <code>wiki/</code> &rarr; <code>lessons/</code>）與 Mochi-Treehole 互動學習體驗，收錄 8 大完整獨立講義模組。</p><p><strong>2. 互動元件標準：</strong>內建八音盒與白噪音合成器、60FPS 暗房對光尋峰小遊戲、OCT 解析度模擬器、新手翻翻卡、樹洞許願牆與三態桌面小寵物。</p><p><strong>3. 防幻覺限制：</strong><code>raw/</code> 唯讀不可修改；未實測物理參數強制標註 <code>[待實驗室實測補齊]</code>。</p>`
+      }
     };
 
-    function openModal(k) {
-      if (!modals[k]) return;
-      document.getElementById('modalTitle').innerHTML = modals[k][0];
-      document.getElementById('modalBody').innerHTML = modals[k][1];
-      document.getElementById('modalBg').classList.add('open');
+    function openModal(key) {
+      const item = modalData[key];
+      if (!item) return;
+      document.getElementById('modalTitle').innerHTML = item.title;
+      document.getElementById('modalBody').innerHTML = item.body;
+      document.getElementById('modalBackdrop').classList.add('open');
       if (window.renderMathInElement) {
-        renderMathInElement(document.getElementById('modalBody'), {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+        renderMathInElement(document.getElementById('modalBody'), {
+          delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]
+        });
       }
     }
-    function closeModal() { document.getElementById('modalBg').classList.remove('open'); }
+    function closeModal() { document.getElementById('modalBackdrop').classList.remove('open'); }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    // Initialize Immediately
+    setPetState(1);
+    updateGame();
+    renderTreehole();
+    animateOscilloscope();
   </script>
 </body>
 </html>
