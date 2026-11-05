@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Module 01 | 認識 OCT：為什麼它是「光學界的超音波」？</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    :root[data-theme="light"] {
+      --bg-main: #FAF7F2; --bg-sec: #F3EFE6; --bg-card: #FFFFFF;
+      --text-main: #1E293B; --text-sec: #475569; --text-muted: #64748B;
+      --border: #E2E8F0; --orange: #EA580C; --orange-soft: #FFEDD5;
+      --blue: #0284C7; --blue-soft: #E0F2FE; --green: #059669; --green-soft: #D1FAE5;
+      --shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+    }
+    :root[data-theme="dark"] {
+      --bg-main: #0B0F17; --bg-sec: #111827; --bg-card: #1E293B;
+      --text-main: #F8FAFC; --text-sec: #CBD5E1; --text-muted: #94A3B8;
+      --border: #334155; --orange: #F97316; --orange-soft: rgba(249, 115, 22, 0.18);
+      --blue: #38BDF8; --blue-soft: rgba(56, 189, 248, 0.16); --green: #34D399; --green-soft: rgba(52, 211, 153, 0.16);
+      --shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg-main); color: var(--text-main);
+      font-family: 'Noto Sans TC', sans-serif; line-height: 1.75;
+      min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between;
+      transition: background 0.25s, color 0.25s;
+    }
+    .navbar {
+      background: var(--bg-card); border-bottom: 1px solid var(--border);
+      padding: 0.85rem 1.5rem; position: sticky; top: 0; z-index: 20;
+    }
+    .nav-inner {
+      max-width: 980px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;
+    }
+    .back-btn {
+      color: var(--blue); text-decoration: none; font-weight: 700; font-size: 0.92rem;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+    }
+    .back-btn:hover { color: var(--orange); }
+    .dots { display: flex; gap: 0.5rem; align-items: center; }
+    .dot {
+      width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border);
+      background: var(--bg-sec); color: var(--text-muted); font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem; font-weight: 700; display: grid; place-items: center; cursor: pointer;
+    }
+    .dot.active { background: var(--orange); color: #fff; border-color: var(--orange); }
+    .theme-btn {
+      background: var(--bg-sec); color: var(--text-main); border: 1px solid var(--border);
+      padding: 0.4rem 0.85rem; border-radius: 99px; cursor: pointer; font-size: 0.82rem; font-weight: 700;
+    }
+    .progress-track { max-width: 980px; width: 100%; margin: 0 auto; height: 5px; background: var(--border); }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--orange), var(--blue)); width: 25%; transition: width 0.25s; }
+    .stage { max-width: 980px; width: 100%; margin: 2rem auto; padding: 0 1.25rem; flex: 1; }
+    .slide-card {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 22px;
+      padding: 2.5rem; box-shadow: var(--shadow); min-height: 470px;
+    }
+    .slide { display: none; }
+    .slide.active { display: block; animation: fadeUp 0.3s ease; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .badge {
+      display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 700;
+      background: var(--blue-soft); color: var(--blue); padding: 0.25rem 0.75rem; border-radius: 99px; margin-bottom: 0.85rem;
+    }
+    h1 { font-size: 1.85rem; font-weight: 900; margin-bottom: 1rem; line-height: 1.35; }
+    p, li { color: var(--text-sec); font-size: 1rem; margin-bottom: 0.85rem; }
+    ul { padding-left: 1.35rem; margin-bottom: 1rem; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1.25rem 0; }
+    @media (max-width: 760px) { .grid-2 { grid-template-columns: 1fr; } .slide-card { padding: 1.5rem; } }
+    .callout {
+      background: var(--bg-sec); border-left: 4px solid var(--orange);
+      padding: 1.15rem 1.35rem; border-radius: 12px; margin: 1.15rem 0;
+    }
+    .callout-blue {
+      background: var(--blue-soft); border-left: 4px solid var(--blue);
+      padding: 1.15rem 1.35rem; border-radius: 12px; margin: 1.15rem 0;
+    }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.92rem; }
+    th, td { border: 1px solid var(--border); padding: 0.75rem; text-align: left; }
+    th { background: var(--bg-sec); color: var(--blue); font-family: 'JetBrains Mono', monospace; }
+    .quiz-btn {
+      display: block; width: 100%; text-align: left; background: var(--bg-sec); color: var(--text-main);
+      border: 1px solid var(--border); padding: 0.8rem 1rem; border-radius: 10px; margin-bottom: 0.6rem;
+      cursor: pointer; font-weight: 600; transition: 0.2s;
+    }
+    .quiz-btn:hover { border-color: var(--orange); }
+    .footer-nav {
+      max-width: 980px; width: 100%; margin: 0 auto 2rem; padding: 0 1.25rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .nav-btn {
+      background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border);
+      padding: 0.65rem 1.35rem; border-radius: 12px; font-weight: 700; cursor: pointer;
+      font-family: 'JetBrains Mono', monospace; transition: 0.2s; text-decoration: none;
+    }
+    .nav-btn:hover { background: var(--orange); color: #fff; border-color: var(--orange); }
+  </style>
+</head>
+<body>
+  <div>
+    <nav class="navbar">
+      <div class="nav-inner">
+        <a href="../index.html" class="back-btn">← 返回實驗室互動學習首頁</a>
+        <div class="dots" id="dotsBox">
+          <div class="dot active" onclick="goSlide(0)">1</div>
+          <div class="dot" onclick="goSlide(1)">2</div>
+          <div class="dot" onclick="goSlide(2)">3</div>
+          <div class="dot" onclick="goSlide(3)">4</div>
+        </div>
+        <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 切換暗房模式</button>
+      </div>
+    </nav>
+    <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+  </div>
+
+  <main class="stage">
+    <div class="slide-card">
+      <!-- Slide 1 -->
+      <section class="slide active">
+        <span class="badge">🌱 MODULE 01 // SLIDE 1 OF 4</span>
+        <h1>1. 什麼是 OCT？為什麼被稱為「光學界的超音波」？</h1>
+        <p>如果你看過婦產科照胎兒的「超音波（Ultrasound）」，那你已經掌握了一半的 <strong>光學同調斷層掃描（Optical Coherence Tomography, OCT）</strong> 概念！超音波是朝人體發射「聲波」並傾聽反射回音；而 OCT 則是發射絕對安全的<strong>近紅外光（Near-Infrared Light）</strong>進入眼球或皮膚，接收各層組織反射回來的微弱光訊號。</p>
+        <table>
+          <thead>
+            <tr><th>比較項目</th><th>醫療超音波 (Ultrasound)</th><th>光學同調斷層 (OCT)</th><th>共軛焦顯微鏡 (Confocal)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>探測媒介</td><td>高頻聲波 (Sound)</td><td><strong>近紅外光波 (Light)</strong></td><td>可見光／雷射</td></tr>
+            <tr><td>軸向解析度</td><td>100 ~ 500 $\mu\text{m}$ (較模糊)</td><td><strong>1 ~ 10 $\mu\text{m}$ (微米級超清晰)</strong></td><td>0.5 ~ 1 $\mu\text{m}$</td></tr>
+            <tr><td>組織穿透深度</td><td>數公分 (深層器官)</td><td><strong>2 ~ 3 mm (視網膜、後鞏膜)</strong></td><td>&lt; 0.3 mm (極淺表層)</td></tr>
+            <tr><td>核心優勢</td><td>看大器官輪廓</td><td><strong>免開刀「活體光學組織切片」</strong></td><td>單細胞觀察</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Slide 2 -->
+      <section class="slide">
+        <span class="badge">🌱 MODULE 01 // SLIDE 2 OF 4</span>
+        <h1>2. 麥克森干涉儀：如何測量每秒 30 萬公里的光？</h1>
+        <p>聲音在空氣中每秒跑 340 公尺，電子儀器可以輕鬆計算回音時間；但光速高達每秒 $3 \times 10^8$ 公尺，光從視網膜各層反射回來的時間差只有幾飛秒（$10^{-15}$ 秒），沒有任何電子碼錶能直接測量！</p>
+        <div class="grid-2">
+          <div class="callout">
+            <strong>🔦 分光鏡與雙臂架構</strong><br/>
+            OCT 使用<strong>麥克森干涉儀（Michelson Interferometer）</strong>，把光源分成兩路：<br/>
+            1. <strong>參考臂（Reference Arm）</strong>：照向已知距離的標準反射鏡。<br/>
+            2. <strong>樣品臂（Sample Arm）</strong>：照向受測眼球組織。
+          </div>
+          <div class="callout-blue">
+            <strong>🌊 低同調干涉（Low-Coherence）</strong><br/>
+            只有當「樣品臂反射光」與「參考臂反射光」走過的光程差小於光源的<strong>同調長度（Coherence Length, $L_c$）</strong>時，兩道光才會產生明顯的建設性／破壞性干涉條紋！
+          </div>
+        </div>
+        <p>換句話說，干涉儀就像一把極度精密的「光學游標卡尺」，幫我們把量不到的時間差，轉換成感測器看得到的<strong>干涉條紋強度變化</strong>。</p>
+      </section>
+
+      <!-- Slide 3 -->
+      <section class="slide">
+        <span class="badge">🌱 MODULE 01 // SLIDE 3 OF 4</span>
+        <h1>3. 決定清晰度的黃金公式：軸向解析度 $\delta z$</h1>
+        <p>在 OCT 系統設計中，決定你能把視網膜與鞏膜看得多清楚的指標叫做<strong>軸向解析度（Axial Resolution, $\delta z$）</strong>，它完全取決於光源的中心波長 $\lambda_0$ 與頻譜半高寬 $\Delta\lambda$：</p>
+        <div class="callout-blue" style="text-align:center; font-size:1.15rem;">
+          $$\delta z = l_c = \frac{2 \ln 2}{\pi} \cdot \frac{\lambda_0^2}{\Delta \lambda} \approx 0.44 \frac{\lambda_0^2}{\Delta \lambda}$$
+        </div>
+        <ul>
+          <li><strong>頻寬 $\Delta\lambda$ 越寬，解析度越好（$\delta z$ 越小）</strong>：這就是為什麼實驗室需要「超寬頻光源」或「高速掃頻雷射（Swept-Source）」。</li>
+          <li><strong>A-scan、B-scan 與 C-scan 怎麼分？</strong>
+            <ul>
+              <li><code>A-scan (1D)</code>：單一光束打入組織，取得一條深度方向的反射強度曲線。</li>
+              <li><code>B-scan (2D)</code>：配合 Galvo 振鏡橫向掃描多條 A-scan，拼成一張二維橫切面斷層圖。</li>
+              <li><code>C-scan (3D)</code>：X-Y 雙軸振鏡掃描整個區域，重建出三維立體組織體積。</li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Slide 4 -->
+      <section class="slide">
+        <span class="badge">🌱 MODULE 01 // SLIDE 4 OF 4</span>
+        <h1>4. 隨堂互動小測驗 &amp; 雙向連結延伸</h1>
+        <p>測試看看你是否已經掌握 OCT 的基本原理（點擊下方選項立即檢視解答）：</p>
+        <button class="quiz-btn" onclick="checkAns(this, false)">A. 如果把雷射的頻譜寬度 $\Delta\lambda$ 變窄，OCT 的軸向解析度會變得更清晰。</button>
+        <button class="quiz-btn" onclick="checkAns(this, true)">B. 光源的頻譜半高寬 $\Delta\lambda$ 越寬，同調長度越短，OCT 的軸向解析度就越高（看得越細）！</button>
+        <button class="quiz-btn" onclick="checkAns(this, false)">C. OCT 是利用高頻聲波的回音時間差來直接測量視網膜厚度。</button>
+        <div id="quizFeedback" style="margin-top:0.85rem; font-weight:700;"></div>
+
+        <div class="callout" style="margin-top:1.5rem;">
+          <strong>🔗 下一站 Wiki 雙向連結（遵循 AGENTS.md 規範）：</strong><br/>
+          學會基礎干涉原理後，接下來看看我們實驗室如何利用 1045nm 波段與偏振光測量眼球後鞏膜雙折射：<br/>
+          👉 <a href="02-ps-oct-birefringence.html" style="color:var(--orange); font-weight:700;">前往 Module 02：1045nm SS-PS-OCT 雙折射相位延遲與後鞏膜成像 &rarr;</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer-nav">
+    <button class="nav-btn" onclick="stepSlide(-1)">← 上一頁 (Prev)</button>
+    <span style="color:var(--text-muted); font-size:0.85rem; font-family:'JetBrains Mono',monospace;">支援鍵盤 ← → 方向鍵翻頁</span>
+    <button class="nav-btn" onclick="stepSlide(1)">下一頁 (Next) →</button>
+  </footer>
+
+  <script>
+    let cur = 0;
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    const prog = document.getElementById('progFill');
+
+    function render() {
+      slides.forEach((s, i) => s.classList.toggle('active', i === cur));
+      dots.forEach((d, i) => d.classList.toggle('active', i === cur));
+      prog.style.width = `${((cur + 1) / slides.length) * 100}%`;
+    }
+    function stepSlide(delta) { cur = (cur + delta + slides.length) % slides.length; render(); }
+    function goSlide(idx) { cur = idx; render(); }
+    function toggleTheme() {
+      const root = document.documentElement;
+      const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      root.setAttribute('data-theme', next);
+      document.getElementById('themeBtn').textContent = next === 'light' ? '🌙 切換暗房模式' : '🌞 切換暖陽模式';
+    }
+    function checkAns(btn, ok) {
+      const fb = document.getElementById('quizFeedback');
+      if (ok) {
+        btn.style.background = 'var(--green-soft)'; btn.style.borderColor = 'var(--green)';
+        fb.style.color = 'var(--green)';
+        fb.textContent = '🎉 答對了！根據公式 δz ≈ 0.44 λ₀² / Δλ，頻寬 Δλ 在分母，因此頻寬越寬，δz 越小（解析度越高）！';
+      } else {
+        btn.style.background = 'var(--orange-soft)'; btn.style.borderColor = 'var(--orange)';
+        fb.style.color = 'var(--orange)';
+        fb.textContent = '💡 再想一下喔！提示：看看公式分母的 Δλ 與分子 λ₀² 的關係。';
+      }
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') stepSlide(1);
+      if (e.key === 'ArrowLeft') stepSlide(-1);
+    });
+  </script>
+</body>
+</html>
