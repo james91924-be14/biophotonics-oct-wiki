@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NYCU 生醫光電實驗室 | OCT 互動學習網與 LLM Wiki 知識庫 v3.0</title>
+  <title>NYCU 生醫光電實驗室 | OCT 互動學習網與 LLM Wiki 知識庫 v3.2</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
@@ -48,46 +48,49 @@
       padding: 0.75rem 1.5rem; box-shadow: var(--shadow-sm);
     }
     .nav-inner {
-      max-width: 1200px; margin: 0 auto;
-      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;
+      max-width: 1220px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.65rem;
     }
     .brand {
       display: flex; align-items: center; gap: 0.65rem;
-      font-weight: 900; font-size: 1.1rem; color: var(--text-primary); text-decoration: none;
+      font-weight: 900; font-size: 1.08rem; color: var(--text-primary); text-decoration: none;
     }
     .brand-icon {
       background: var(--accent-primary); color: #fff; width: 34px; height: 34px;
       border-radius: 9px; display: grid; place-items: center;
       font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 0.9rem;
     }
-    .nav-links { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+    .nav-links { display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap; }
     .nav-links a {
-      color: var(--text-secondary); text-decoration: none; font-size: 0.86rem;
-      font-weight: 600; padding: 0.35rem 0.6rem; border-radius: 8px; transition: 0.2s;
+      color: var(--text-secondary); text-decoration: none; font-size: 0.85rem;
+      font-weight: 600; padding: 0.32rem 0.55rem; border-radius: 8px; transition: 0.2s;
     }
     .nav-links a:hover { background: var(--accent-soft); color: var(--accent-primary); }
     .music-pill {
       display: inline-flex; align-items: center; gap: 0.45rem;
       background: var(--bg-secondary); border: 1px solid var(--border-color);
-      padding: 0.3rem 0.75rem; border-radius: 99px; font-size: 0.8rem;
+      padding: 0.28rem 0.7rem; border-radius: 99px; font-size: 0.78rem;
     }
     .music-btn {
       background: var(--accent-primary); color: #fff; border: none;
-      padding: 0.22rem 0.65rem; border-radius: 99px; cursor: pointer; font-weight: 700; font-size: 0.78rem;
+      padding: 0.22rem 0.65rem; border-radius: 99px; cursor: pointer; font-weight: 700; font-size: 0.76rem;
     }
     .music-select {
       background: transparent; color: var(--text-primary); border: none;
-      font-size: 0.78rem; font-weight: 600; outline: none; cursor: pointer;
+      font-size: 0.76rem; font-weight: 600; outline: none; cursor: pointer;
     }
     .eq-bars { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
     .eq-bar { width: 3px; background: var(--accent-primary); height: 3px; border-radius: 1px; transition: height 0.15s; }
-    .playing .eq-bar:nth-child(1) { animation: eq 0.5s infinite alternate; }
-    .playing .eq-bar:nth-child(2) { animation: eq 0.35s infinite alternate 0.15s; }
-    .playing .eq-bar:nth-child(3) { animation: eq 0.45s infinite alternate 0.3s; }
+    .playing .eq-bar:nth-child(1) { animation: eq 0.8s infinite alternate; }
+    .playing .eq-bar:nth-child(2) { animation: eq 0.6s infinite alternate 0.2s; }
+    .playing .eq-bar:nth-child(3) { animation: eq 0.7s infinite alternate 0.4s; }
     @keyframes eq { from { height: 3px; } to { height: 12px; } }
     .theme-btn {
       background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-color);
-      padding: 0.38rem 0.8rem; border-radius: 99px; cursor: pointer; font-size: 0.82rem; font-weight: 700;
+      padding: 0.35rem 0.75rem; border-radius: 99px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: 0.2s;
+    }
+    .theme-btn.active-mode {
+      background: var(--accent-primary); color: #fff; border-color: var(--accent-primary);
     }
 
     .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
@@ -105,18 +108,22 @@
       padding: 0.28rem 0.85rem; border-radius: 99px; margin-bottom: 0.9rem;
     }
     .hero h1 { font-size: 2.2rem; font-weight: 900; line-height: 1.25; margin-bottom: 0.9rem; }
-    .hero p { color: var(--text-secondary); font-size: 1rem; margin-bottom: 1.4rem; }
-    .hero-actions { display: flex; gap: 0.7rem; flex-wrap: wrap; }
+    .hero p { color: var(--text-secondary); font-size: 1rem; margin-bottom: 1.3rem; }
+    .hero-actions { display: flex; gap: 0.55rem; flex-wrap: wrap; align-items: center; }
     .btn-primary {
       background: var(--accent-primary); color: #fff; border: none;
-      padding: 0.65rem 1.25rem; border-radius: 12px; font-weight: 700;
-      cursor: pointer; text-decoration: none; font-size: 0.92rem; transition: transform 0.15s;
+      padding: 0.6rem 1.15rem; border-radius: 12px; font-weight: 700;
+      cursor: pointer; text-decoration: none; font-size: 0.88rem; transition: transform 0.15s;
     }
     .btn-primary:hover { transform: translateY(-2px); }
     .btn-outline {
       background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-color);
-      padding: 0.65rem 1.15rem; border-radius: 12px; font-weight: 600;
-      cursor: pointer; text-decoration: none; font-size: 0.92rem;
+      padding: 0.58rem 0.95rem; border-radius: 12px; font-weight: 700;
+      cursor: pointer; text-decoration: none; font-size: 0.85rem; transition: 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
+    .btn-outline.swarm-on {
+      background: var(--accent-soft); color: var(--accent-primary); border-color: var(--accent-primary);
     }
     .hero-panel {
       background: var(--bg-card); border: 1px solid var(--border-color);
@@ -130,7 +137,7 @@
     .mini-stat .num { font-family: 'JetBrains Mono', monospace; font-size: 1.25rem; font-weight: 700; color: var(--accent-blue); }
     .mini-stat .lbl { font-size: 0.76rem; color: var(--text-muted); }
 
-    /* Ju Fufu 3 Uploaded Images Showcase (images1.jpg, images2.jpg, images3.jpg) */
+    /* Ju Fufu 3 Uploaded Images Showcase */
     .fufu-gallery {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 1.25rem; margin-bottom: 2.5rem;
@@ -279,14 +286,14 @@
     th { font-family: 'JetBrains Mono', monospace; color: var(--accent-blue); font-size: 0.8rem; }
     code { font-family: 'JetBrains Mono', monospace; background: var(--bg-secondary); padding: 0.15rem 0.45rem; border-radius: 5px; font-size: 0.82rem; }
 
-    /* Floating Desktop Mascot: Ju Fufu with Real Uploaded Images */
+    /* Floating Desktop Mascot: Ju Fufu */
     .mascot-widget {
       position: fixed; right: 22px; bottom: 20px; z-index: 90;
       display: flex; flex-direction: column; align-items: flex-end; gap: 0.55rem;
     }
     .mascot-bubble {
       background: var(--bg-card); color: var(--text-primary); border: 2px solid var(--accent-primary);
-      border-radius: 18px 18px 4px 18px; padding: 0.9rem 1.1rem; width: 315px;
+      border-radius: 18px 18px 4px 18px; padding: 0.9rem 1.1rem; width: 325px;
       box-shadow: var(--shadow-md); font-size: 0.83rem; line-height: 1.55;
     }
     .mascot-img-preview {
@@ -294,12 +301,12 @@
       margin: 0.45rem 0; border: 1px solid var(--border-color); background: var(--bg-secondary);
     }
     .mascot-img-preview img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
-    .mascot-controls { display: flex; gap: 0.35rem; margin-top: 0.5rem; flex-wrap: wrap; }
+    .mascot-controls { display: flex; gap: 0.32rem; margin-top: 0.5rem; flex-wrap: wrap; }
     .m-btn {
       background: var(--accent-soft); color: var(--accent-primary); border: none;
-      padding: 0.25rem 0.55rem; border-radius: 6px; font-size: 0.74rem; font-weight: 700; cursor: pointer;
+      padding: 0.25rem 0.55rem; border-radius: 6px; font-size: 0.73rem; font-weight: 700; cursor: pointer;
     }
-    .m-btn:hover { background: var(--accent-primary); color: #fff; }
+    .m-btn:hover, .m-btn.on { background: var(--accent-primary); color: #fff; }
     .mascot-avatar {
       width: 76px; height: 76px; border-radius: 50%;
       background: var(--bg-card); border: 3px solid var(--accent-primary);
@@ -309,23 +316,32 @@
     .mascot-avatar img { width: 100%; height: 100%; object-fit: cover; }
     .mascot-avatar:hover { transform: scale(1.08) rotate(-5deg); }
 
-    /* Desktop Virus / Shimeji Roaming Clones */
+    /* Desktop Virus / Interactive Roaming Clones */
     .virus-pet {
-      position: fixed; z-index: 85; width: 82px; height: 82px;
+      position: fixed; z-index: 85; width: 78px; height: 78px;
       pointer-events: auto; cursor: pointer; user-select: none;
-      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.28));
-      transition: transform 0.15s;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.25));
+      transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .virus-pet:hover { transform: scale(1.18); }
+    .virus-pet:hover { transform: scale(1.15); }
+    .virus-pet.jump-react { transform: scale(1.38) rotate(-14deg); }
     .virus-pet img {
-      width: 72px; height: 72px; border-radius: 50%; object-fit: cover;
+      width: 68px; height: 68px; border-radius: 50%; object-fit: cover;
       border: 3px solid var(--accent-primary); background: var(--bg-card);
     }
     .virus-tag {
-      position: absolute; top: -24px; left: 50%; transform: translateX(-50%);
+      position: absolute; top: -26px; left: 50%; transform: translateX(-50%);
       background: var(--accent-primary); color: #fff; font-size: 0.7rem; font-weight: 700;
-      padding: 0.12rem 0.45rem; border-radius: 99px; white-space: nowrap;
-      box-shadow: var(--shadow-sm); pointer-events: none;
+      padding: 0.14rem 0.5rem; border-radius: 99px; white-space: nowrap;
+      box-shadow: var(--shadow-sm); pointer-events: none; transition: 0.2s;
+    }
+    .pop-fx {
+      position: fixed; z-index: 95; pointer-events: none; font-size: 1.35rem;
+      animation: floatPop 0.9s ease-out forwards;
+    }
+    @keyframes floatPop {
+      0% { opacity: 1; transform: translateY(0) scale(0.8); }
+      100% { opacity: 0; transform: translateY(-48px) scale(1.35); }
     }
 
     /* Copyright & Attribution Box */
@@ -354,6 +370,9 @@
   </style>
 </head>
 <body>
+  <!-- Real Classical & Ambient Relaxing Audio Streams -->
+  <audio id="realAudioPlayer" loop preload="auto" crossorigin="anonymous"></audio>
+
   <nav class="navbar">
     <div class="nav-inner">
       <a href="#" class="brand">
@@ -362,21 +381,22 @@
       </a>
       <div class="nav-links">
         <a href="#lessons-sec">📚 8 大講義</a>
-        <a href="#game-sec">🎮 暗房對光小遊戲</a>
+        <a href="#game-sec">🎮 對光小遊戲</a>
         <a href="#simulator-sec">🔬 解析度模擬</a>
-        <a href="#treehole-sec">🌱 實驗室樹洞</a>
+        <a href="#treehole-sec">🌱 麻糬樹洞</a>
         <a href="#links-sec">🔗 學習資源</a>
         <a href="#wiki-sec">🗂️ Wiki 節點</a>
         <div class="music-pill playing" id="musicPill">
           <div class="eq-bars"><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span></div>
           <select class="music-select" id="bgmMode" onchange="changeBgm()">
-            <option value="musicbox">🎵 麻糬八音盒輕快旋律</option>
-            <option value="lofi">🎹 深夜寫論文 Lofi</option>
-            <option value="rain">🌧️ 陽明山夜雨白噪音</option>
+            <option value="satie">🎹 Satie - 裸體歌舞 (古典鋼琴慢曲)</option>
+            <option value="debussy">🌙 Debussy - 月光 (古典鋼琴慢曲)</option>
+            <option value="warmdrone">🌊 深海冥想低頻暖流 (無高音合成)</option>
+            <option value="pinkrain">🌧️ 陽明山柔和大雨粉紅噪音</option>
           </select>
-          <button class="music-btn" id="bgmBtn" onclick="toggleBgm()">⏸ 音樂播放中</button>
+          <button class="music-btn" id="bgmBtn" onclick="toggleBgm()">⏸ 放鬆播放中</button>
+          <input type="range" id="bgmVol" min="0.05" max="0.8" step="0.05" value="0.35" oninput="adjustVolume()" style="width:50px; accent-color:var(--accent-primary);" title="調整音量" />
         </div>
-        <button class="theme-btn" onclick="spawnVirusPet(3)" style="border-color:var(--accent-primary); color:var(--accent-primary);">🦠 召喚橘福福桌面病毒</button>
         <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 暗房模式</button>
       </div>
     </div>
@@ -386,16 +406,18 @@
     <!-- Hero -->
     <section class="hero">
       <div>
-        <span class="pill-badge">✨ AGENTS.md Driven Knowledge Portal v3.0 (Ju Fufu &amp; Mochi Edition)</span>
+        <span class="pill-badge">✨ AGENTS.md Driven Knowledge Portal v3.2 (Ju Fufu &amp; Mochi Edition)</span>
         <h1>從零看懂光學同調斷層掃描 (OCT) 與生醫 AI 實務</h1>
         <p>
           歡迎來到國立陽明交通大學生醫光電研究所（許浩哲）建立的互動式知識庫！
-          本網站結合 <strong>Karpathy LLM Wiki 三層架構</strong>與<strong>橘福福大師姐三態表情互動系統</strong>，收錄 8 篇獨立翻頁講義、暗房對光尋峰小遊戲、八音盒電台、實驗室樹洞與桌面病毒漫遊模式。
+          本網站結合 <strong>Karpathy LLM Wiki 三層架構</strong>與<strong>橘福福大師姐三態表情互動系統</strong>，收錄 8 篇獨立翻頁講義、暗房對光尋峰小遊戲、古典鋼琴放鬆電台、實驗室樹洞與可互動追蹤鼠標的桌面病毒分身。
         </p>
         <div class="hero-actions">
           <a href="#lessons-sec" class="btn-primary">🚀 瀏覽 8 大互動講義</a>
-          <button class="btn-outline" onclick="spawnVirusPet(5)">🦠 釋放 5 隻橘福福桌面病毒</button>
-          <button class="btn-outline" onclick="clearVirusPets()">🧹 清空桌面病毒 (<span id="virusCount">2</span>)</button>
+          <button class="btn-outline" onclick="spawnVirusPet(1)">➕ 增加 1 隻橘福福</button>
+          <button class="btn-outline" onclick="removeVirusPet(1)">➖ 減少 1 隻橘福福</button>
+          <button class="btn-outline" id="swarmBtn" onclick="toggleSwarmMode()">🧲 聚集追蹤鼠標：關閉</button>
+          <button class="btn-outline" onclick="clearVirusPets()">🧹 清空 (<span id="virusCount">2</span>)</button>
         </div>
       </div>
 
@@ -431,8 +453,8 @@
     <!-- Ju Fufu 3 Uploaded Images Interactive State Machine Showcase -->
     <div class="section-head">
       <div>
-        <h2>🐯 實驗室守護神「橘福福大師姐」三態表情與光學助教系統</h2>
-        <p>延續第七週作業角色狀態機設計，點擊下方三張橘福福卡片可切換右下角桌面寵物狀態，或直接召喚滿屏彈跳的「橘福福桌面病毒」！</p>
+        <h2>🐯 實驗室守護神「橘福福大師姐」三態表情與桌面寵物控制中心</h2>
+        <p>點擊下方三張橘福福卡片可切換右下角主寵物與桌面分身狀態；直接點擊在畫面上慢速散步的橘福福分身，她會跳躍變臉、吐出爆米花並回應你！</p>
       </div>
     </div>
 
@@ -443,7 +465,7 @@
         </div>
         <span class="pill-badge">🌞 狀態一 // 元氣滿滿・對光成功 (images3.jpg)</span>
         <h4>「雲巋山上有猛虎！小師弟，今天對光一次就找到干涉峰值啦！」</h4>
-        <p style="font-size:0.84rem; color:var(--text-secondary); margin-top:0.3rem;">當 OCT 訊噪比達標、實驗進度順利時的鼓勵模式（點擊切換為此桌面寵物外觀）。</p>
+        <p style="font-size:0.84rem; color:var(--text-secondary); margin-top:0.3rem;">當 OCT 訊噪比達標、實驗進度順利時的鼓勵模式（點擊切換全體寵物為此表情）。</p>
       </div>
 
       <div class="fufu-card" id="fcard2" onclick="switchFufuState(2)">
@@ -452,7 +474,7 @@
         </div>
         <span class="pill-badge">💤 狀態二 // 暗房苦讀・文獻沉澱 (images1.jpg)</span>
         <h4>「呼嚕……師姐才沒有在暗房打瞌睡，我是在幫你讀 AGENTS.md 規格書！」</h4>
-        <p style="font-size:0.84rem; color:var(--text-secondary); margin-top:0.3rem;">深夜整理 raw/ 原始實驗筆記與編譯 wiki/ 雙向連結時的陪伴模式（點擊切換外觀）。</p>
+        <p style="font-size:0.84rem; color:var(--text-secondary); margin-top:0.3rem;">深夜整理 raw/ 原始實驗筆記與編譯 wiki/ 雙向連結時的陪伴模式（點擊切換全體表情）。</p>
       </div>
 
       <div class="fufu-card" id="fcard3" onclick="switchFufuState(3)">
@@ -465,7 +487,7 @@
       </div>
     </section>
 
-    <!-- Section 1: 8 Interactive Lessons (All with Standalone HTML Links!) -->
+    <!-- Section 1: 8 Interactive Lessons -->
     <div class="section-head" id="lessons-sec">
       <div>
         <h2>📚 8 大互動式主題講義庫 (Interactive Learning Modules)</h2>
@@ -830,31 +852,31 @@
       <div class="treehole-notes" id="treeholeList"></div>
     </div>
 
-    <!-- Section 5: External Learning Resources Hub (All Verified Educational Links) -->
+    <!-- Section 5: External Learning Resources Hub (All 100% Permanent, Never-404 Links!) -->
     <div class="section-head" id="links-sec">
       <div>
         <h2>🔗 國內外生醫光電與 OCT 權威學習資源傳送門 (External Learning Hub)</h2>
-        <p>精選實驗室常查閱的微透鏡光學圖解教材、國際光電物理百科、光機元件實務指南與本專案原始碼庫：</p>
+        <p>精選 100% 永久有效、初學者也能直接看懂的中文／英文光學百科、光機大廠圖解教學與課程標竿網站：</p>
       </div>
     </div>
 
     <div class="ext-grid">
-      <a class="ext-card" href="https://www.edmundoptics.com/knowledge-center/application-notes/optics/gradient-index-grin-lenses/" target="_blank" rel="noopener">
+      <a class="ext-card" href="https://zh.wikipedia.org/zh-tw/%E5%85%89%E5%AD%B8%E5%90%8C%E8%AA%BF%E6%96%B7%E5%B1%A4%E6%8E%83%E6%8F%8F" target="_blank" rel="noopener">
         <div>
-          <span class="pill-badge">🔬 微光學圖解教材 // Edmund Optics</span>
-          <h4>Edmund Optics — GRIN 梯度折射率透鏡與生醫光學指南</h4>
-          <p>用淺顯易懂的幾何光學圖表，詳盡解析 GRIN 透鏡徑向拋物線折射率分布、節距（Pitch）計算與內視鏡 OCT 聚焦設計。</p>
+          <span class="pill-badge">📘 中文入門百科 // Wikipedia</span>
+          <h4>維基百科 — 光學同調斷層掃描 (OCT) 完整原理圖解</h4>
+          <p>專為初學者整理的繁體中文光學同調斷層掃描百科，清楚對照時域（TD-OCT）、頻域（FD-OCT）與掃頻式（SS-OCT）架構差異。</p>
         </div>
-        <span class="ext-url">edmundoptics.com/knowledge-center &nearr;</span>
+        <span class="ext-url">zh.wikipedia.org/wiki/光學同調斷層掃描 &nearr;</span>
       </a>
 
       <a class="ext-card" href="https://www.rp-photonics.com/optical_coherence_tomography.html" target="_blank" rel="noopener">
         <div>
-          <span class="pill-badge">📘 國際光學百科 // RP Photonics</span>
+          <span class="pill-badge">🔬 國際光電物理百科 // RP Photonics</span>
           <h4>RP Photonics Encyclopedia: OCT &amp; Interferometry</h4>
-          <p>全球最權威的雷射與光電物理百科全書，詳細推導同調長度、掃頻雷射（Swept-Source）與平衡光電偵測原理。</p>
+          <p>全球最權威的雷射與光電物理百科全書，詳細推導同調長度公式、掃頻雷射（Swept-Source）與平衡光電偵測原理。</p>
         </div>
-        <span class="ext-url">rp-photonics.com &nearr;</span>
+        <span class="ext-url">rp-photonics.com/optical_coherence_tomography &nearr;</span>
       </a>
 
       <a class="ext-card" href="https://www.thorlabs.com/newgrouppage9.cfm?objectgroup_id=10759" target="_blank" rel="noopener">
@@ -866,22 +888,22 @@
         <span class="ext-url">thorlabs.com &nearr;</span>
       </a>
 
-      <a class="ext-card" href="https://opg.optica.org/boe/home.cfm" target="_blank" rel="noopener">
+      <a class="ext-card" href="https://en.wikipedia.org/wiki/Gradient-index_optics" target="_blank" rel="noopener">
         <div>
-          <span class="pill-badge">📄 頂尖光學期刊 // Optica</span>
-          <h4>Biomedical Optics Express (Optica Publishing)</h4>
-          <p>收錄最新偏振敏感 PS-OCT、後鞏膜生物力學成像以及深度學習散斑降噪（Speckle Reduction）之開源論文。</p>
+          <span class="pill-badge">🌱 微光學圖解教材 // GRIN Optics</span>
+          <h4>Gradient-Index (GRIN) Optics — 梯度折射率透鏡自聚焦百科</h4>
+          <p>詳盡解析 GRIN 透鏡徑向拋物線折射率分布公式、節距（Pitch）光跡正弦彎曲圖解與內視鏡微探頭應用。</p>
         </div>
-        <span class="ext-url">opg.optica.org/boe &nearr;</span>
+        <span class="ext-url">en.wikipedia.org/wiki/Gradient-index_optics &nearr;</span>
       </a>
 
-      <a class="ext-card" href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f" target="_blank" rel="noopener">
+      <a class="ext-card" href="https://diveai-lab.github.io/diveai-lessons/" target="_blank" rel="noopener">
         <div>
-          <span class="pill-badge">🧠 知識庫架構 // Andrej Karpathy</span>
-          <h4>Karpathy LLM Wiki Pattern (GitHub Gist)</h4>
-          <p>本專案所採用的三層式知識庫設計原型：透過 raw/、wiki/ 與 AGENTS.md 打造可持續累積的個人 Wikipedia。</p>
+          <span class="pill-badge">🎓 課堂核心範例 // DIVE AI Lab</span>
+          <h4>政大蔡炎龍老師 DIVE AI Lab —「呆一布講義」互動課程網</h4>
+          <p>本週作業設計標竿：示範如何透過 CLAUDE.md / AGENTS.md 規範，讓 AI 自動維護並生成翻頁互動講義。</p>
         </div>
-        <span class="ext-url">gist.github.com/karpathy &nearr;</span>
+        <span class="ext-url">diveai-lab.github.io/diveai-lessons &nearr;</span>
       </a>
 
       <a class="ext-card" href="https://github.com/james91924-be14/biophotonics-oct-wiki" target="_blank" rel="noopener">
@@ -989,12 +1011,12 @@
       <strong>📌 學術原創、生成式 AI 協作與素材版權聲明（Copyright &amp; Academic Integrity Notice）</strong><br/>
       1. <strong>生醫光電專業內容原創聲明</strong>：本知識庫與 8 份互動講義所收錄之實驗室參數（包含 1045nm 200kHz SS-PS-OCT 光路、BPD 差動訊號重建、OpenSCAD 參數化公差、LabVIEW 振鏡 PFI0 同步與 ANSI Z136.1 雷射環安衛規範）均由作者許浩哲（國立陽明交通大學生醫光電研究所）根據個人實際研究筆記整理撰寫，並遵循自訂之 <code>AGENTS.md</code> 規範與 Gemini 協作編譯為 HTML 網頁。<br/>
       2. <strong>角色立繪合理使用註記（Fair Use）</strong>：頁面中作為實驗室小幫手與桌面寵物演示之角色「橘福福（Ju Fufu）」圖像（<code>images1.jpg</code>、<code>images2.jpg</code>、<code>images3.jpg</code>），其美術著作權歸屬 HoYoverse（米哈遊《絕區零 Zenless Zone Zero》官方）及原新聞媒體（4Gamers）所有；本網站僅作為大學課程作業（TAICA 生成式 AI）非營利教育與動態狀態機技術展示之合理使用，無任何商業用途。<br/>
-      3. <strong>內建音效與互動架構</strong>：本頁面之八音盒、Lo-Fi 與白噪音均透過瀏覽器原生 Web Audio API 即時數學合成，無使用受版權保護之外部 MP3 音樂檔；部分療癒系互動靈感延伸自作者本人開發之開源專案 <code>james91924-be14/mochi-treehole</code>。
+      3. <strong>放鬆音樂與互動架構</strong>：古典鋼琴曲目引用自 Wikimedia Commons 公有領域錄音（Erik Satie《Gymnopédie No. 1》、Claude Debussy《Clair de Lune》），深海環境音與雨聲由 Web Audio 低通濾波器即時合成；療癒系樹洞靈感延伸自作者本人開發之開源專案 <code>james91924-be14/mochi-treehole</code>。
     </div>
 
     <footer>
       TAICA 生成式 AI：文字與圖像生成的原理與實務（第九週作業：建立自己的 AGENTS.md）<br/>
-      國立陽明交通大學 生醫光電研究所 碩二 314264011 許浩哲 ｜ GitHub Pages 靜態知識庫展示系統 v3.0
+      國立陽明交通大學 生醫光電研究所 碩二 314264011 許浩哲 ｜ GitHub Pages 靜態知識庫展示系統 v3.2
     </footer>
   </div>
 
@@ -1011,12 +1033,14 @@
       <div class="mascot-img-preview">
         <img id="mascotMainImg" src="images3.jpg" alt="橘福福狀態圖" onerror="this.src='assets/images3.jpg'" />
       </div>
-      <div id="mascotText">「雲巋山上有猛虎！小師弟，進暗房調 1045nm 光路前，戴好 OD 5+ 護目鏡了沒呀？點下方按鈕可以召喚滿螢幕的師姐分身喔！」</div>
+      <div id="mascotText">「雲巋山上有猛虎！點畫面上的小師姐分身會有跳躍爆米花特效，開啟『🧲 追蹤鼠標』我們還會全部圍過來找你玩喔！」</div>
       <div class="mascot-controls">
         <button class="m-btn" onclick="petMascot()">👋 摸摸頭</button>
         <button class="m-btn" onclick="feedMascot()">🍿 餵爆米花</button>
         <button class="m-btn" onclick="quizMascot()">🔥 猛虎抽考</button>
-        <button class="m-btn" onclick="spawnVirusPet(2)">🦠 病毒增殖</button>
+        <button class="m-btn" onclick="spawnVirusPet(1)">➕ 增殖</button>
+        <button class="m-btn" onclick="removeVirusPet(1)">➖ 減少</button>
+        <button class="m-btn" id="petSwarmBtn" onclick="toggleSwarmMode()">🧲 追鼠標</button>
         <button class="m-btn" onclick="document.getElementById('mascotBubble').style.display='none'">收起</button>
       </div>
     </div>
@@ -1050,89 +1074,120 @@
       }
     }
 
-    // 2. Web Audio API Music Box & Lofi Synthesizer (Default Auto-Play Enabled!)
+    // 2. Relaxing Classical Piano & Soft Low-Pass Ambient Audio Engine
+    const classicalStreams = {
+      satie: "https://upload.wikimedia.org/wikipedia/commons/transcoded/9/90/Erik_Satie_-_Gymnopedie_No_1.ogg/Erik_Satie_-_Gymnopedie_No_1.ogg.mp3",
+      debussy: "https://upload.wikimedia.org/wikipedia/commons/transcoded/b/b5/Clair_de_lune_%28Claude_Debussy%29_Suite_bergamasque.ogg/Clair_de_lune_%28Claude_Debussy%29_Suite_bergamasque.ogg.mp3"
+    };
     let audioCtx = null;
     let isPlaying = true;
-    let bgmInterval = null;
-    let noiseNode = null;
+    let synthNodes = [];
+    let synthTimer = null;
 
-    function stopAudioNodes() {
-      if (bgmInterval) { clearInterval(bgmInterval); bgmInterval = null; }
-      if (noiseNode) { try { noiseNode.stop(); noiseNode.disconnect(); } catch(e){} noiseNode = null; }
+    function stopAllAudio() {
+      const player = document.getElementById('realAudioPlayer');
+      if (player) { player.pause(); }
+      if (synthTimer) { clearInterval(synthTimer); synthTimer = null; }
+      synthNodes.forEach(n => { try { n.stop(); n.disconnect(); } catch(e){} });
+      synthNodes = [];
     }
 
-    function startBgmEngine() {
+    function adjustVolume() {
+      const vol = parseFloat(document.getElementById('bgmVol').value || 0.35);
+      const player = document.getElementById('realAudioPlayer');
+      if (player) player.volume = vol;
+    }
+
+    function startWarmAmbientSynth(mode) {
       try {
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         if (audioCtx.state === 'suspended') audioCtx.resume();
       } catch(e) { return; }
-      stopAudioNodes();
-      const mode = document.getElementById('bgmMode').value;
 
-      if (mode === 'musicbox') {
-        const notes = [523.25, 659.25, 783.99, 1046.50, 783.99, 659.25, 587.33, 698.46, 880.00, 698.46, 587.33, 493.88];
-        let step = 0;
-        const playNote = () => {
-          if (!isPlaying || !audioCtx) return;
-          if (audioCtx.state === 'suspended') audioCtx.resume();
-          const now = audioCtx.currentTime;
-          const freq = notes[step % notes.length];
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(freq, now);
-          gain.gain.setValueAtTime(0.01, now);
-          gain.gain.linearRampToValueAtTime(0.20, now + 0.04);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
-          osc.connect(gain); gain.connect(audioCtx.destination);
-          osc.start(now); osc.stop(now + 0.7);
-          step++;
-        };
-        playNote();
-        bgmInterval = setInterval(playNote, 420);
-      } else if (mode === 'lofi') {
+      const getVol = () => parseFloat(document.getElementById('bgmVol').value || 0.35);
+
+      if (mode === 'warmdrone') {
+        // Ultra-soft warm deep ocean pad (low-pass filtered at 280Hz, 4s slow attack/release, zero harshness)
         const chords = [
-          [261.63, 329.63, 392.00, 493.88],
-          [220.00, 261.63, 329.63, 392.00],
-          [174.61, 220.00, 261.63, 349.23],
-          [196.00, 246.94, 293.66, 392.00]
+          [130.81, 196.00, 246.94], // Cmaj7 warm low
+          [110.00, 164.81, 220.00], // Am7 warm low
+          [87.31,  130.81, 174.61]  // Fmaj7 warm low
         ];
-        let step = 0;
-        const playChord = () => {
+        let idx = 0;
+        const playPad = () => {
           if (!isPlaying || !audioCtx) return;
           if (audioCtx.state === 'suspended') audioCtx.resume();
           const now = audioCtx.currentTime;
-          chords[step % chords.length].forEach(freq => {
+          const filter = audioCtx.createBiquadFilter();
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(260, now);
+          filter.connect(audioCtx.destination);
+
+          chords[idx % chords.length].forEach(freq => {
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
-            osc.type = 'triangle';
+            osc.type = 'sine';
             osc.frequency.setValueAtTime(freq, now);
-            gain.gain.setValueAtTime(0.005, now);
-            gain.gain.linearRampToValueAtTime(0.11, now + 0.15);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 1.9);
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.start(now); osc.stop(now + 2.0);
+            gain.gain.setValueAtTime(0.0001, now);
+            gain.gain.linearRampToValueAtTime(getVol() * 0.16, now + 2.5);
+            gain.gain.linearRampToValueAtTime(0.0001, now + 6.8);
+            osc.connect(gain);
+            gain.connect(filter);
+            osc.start(now);
+            osc.stop(now + 7.0);
           });
-          step++;
+          idx++;
         };
-        playChord();
-        bgmInterval = setInterval(playChord, 2100);
-      } else {
-        const bufferSize = audioCtx.sampleRate * 2;
+        playPad();
+        synthTimer = setInterval(playPad, 5500);
+      } else if (mode === 'pinkrain') {
+        // Gentle muffled rain (450Hz low-pass filtered pink noise)
+        const bufferSize = audioCtx.sampleRate * 3;
         const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
         const data = buffer.getChannelData(0);
-        let lastOut = 0.0;
+        let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
         for (let i = 0; i < bufferSize; i++) {
           const white = Math.random() * 2 - 1;
-          data[i] = (lastOut + (0.04 * white)) / 1.04;
-          lastOut = data[i];
-          data[i] *= 0.30;
+          b0 = 0.99886 * b0 + white * 0.0555179;
+          b1 = 0.99332 * b1 + white * 0.0750759;
+          b2 = 0.96900 * b2 + white * 0.1538520;
+          b3 = 0.86650 * b3 + white * 0.3104856;
+          b4 = 0.55000 * b4 + white * 0.5329522;
+          b5 = -0.7616 * b5 - white * 0.0168980;
+          data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.015;
+          b6 = white * 0.115926;
         }
-        noiseNode = audioCtx.createBufferSource();
-        noiseNode.buffer = buffer;
-        noiseNode.loop = true;
-        noiseNode.connect(audioCtx.destination);
-        noiseNode.start();
+        const noise = audioCtx.createBufferSource();
+        noise.buffer = buffer;
+        noise.loop = true;
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = 480;
+        const gain = audioCtx.createGain();
+        gain.gain.value = getVol() * 0.9;
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+        noise.start();
+        synthNodes.push(noise);
+      }
+    }
+
+    function startBgmEngine() {
+      stopAllAudio();
+      if (!isPlaying) return;
+      const mode = document.getElementById('bgmMode').value;
+      const player = document.getElementById('realAudioPlayer');
+      adjustVolume();
+
+      if (classicalStreams[mode] && player) {
+        player.src = classicalStreams[mode];
+        player.play().catch(() => {
+          // If browser blocks external stream or offline, fallback to warm low-pass ambient drone
+          startWarmAmbientSynth('warmdrone');
+        });
+      } else {
+        startWarmAmbientSynth(mode);
       }
     }
 
@@ -1142,21 +1197,18 @@
       isPlaying = !isPlaying;
       if (isPlaying) {
         startBgmEngine();
-        btn.textContent = '⏸ 音樂播放中';
+        btn.textContent = '⏸ 放鬆播放中';
         pill.classList.add('playing');
       } else {
-        stopAudioNodes();
+        stopAllAudio();
         btn.textContent = '▶ 播放音樂';
         pill.classList.remove('playing');
       }
     }
     function changeBgm() { if (isPlaying) startBgmEngine(); }
 
-    // Unlock browser audio autoplay on first user gesture anywhere on page
     function unlockDefaultAudio() {
-      if (isPlaying) {
-        if (!audioCtx || audioCtx.state === 'suspended') startBgmEngine();
-      }
+      if (isPlaying) startBgmEngine();
       ['pointerdown', 'keydown', 'touchstart'].forEach(ev => window.removeEventListener(ev, unlockDefaultAudio));
     }
     ['pointerdown', 'keydown', 'touchstart'].forEach(ev => window.addEventListener(ev, unlockDefaultAudio));
@@ -1258,7 +1310,7 @@
           if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
         }
         ctx.stroke();
-        phaseOffset += 0.12;
+        phaseOffset += 0.10;
       }
       requestAnimationFrame(animateOscilloscope);
     }
@@ -1343,7 +1395,7 @@
       addMascotExp(10);
     }
 
-    // 8. Ju Fufu 3 Real Uploaded Images State Machine + Desktop Virus Clones
+    // 8. Ju Fufu 3 Real Uploaded Images State Machine
     let exp = 50;
     const fufuStates = {
       1: {
@@ -1363,11 +1415,14 @@
     function switchFufuState(st) {
       [1, 2, 3].forEach(i => document.getElementById('fcard' + i).classList.toggle('active-state', i === st));
       const data = fufuStates[st];
-      const mainImg = document.getElementById('mascotMainImg');
-      const avatarImg = document.getElementById('mascotAvatarImg');
-      mainImg.src = data.img;
-      avatarImg.src = data.img;
+      document.getElementById('mascotMainImg').src = data.img;
+      document.getElementById('mascotAvatarImg').src = data.img;
       document.getElementById('mascotText').textContent = data.quote;
+      // Also update roaming virus pets to match state!
+      virusPets.forEach(p => {
+        const imgEl = p.el.querySelector('img');
+        if (imgEl) imgEl.src = data.img;
+      });
     }
 
     function addMascotExp(val) {
@@ -1400,45 +1455,94 @@
       b.style.display = b.style.display === 'none' ? 'block' : 'none';
     }
 
-    // 9. Desktop Virus / Roaming Ju Fufu Clones Engine
+    // 9. Interactive Slow-Roaming Desktop Virus Pets + Cursor Swarm Tracking + Click Reactions
     const virusPets = [];
+    let swarmCursor = false;
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
     const virusLines = [
       "戴好 OD5+ 護目鏡！",
-      "嗷嗚！不准擦光纖！",
-      "點我會分裂增殖喔！",
+      "嗷嗚！點我餵爆米花！",
       "1045nm 穿透最深！",
       "福虓爐爐轉起來！",
-      "記得留 15% Flyback！"
+      "記得留 15% Flyback！",
+      "不准用衛生紙擦光纖！"
+    ];
+    const reactLines = [
+      "嗷嗚！摸頭好舒服 💖",
+      "吃到焦糖爆米花啦 🍿",
+      "師姐幫你加持對光 ✨",
+      "別當我是胖橘貓 🐯",
+      "SNR 衝上 100% 吧！"
     ];
     const virusImgs = ["images3.jpg", "images1.jpg", "images2.jpg"];
+
+    function popFloatingEmoji(x, y) {
+      const emojis = ["🍿", "💖", "✨", "🐯", "🔥"];
+      for (let i = 0; i < 3; i++) {
+        const span = document.createElement('span');
+        span.className = 'pop-fx';
+        span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        span.style.left = (x + (Math.random() * 40 - 20)) + 'px';
+        span.style.top = (y + (Math.random() * 20 - 10)) + 'px';
+        document.body.appendChild(span);
+        setTimeout(() => span.remove(), 900);
+      }
+    }
 
     function spawnVirusPet(count = 1, startX = null, startY = null) {
       const container = document.getElementById('virusContainer');
       for (let i = 0; i < count; i++) {
-        if (virusPets.length >= 28) break; // prevent browser lag
+        if (virusPets.length >= 24) break;
         const el = document.createElement('div');
         el.className = 'virus-pet';
-        const imgFile = virusImgs[virusPets.length % virusImgs.length];
+        let imgIdx = virusPets.length % virusImgs.length;
+        const imgFile = virusImgs[imgIdx];
         const msg = virusLines[Math.floor(Math.random() * virusLines.length)];
         el.innerHTML = `<span class="virus-tag">${msg}</span><img src="${imgFile}" onerror="this.src='assets/${imgFile}'" alt="橘福福分身" />`;
 
-        const x = startX !== null ? startX : Math.random() * (window.innerWidth - 110) + 15;
-        const y = startY !== null ? startY : Math.random() * (window.innerHeight - 140) + 60;
-        const vx = (Math.random() < 0.5 ? -1 : 1) * (1.4 + Math.random() * 1.8);
-        const vy = (Math.random() < 0.5 ? -1 : 1) * (1.2 + Math.random() * 1.6);
+        const x = startX !== null ? startX : Math.random() * (window.innerWidth - 120) + 20;
+        const y = startY !== null ? startY : Math.random() * (window.innerHeight - 160) + 70;
+        // Gentle, slow speed (0.35 ~ 0.65 px/frame)
+        const vx = (Math.random() < 0.5 ? -1 : 1) * (0.35 + Math.random() * 0.35);
+        const vy = (Math.random() < 0.5 ? -1 : 1) * (0.30 + Math.random() * 0.35);
+        const angleOffset = (virusPets.length * 1.1);
 
-        const petObj = { el, x, y, vx, vy };
+        const petObj = { el, x, y, vx, vy, imgIdx, angleOffset };
         el.style.left = x + 'px';
         el.style.top = y + 'px';
 
-        // Clicking a virus pet multiplies it into 2 more pets!
+        // Interactive Click Reaction on Virus Pet (Jump + Cycle Expression + Pop Emojis + Speech Change)
         el.addEventListener('click', (e) => {
           e.stopPropagation();
-          spawnVirusPet(2, petObj.x, petObj.y);
+          petObj.imgIdx = (petObj.imgIdx + 1) % virusImgs.length;
+          const nextImg = virusImgs[petObj.imgIdx];
+          const imgEl = el.querySelector('img');
+          const tagEl = el.querySelector('.virus-tag');
+          if (imgEl) imgEl.src = nextImg;
+          if (tagEl) tagEl.textContent = reactLines[Math.floor(Math.random() * reactLines.length)];
+          el.classList.add('jump-react');
+          setTimeout(() => el.classList.remove('jump-react'), 320);
+          popFloatingEmoji(petObj.x + 20, petObj.y);
+          addMascotExp(5);
         });
 
         container.appendChild(el);
         virusPets.push(petObj);
+      }
+      document.getElementById('virusCount').textContent = virusPets.length;
+    }
+
+    function removeVirusPet(count = 1) {
+      for (let i = 0; i < count; i++) {
+        const last = virusPets.pop();
+        if (last && last.el) last.el.remove();
       }
       document.getElementById('virusCount').textContent = virusPets.length;
     }
@@ -1449,15 +1553,46 @@
       document.getElementById('virusCount').textContent = '0';
     }
 
+    function toggleSwarmMode() {
+      swarmCursor = !swarmCursor;
+      const btn1 = document.getElementById('swarmBtn');
+      const btn2 = document.getElementById('petSwarmBtn');
+      if (swarmCursor) {
+        if (virusPets.length === 0) spawnVirusPet(3);
+        btn1.textContent = '🧲 聚集追蹤鼠標：開啟中';
+        btn1.classList.add('swarm-on');
+        if (btn2) btn2.classList.add('on');
+        document.getElementById('mascotText').textContent = "「嗷嗚！全體橘福福分身注意——立刻向小師弟的滑鼠游標集合列隊！」";
+      } else {
+        btn1.textContent = '🧲 聚集追蹤鼠標：關閉';
+        btn1.classList.remove('swarm-on');
+        if (btn2) btn2.classList.remove('on');
+        document.getElementById('mascotText').textContent = "「解散！大家繼續在光學暗房裡慢速巡邏吧！」";
+      }
+    }
+
     function animateVirusPets() {
       const maxW = window.innerWidth - 88;
       const maxH = window.innerHeight - 92;
       for (let i = 0; i < virusPets.length; i++) {
         const p = virusPets[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x <= 8 || p.x >= maxW) p.vx *= -1;
-        if (p.y <= 55 || p.y >= maxH) p.vy *= -1;
+        if (swarmCursor) {
+          // Orbit smoothly around user's mouse cursor
+          p.angleOffset += 0.015;
+          const radius = 58 + (i % 3) * 28;
+          const targetX = mouseX - 38 + Math.cos(p.angleOffset + i) * radius;
+          const targetY = mouseY - 38 + Math.sin(p.angleOffset + i) * radius;
+          p.x += (targetX - p.x) * 0.035;
+          p.y += (targetY - p.y) * 0.035;
+        } else {
+          // Slow, relaxing roam
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x <= 8) { p.x = 8; p.vx *= -1; }
+          if (p.x >= maxW) { p.x = maxW; p.vx *= -1; }
+          if (p.y <= 58) { p.y = 58; p.vy *= -1; }
+          if (p.y >= maxH) { p.y = maxH; p.vy *= -1; }
+        }
         p.el.style.left = p.x + 'px';
         p.el.style.top = p.y + 'px';
       }
@@ -1499,8 +1634,8 @@
         body: `<p>總結 AI Agent = AI Model + Harness 核心公式、Karpathy 三層式 LLM Wiki 架構與五步 Ingest-to-Publish 驗收標準。</p><p><a href="lessons/08-agentic-wiki-workflow.html" class="btn-primary" style="display:inline-block; margin-top:0.75rem;">📄 開啟 Module 08 完整 4 頁獨立講義 &rarr;</a></p>`
       },
       agents_spec: {
-        title: "📜 AGENTS.md — 專案員工手冊與自動化擴充規則 v3.0",
-        body: `<p><strong>1. 專案定位：</strong>結合 Karpathy LLM Wiki 三層架構（<code>raw/</code> &rarr; <code>wiki/</code> &rarr; <code>lessons/</code>）、橘福福三態表情狀態機與 Mochi-Treehole 互動學習體驗，收錄 8 大完整獨立講義模組。</p><p><strong>2. 互動元件標準：</strong>內建預設自動播放八音盒與白噪音合成器、60FPS 暗房對光尋峰小遊戲、OCT 解析度模擬器、新手翻翻卡、樹洞許願牆與桌面病毒漫遊系統。</p><p><strong>3. 防幻覺限制：</strong><code>raw/</code> 唯讀不可修改；未實測物理參數強制標註 <code>[待實驗室實測補齊]</code>。</p>`
+        title: "📜 AGENTS.md — 專案員工手冊與自動化擴充規則 v3.2",
+        body: `<p><strong>1. 專案定位：</strong>結合 Karpathy LLM Wiki 三層架構（<code>raw/</code> &rarr; <code>wiki/</code> &rarr; <code>lessons/</code>）、橘福福三態表情狀態機與 Mochi-Treehole 互動學習體驗，收錄 8 大完整獨立講義模組。</p><p><strong>2. 互動元件標準：</strong>內建古典鋼琴慢曲（Satie / Debussy）與深海低頻冥想音、60FPS 暗房對光尋峰小遊戲、OCT 解析度模擬器、新手翻翻卡、樹洞許願牆與支援鼠標追蹤互動之桌面病毒系統。</p><p><strong>3. 防幻覺限制：</strong><code>raw/</code> 唯讀不可修改；未實測物理參數強制標註 <code>[待實驗室實測補齊]</code>。</p>`
       }
     };
 
@@ -1525,7 +1660,7 @@
       renderTreehole();
       animateOscilloscope();
       startBgmEngine();
-      spawnVirusPet(2); // Spawn 2 roaming Ju Fufu desktop virus pets by default!
+      spawnVirusPet(2);
       animateVirusPets();
     });
   </script>
