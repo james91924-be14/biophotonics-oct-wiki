@@ -389,13 +389,14 @@
         <div class="music-pill playing" id="musicPill">
           <div class="eq-bars"><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span></div>
           <select class="music-select" id="bgmMode" onchange="changeBgm()">
-            <option value="satie">🎹 Satie - 裸體歌舞 (古典鋼琴慢曲)</option>
-            <option value="debussy">🌙 Debussy - 月光 (古典鋼琴慢曲)</option>
-            <option value="warmdrone">🌊 深海冥想低頻暖流 (無高音合成)</option>
-            <option value="pinkrain">🌧️ 陽明山柔和大雨粉紅噪音</option>
+            <option value="lofi_beat" selected>🥁 1. 咖啡廳 Lo-Fi 輕快鼓點 (90 BPM)</option>
+            <option value="bossa_groove">☕ 2. 午後陽光 Bossa 爵士律動 (108 BPM)</option>
+            <option value="kalimba_pop">🌿 3. 森林木琴 Kalimba 輕快節拍 (98 BPM)</option>
+            <option value="chill_drive">🌴 4. 夜間兜風 Chill-Pop 動感節奏 (104 BPM)</option>
           </select>
-          <button class="music-btn" id="bgmBtn" onclick="toggleBgm()">⏸ 放鬆播放中</button>
-          <input type="range" id="bgmVol" min="0.05" max="0.8" step="0.05" value="0.35" oninput="adjustVolume()" style="width:50px; accent-color:var(--accent-primary);" title="調整音量" />
+          <button class="music-btn" onclick="nextBgmTrack()" style="background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border-color);" title="切換下一首">⏭ 換首</button>
+          <button class="music-btn" id="bgmBtn" onclick="toggleBgm()">⏸ 節奏播放中</button>
+          <input type="range" id="bgmVol" min="0.05" max="0.9" step="0.05" value="0.45" oninput="adjustVolume()" style="width:50px; accent-color:var(--accent-primary);" title="調整音量" />
         </div>
         <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 暗房模式</button>
       </div>
@@ -1074,121 +1075,230 @@
       }
     }
 
-    // 2. Relaxing Classical Piano & Soft Low-Pass Ambient Audio Engine
-    const classicalStreams = {
-      satie: "https://upload.wikimedia.org/wikipedia/commons/transcoded/9/90/Erik_Satie_-_Gymnopedie_No_1.ogg/Erik_Satie_-_Gymnopedie_No_1.ogg.mp3",
-      debussy: "https://upload.wikimedia.org/wikipedia/commons/transcoded/b/b5/Clair_de_lune_%28Claude_Debussy%29_Suite_bergamasque.ogg/Clair_de_lune_%28Claude_Debussy%29_Suite_bergamasque.ogg.mp3"
-    };
+    // 2. Built-in 16-Step Rhythmic Drum, Bass & Pluck Groove Engine (Zero Drone, Instant Track Switch)
     let audioCtx = null;
+    let masterGain = null;
     let isPlaying = true;
-    let synthNodes = [];
-    let synthTimer = null;
+    let seqTimer = null;
+    let stepIdx = 0;
+    let noiseBuf = null;
+
+    function initAudioEngine() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      if (!noiseBuf) {
+        const len = audioCtx.sampleRate;
+        noiseBuf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+        const d = noiseBuf.getChannelData(0);
+        for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+      }
+    }
 
     function stopAllAudio() {
-      const player = document.getElementById('realAudioPlayer');
-      if (player) { player.pause(); }
-      if (synthTimer) { clearInterval(synthTimer); synthTimer = null; }
-      synthNodes.forEach(n => { try { n.stop(); n.disconnect(); } catch(e){} });
-      synthNodes = [];
+      if (seqTimer) {
+        clearInterval(seqTimer);
+        seqTimer = null;
+      }
+      // Disconnect masterGain to immediately silence any residual sound in 0ms
+      if (masterGain) {
+        try { masterGain.disconnect(); } catch (e) {}
+        masterGain = null;
+      }
     }
 
     function adjustVolume() {
-      const vol = parseFloat(document.getElementById('bgmVol').value || 0.35);
-      const player = document.getElementById('realAudioPlayer');
-      if (player) player.volume = vol;
-    }
-
-    function startWarmAmbientSynth(mode) {
-      try {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-      } catch(e) { return; }
-
-      const getVol = () => parseFloat(document.getElementById('bgmVol').value || 0.35);
-
-      if (mode === 'warmdrone') {
-        // Ultra-soft warm deep ocean pad (low-pass filtered at 280Hz, 4s slow attack/release, zero harshness)
-        const chords = [
-          [130.81, 196.00, 246.94], // Cmaj7 warm low
-          [110.00, 164.81, 220.00], // Am7 warm low
-          [87.31,  130.81, 174.61]  // Fmaj7 warm low
-        ];
-        let idx = 0;
-        const playPad = () => {
-          if (!isPlaying || !audioCtx) return;
-          if (audioCtx.state === 'suspended') audioCtx.resume();
-          const now = audioCtx.currentTime;
-          const filter = audioCtx.createBiquadFilter();
-          filter.type = 'lowpass';
-          filter.frequency.setValueAtTime(260, now);
-          filter.connect(audioCtx.destination);
-
-          chords[idx % chords.length].forEach(freq => {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(freq, now);
-            gain.gain.setValueAtTime(0.0001, now);
-            gain.gain.linearRampToValueAtTime(getVol() * 0.16, now + 2.5);
-            gain.gain.linearRampToValueAtTime(0.0001, now + 6.8);
-            osc.connect(gain);
-            gain.connect(filter);
-            osc.start(now);
-            osc.stop(now + 7.0);
-          });
-          idx++;
-        };
-        playPad();
-        synthTimer = setInterval(playPad, 5500);
-      } else if (mode === 'pinkrain') {
-        // Gentle muffled rain (450Hz low-pass filtered pink noise)
-        const bufferSize = audioCtx.sampleRate * 3;
-        const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-        const data = buffer.getChannelData(0);
-        let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
-        for (let i = 0; i < bufferSize; i++) {
-          const white = Math.random() * 2 - 1;
-          b0 = 0.99886 * b0 + white * 0.0555179;
-          b1 = 0.99332 * b1 + white * 0.0750759;
-          b2 = 0.96900 * b2 + white * 0.1538520;
-          b3 = 0.86650 * b3 + white * 0.3104856;
-          b4 = 0.55000 * b4 + white * 0.5329522;
-          b5 = -0.7616 * b5 - white * 0.0168980;
-          data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.015;
-          b6 = white * 0.115926;
-        }
-        const noise = audioCtx.createBufferSource();
-        noise.buffer = buffer;
-        noise.loop = true;
-        const filter = audioCtx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.value = 480;
-        const gain = audioCtx.createGain();
-        gain.gain.value = getVol() * 0.9;
-        noise.connect(filter);
-        filter.connect(gain);
-        gain.connect(audioCtx.destination);
-        noise.start();
-        synthNodes.push(noise);
+      if (masterGain && audioCtx) {
+        const v = parseFloat(document.getElementById('bgmVol').value || 0.45);
+        masterGain.gain.setValueAtTime(v, audioCtx.currentTime);
       }
     }
+
+    // Drum 1: Punchy Warm Kick
+    function hitKick(t, level = 1.0) {
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(125, t);
+      osc.frequency.exponentialRampToValueAtTime(42, t + 0.09);
+      g.gain.setValueAtTime(0.75 * level, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.19);
+      osc.connect(g);
+      g.connect(masterGain);
+      osc.start(t);
+      osc.stop(t + 0.20);
+    }
+
+    // Drum 2: Crisp Rimshot / Lo-Fi Snare
+    function hitSnare(t, level = 1.0) {
+      const osc = audioCtx.createOscillator();
+      const og = audioCtx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(230, t);
+      osc.frequency.exponentialRampToValueAtTime(110, t + 0.045);
+      og.gain.setValueAtTime(0.32 * level, t);
+      og.gain.exponentialRampToValueAtTime(0.001, t + 0.075);
+      osc.connect(og);
+      og.connect(masterGain);
+      osc.start(t);
+      osc.stop(t + 0.08);
+
+      const src = audioCtx.createBufferSource();
+      src.buffer = noiseBuf;
+      const flt = audioCtx.createBiquadFilter();
+      flt.type = 'bandpass';
+      flt.frequency.setValueAtTime(1800, t);
+      const ng = audioCtx.createGain();
+      ng.gain.setValueAtTime(0.22 * level, t);
+      ng.gain.exponentialRampToValueAtTime(0.001, t + 0.09);
+      src.connect(flt);
+      flt.connect(ng);
+      ng.connect(masterGain);
+      src.start(t);
+      src.stop(t + 0.10);
+    }
+
+    // Drum 3: Tight Hi-Hat / Shaker
+    function hitHat(t, open = false, level = 1.0) {
+      const src = audioCtx.createBufferSource();
+      src.buffer = noiseBuf;
+      const flt = audioCtx.createBiquadFilter();
+      flt.type = 'highpass';
+      flt.frequency.setValueAtTime(7000, t);
+      const g = audioCtx.createGain();
+      const dur = open ? 0.11 : 0.035;
+      g.gain.setValueAtTime(0.14 * level, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+      src.connect(flt);
+      flt.connect(g);
+      g.connect(masterGain);
+      src.start(t);
+      src.stop(t + dur + 0.01);
+    }
+
+    // Instrument 4: Bouncy Sub-Bass
+    function hitBass(t, freq, dur = 0.18, level = 1.0) {
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, t);
+      const flt = audioCtx.createBiquadFilter();
+      flt.type = 'lowpass';
+      flt.frequency.setValueAtTime(320, t);
+      g.gain.setValueAtTime(0.001, t);
+      g.gain.linearRampToValueAtTime(0.38 * level, t + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+      osc.connect(flt);
+      flt.connect(g);
+      g.connect(masterGain);
+      osc.start(t);
+      osc.stop(t + dur + 0.01);
+    }
+
+    // Instrument 5: Short Staccato Pluck / Kalimba (Never Drones!)
+    function hitPluck(t, freqs, dur = 0.18, level = 1.0) {
+      const flt = audioCtx.createBiquadFilter();
+      flt.type = 'lowpass';
+      flt.frequency.setValueAtTime(1400, t);
+      flt.frequency.exponentialRampToValueAtTime(420, t + dur);
+      flt.connect(masterGain);
+
+      freqs.forEach((f) => {
+        const osc = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(f, t);
+        g.gain.setValueAtTime(0.001, t);
+        g.gain.linearRampToValueAtTime(0.12 * level, t + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+        osc.connect(g);
+        g.connect(flt);
+        osc.start(t);
+        osc.stop(t + dur + 0.01);
+      });
+    }
+
+    const rhythmTracks = {
+      lofi_beat: {
+        stepMs: 165, // 90 BPM Boom-Bap Lo-Fi
+        chords: [[261.6, 329.6, 392.0, 493.9], [220.0, 261.6, 329.6, 392.0], [174.6, 220.0, 261.6, 349.2], [196.0, 246.9, 293.7, 349.2]],
+        bass: [65.4, 55.0, 87.3, 98.0],
+        playStep: (s, bar, t, tr) => {
+          if (s === 0 || s === 7 || s === 10) hitKick(t);
+          if (s === 4 || s === 12) hitSnare(t);
+          if (s % 2 === 0) hitHat(t, s === 14);
+          if (s === 0 || s === 6 || s === 11) hitPluck(t, tr.chords[bar], 0.22);
+          if (s === 0 || s === 7 || s === 10 || s === 14) hitBass(t, tr.bass[bar], 0.19);
+        }
+      },
+      bossa_groove: {
+        stepMs: 138, // 108 BPM Bossa Nova Syncopated Groove
+        chords: [[293.7, 349.2, 440.0, 523.3], [196.0, 246.9, 293.7, 349.2], [261.6, 329.6, 392.0, 493.9], [220.0, 277.2, 329.6, 392.0]],
+        bass: [73.4, 98.0, 65.4, 110.0],
+        playStep: (s, bar, t, tr) => {
+          if (s % 4 === 0 || s % 4 === 3) { hitKick(t, 0.85); hitBass(t, tr.bass[bar], 0.15); }
+          if (s === 0 || s === 3 || s === 6 || s === 10 || s === 13) hitSnare(t, 0.75);
+          hitHat(t, false, 0.65);
+          if (s === 2 || s === 5 || s === 8 || s === 11 || s === 14) hitPluck(t, tr.chords[bar], 0.16);
+        }
+      },
+      kalimba_pop: {
+        stepMs: 152, // 98 BPM Bouncy Kalimba Arpeggio + Light Percussion
+        notes: [523.3, 659.3, 784.0, 659.3, 587.3, 698.5, 880.0, 698.5, 523.3, 659.3, 784.0, 1046.5, 784.0, 659.3, 587.3, 493.9],
+        bass: [65.4, 73.4, 87.3, 98.0],
+        playStep: (s, bar, t, tr) => {
+          if (s === 0 || s === 8) hitKick(t, 0.9);
+          if (s === 4 || s === 12) hitSnare(t, 0.8);
+          if (s % 2 === 1) hitHat(t, false, 0.75);
+          hitPluck(t, [tr.notes[s], tr.notes[s] * 0.5], 0.14, 1.15);
+          if (s % 4 === 0) hitBass(t, tr.bass[bar], 0.20);
+        }
+      },
+      chill_drive: {
+        stepMs: 144, // 104 BPM Upbeat Four-on-the-Floor Chill-Pop
+        chords: [[349.2, 440.0, 523.3], [392.0, 493.9, 587.3], [329.6, 392.0, 493.9], [220.0, 261.6, 329.6]],
+        bass: [87.3, 98.0, 82.4, 110.0],
+        playStep: (s, bar, t, tr) => {
+          if (s % 4 === 0) hitKick(t, 1.05);
+          if (s === 4 || s === 12) hitSnare(t, 1.0);
+          if (s % 2 === 1) hitHat(t, s % 4 === 3, 0.9);
+          if (s % 2 === 0) hitBass(t, tr.bass[bar] * (s % 4 === 2 ? 1.5 : 1), 0.14);
+          if (s === 0 || s === 3 || s === 6 || s === 10 || s === 12) hitPluck(t, tr.chords[bar], 0.18);
+        }
+      }
+    };
 
     function startBgmEngine() {
       stopAllAudio();
       if (!isPlaying) return;
-      const mode = document.getElementById('bgmMode').value;
-      const player = document.getElementById('realAudioPlayer');
-      adjustVolume();
-
-      if (classicalStreams[mode] && player) {
-        player.src = classicalStreams[mode];
-        player.play().catch(() => {
-          // If browser blocks external stream or offline, fallback to warm low-pass ambient drone
-          startWarmAmbientSynth('warmdrone');
-        });
-      } else {
-        startWarmAmbientSynth(mode);
+      try {
+        initAudioEngine();
+        masterGain = audioCtx.createGain();
+        const v = parseFloat(document.getElementById('bgmVol').value || 0.45);
+        masterGain.gain.setValueAtTime(v, audioCtx.currentTime);
+        masterGain.connect(audioCtx.destination);
+      } catch (e) {
+        return;
       }
+
+      const sel = document.getElementById('bgmMode');
+      const mode = sel ? sel.value : 'lofi_beat';
+      const tr = rhythmTracks[mode] || rhythmTracks.lofi_beat;
+
+      const tick = () => {
+        if (!isPlaying || !audioCtx || !masterGain) return;
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const s = stepIdx % 16;
+        const bar = Math.floor(stepIdx / 16) % 4;
+        tr.playStep(s, bar, audioCtx.currentTime, tr);
+        stepIdx++;
+      };
+
+      tick();
+      seqTimer = setInterval(tick, tr.stepMs);
     }
 
     function toggleBgm() {
@@ -1197,7 +1307,7 @@
       isPlaying = !isPlaying;
       if (isPlaying) {
         startBgmEngine();
-        btn.textContent = '⏸ 放鬆播放中';
+        btn.textContent = '⏸ 節奏播放中';
         pill.classList.add('playing');
       } else {
         stopAllAudio();
@@ -1205,7 +1315,20 @@
         pill.classList.remove('playing');
       }
     }
-    function changeBgm() { if (isPlaying) startBgmEngine(); }
+
+    function changeBgm() {
+      stepIdx = 0;
+      isPlaying = true;
+      document.getElementById('bgmBtn').textContent = '⏸ 節奏播放中';
+      document.getElementById('musicPill').classList.add('playing');
+      startBgmEngine();
+    }
+
+    function nextBgmTrack() {
+      const sel = document.getElementById('bgmMode');
+      sel.selectedIndex = (sel.selectedIndex + 1) % sel.options.length;
+      changeBgm();
+    }
 
     function unlockDefaultAudio() {
       if (isPlaying) startBgmEngine();
