@@ -39,6 +39,7 @@
       background-color: var(--bg-main); color: var(--text-primary);
       font-family: 'Noto Sans TC', sans-serif; line-height: 1.7;
       transition: background-color 0.25s ease, color 0.25s ease;
+      overflow-x: hidden;
     }
     /* Sticky Navbar + Music Bar */
     .navbar {
@@ -89,7 +90,7 @@
       padding: 0.38rem 0.8rem; border-radius: 99px; cursor: pointer; font-size: 0.82rem; font-weight: 700;
     }
 
-    .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem 6rem; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
     /* Hero */
     .hero {
       background: var(--hero-grad); border: 1px solid var(--border-color);
@@ -129,22 +130,27 @@
     .mini-stat .num { font-family: 'JetBrains Mono', monospace; font-size: 1.25rem; font-weight: 700; color: var(--accent-blue); }
     .mini-stat .lbl { font-size: 0.76rem; color: var(--text-muted); }
 
-    /* 3 Visual Gallery Cards (The 3 Featured Illustrations/Images) */
-    .gallery-grid {
+    /* Ju Fufu 3 Uploaded Images Showcase (images1.jpg, images2.jpg, images3.jpg) */
+    .fufu-gallery {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 1.25rem; margin-bottom: 2.5rem;
     }
-    .gallery-card {
-      background: var(--bg-card); border: 1px solid var(--border-color);
-      border-radius: 18px; padding: 1.25rem; box-shadow: var(--shadow-sm);
-      display: flex; flex-direction: column; gap: 0.75rem;
+    .fufu-card {
+      background: var(--bg-card); border: 2px solid var(--border-color);
+      border-radius: 18px; padding: 1.15rem; box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, border-color 0.2s; cursor: pointer;
     }
-    .gallery-img-wrap {
-      width: 100%; height: 175px; background: var(--bg-secondary);
-      border-radius: 12px; overflow: hidden; display: grid; place-items: center;
-      border: 1px solid var(--border-color); position: relative;
+    .fufu-card:hover, .fufu-card.active-state {
+      transform: translateY(-4px); border-color: var(--accent-primary); box-shadow: var(--shadow-md);
     }
-    .gallery-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .fufu-img-box {
+      width: 100%; height: 185px; border-radius: 12px; overflow: hidden;
+      background: var(--bg-secondary); margin-bottom: 0.85rem; border: 1px solid var(--border-color);
+    }
+    .fufu-img-box img {
+      width: 100%; height: 100%; object-fit: cover; object-position: center top; transition: transform 0.3s;
+    }
+    .fufu-card:hover .fufu-img-box img { transform: scale(1.04); }
 
     /* Section Headers */
     .section-head {
@@ -273,40 +279,61 @@
     th { font-family: 'JetBrains Mono', monospace; color: var(--accent-blue); font-size: 0.8rem; }
     code { font-family: 'JetBrains Mono', monospace; background: var(--bg-secondary); padding: 0.15rem 0.45rem; border-radius: 5px; font-size: 0.82rem; }
 
-    /* Interactive Walking Desktop Pet (3 States + Image Switcher) */
+    /* Floating Desktop Mascot: Ju Fufu with Real Uploaded Images */
     .mascot-widget {
-      position: fixed; right: 24px; bottom: 18px; z-index: 80;
+      position: fixed; right: 22px; bottom: 20px; z-index: 90;
       display: flex; flex-direction: column; align-items: flex-end; gap: 0.55rem;
-      transition: right 0.6s ease;
     }
     .mascot-bubble {
       background: var(--bg-card); color: var(--text-primary); border: 2px solid var(--accent-primary);
-      border-radius: 18px 18px 4px 18px; padding: 0.9rem 1.1rem; max-width: 310px;
-      box-shadow: var(--shadow-md); font-size: 0.84rem; line-height: 1.55;
+      border-radius: 18px 18px 4px 18px; padding: 0.9rem 1.1rem; width: 315px;
+      box-shadow: var(--shadow-md); font-size: 0.83rem; line-height: 1.55;
     }
-    .pet-state-tabs {
-      display: flex; gap: 0.3rem; margin: 0.45rem 0;
+    .mascot-img-preview {
+      width: 100%; height: 125px; border-radius: 10px; overflow: hidden;
+      margin: 0.45rem 0; border: 1px solid var(--border-color); background: var(--bg-secondary);
     }
-    .pet-tab {
-      flex: 1; text-align: center; font-size: 0.72rem; padding: 0.2rem 0.3rem;
-      border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-secondary);
-      cursor: pointer; font-weight: 700; color: var(--text-secondary);
-    }
-    .pet-tab.active { background: var(--accent-primary); color: #fff; border-color: var(--accent-primary); }
+    .mascot-img-preview img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
     .mascot-controls { display: flex; gap: 0.35rem; margin-top: 0.5rem; flex-wrap: wrap; }
     .m-btn {
       background: var(--accent-soft); color: var(--accent-primary); border: none;
-      padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer;
+      padding: 0.25rem 0.55rem; border-radius: 6px; font-size: 0.74rem; font-weight: 700; cursor: pointer;
     }
     .m-btn:hover { background: var(--accent-primary); color: #fff; }
-    .mascot-avatar-box {
-      width: 78px; height: 78px; border-radius: 50%;
-      background: linear-gradient(135deg, #FFF7ED, #FFEDD5);
-      border: 3px solid var(--accent-primary); box-shadow: var(--shadow-md);
-      display: grid; place-items: center; cursor: pointer; overflow: hidden;
-      animation: petBob 2.4s ease-in-out infinite; position: relative;
+    .mascot-avatar {
+      width: 76px; height: 76px; border-radius: 50%;
+      background: var(--bg-card); border: 3px solid var(--accent-primary);
+      box-shadow: var(--shadow-md); overflow: hidden; cursor: pointer;
+      transition: transform 0.2s; user-select: none;
     }
-    @keyframes petBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    .mascot-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .mascot-avatar:hover { transform: scale(1.08) rotate(-5deg); }
+
+    /* Desktop Virus / Shimeji Roaming Clones */
+    .virus-pet {
+      position: fixed; z-index: 85; width: 82px; height: 82px;
+      pointer-events: auto; cursor: pointer; user-select: none;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.28));
+      transition: transform 0.15s;
+    }
+    .virus-pet:hover { transform: scale(1.18); }
+    .virus-pet img {
+      width: 72px; height: 72px; border-radius: 50%; object-fit: cover;
+      border: 3px solid var(--accent-primary); background: var(--bg-card);
+    }
+    .virus-tag {
+      position: absolute; top: -24px; left: 50%; transform: translateX(-50%);
+      background: var(--accent-primary); color: #fff; font-size: 0.7rem; font-weight: 700;
+      padding: 0.12rem 0.45rem; border-radius: 99px; white-space: nowrap;
+      box-shadow: var(--shadow-sm); pointer-events: none;
+    }
+
+    /* Copyright & Attribution Box */
+    .copyright-box {
+      background: var(--bg-secondary); border: 1px solid var(--border-color);
+      border-radius: 16px; padding: 1.25rem 1.5rem; margin-top: 2.5rem;
+      font-size: 0.82rem; color: var(--text-secondary); line-height: 1.65;
+    }
 
     /* Modal */
     .modal-backdrop {
@@ -323,7 +350,7 @@
       border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.25rem;
     }
     .close-btn { background: var(--bg-secondary); border: none; color: var(--text-primary); padding: 0.4rem 0.85rem; border-radius: 8px; cursor: pointer; font-weight: 700; }
-    footer { text-align: center; padding: 2.5rem 1rem; color: var(--text-muted); font-size: 0.86rem; border-top: 1px solid var(--border-color); margin-top: 3rem; }
+    footer { text-align: center; padding: 2rem 1rem; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--border-color); margin-top: 1.5rem; }
   </style>
 </head>
 <body>
@@ -340,16 +367,16 @@
         <a href="#treehole-sec">🌱 實驗室樹洞</a>
         <a href="#links-sec">🔗 學習資源</a>
         <a href="#wiki-sec">🗂️ Wiki 節點</a>
-        <div class="music-pill" id="musicPill">
+        <div class="music-pill playing" id="musicPill">
           <div class="eq-bars"><span class="eq-bar"></span><span class="eq-bar"></span><span class="eq-bar"></span></div>
           <select class="music-select" id="bgmMode" onchange="changeBgm()">
             <option value="musicbox">🎵 麻糬八音盒輕快旋律</option>
-            <option value="lofi">🎹 暗房溫暖爵士和弦</option>
-            <option value="rain">🌧️ 陽明山午後雨聲</option>
+            <option value="lofi">🎹 深夜寫論文 Lofi</option>
+            <option value="rain">🌧️ 陽明山夜雨白噪音</option>
           </select>
-          <button class="music-btn" id="bgmBtn" onclick="toggleBgm()">▶ 播放音樂</button>
-          <input type="range" id="bgmVol" min="0.05" max="0.5" step="0.05" value="0.25" style="width:55px; accent-color:var(--accent-primary);" title="調整音樂音量" />
+          <button class="music-btn" id="bgmBtn" onclick="toggleBgm()">⏸ 音樂播放中</button>
         </div>
+        <button class="theme-btn" onclick="spawnVirusPet(3)" style="border-color:var(--accent-primary); color:var(--accent-primary);">🦠 召喚橘福福桌面病毒</button>
         <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 暗房模式</button>
       </div>
     </div>
@@ -359,16 +386,16 @@
     <!-- Hero -->
     <section class="hero">
       <div>
-        <span class="pill-badge">✨ AGENTS.md Driven Knowledge Portal v3.0 (Mochi-Treehole Edition)</span>
+        <span class="pill-badge">✨ AGENTS.md Driven Knowledge Portal v3.0 (Ju Fufu &amp; Mochi Edition)</span>
         <h1>從零看懂光學同調斷層掃描 (OCT) 與生醫 AI 實務</h1>
         <p>
           歡迎來到國立陽明交通大學生醫光電研究所（許浩哲）建立的互動式知識庫！
-          本網站結合 <strong>Karpathy LLM Wiki 三層架構</strong>與 <strong>Mochi-Treehole 療癒系互動體驗</strong>，收錄 8 篇獨立翻頁講義、暗房對光尋峰小遊戲、八音盒電台、實驗室樹洞與三態桌面小寵物。
+          本網站結合 <strong>Karpathy LLM Wiki 三層架構</strong>與<strong>橘福福大師姐三態表情互動系統</strong>，收錄 8 篇獨立翻頁講義、暗房對光尋峰小遊戲、八音盒電台、實驗室樹洞與桌面病毒漫遊模式。
         </p>
         <div class="hero-actions">
           <a href="#lessons-sec" class="btn-primary">🚀 瀏覽 8 大互動講義</a>
-          <a href="#game-sec" class="btn-outline">🎮 挑戰暗房對光小遊戲</a>
-          <button class="btn-outline" onclick="openModal('agents_spec')">📜 檢視 AGENTS.md 規格書</button>
+          <button class="btn-outline" onclick="spawnVirusPet(5)">🦠 釋放 5 隻橘福福桌面病毒</button>
+          <button class="btn-outline" onclick="clearVirusPets()">🧹 清空桌面病毒 (<span id="virusCount">2</span>)</button>
         </div>
       </div>
 
@@ -394,73 +421,47 @@
             <div class="lbl">200kHz 後鞏膜深層穿透波段</div>
           </div>
           <div class="mini-stat">
-            <div class="num" id="petLv">Lv.1 實習生</div>
+            <div class="num" id="petLv">Lv.2 光學大師姐</div>
             <div class="lbl">橘福福守護神好感度等級</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Featured 3 Images / Visual Diagrams Showcase -->
-    <section class="gallery-grid">
-      <div class="gallery-card">
-        <div class="gallery-img-wrap">
-          <svg viewBox="0 0 320 160" width="100%" height="100%">
-            <rect width="320" height="160" fill="#0F172A"/>
-            <circle cx="45" cy="80" r="18" fill="#EA580C"/>
-            <text x="45" y="84" fill="#fff" font-size="10" text-anchor="middle" font-weight="bold">1045nm</text>
-            <line x1="63" y1="80" x2="145" y2="80" stroke="#F97316" stroke-width="3"/>
-            <rect x="145" y="65" width="30" height="30" fill="none" stroke="#38BDF8" stroke-width="2" transform="rotate(45 160 80)"/>
-            <line x1="160" y1="58" x2="160" y2="22" stroke="#38BDF8" stroke-width="2.5" stroke-dasharray="4 2"/>
-            <rect x="135" y="14" width="50" height="8" fill="#94A3B8"/>
-            <text x="200" y="24" fill="#38BDF8" font-size="10">參考鏡 (Ref)</text>
-            <line x1="182" y1="80" x2="265" y2="80" stroke="#F97316" stroke-width="3"/>
-            <ellipse cx="280" cy="80" rx="18" ry="26" fill="none" stroke="#34D399" stroke-width="2.5"/>
-            <text x="275" y="122" fill="#34D399" font-size="10" text-anchor="middle">豬眼後鞏膜</text>
-            <line x1="160" y1="102" x2="160" y2="140" stroke="#A78BFA" stroke-width="2.5"/>
-            <text x="160" y="152" fill="#A78BFA" font-size="10" text-anchor="middle">BPD 平衡探測器</text>
-          </svg>
+    <!-- Ju Fufu 3 Uploaded Images Interactive State Machine Showcase -->
+    <div class="section-head">
+      <div>
+        <h2>🐯 實驗室守護神「橘福福大師姐」三態表情與光學助教系統</h2>
+        <p>延續第七週作業角色狀態機設計，點擊下方三張橘福福卡片可切換右下角桌面寵物狀態，或直接召喚滿屏彈跳的「橘福福桌面病毒」！</p>
+      </div>
+    </div>
+
+    <section class="fufu-gallery">
+      <div class="fufu-card active-state" id="fcard1" onclick="switchFufuState(1)">
+        <div class="fufu-img-box">
+          <img src="images3.jpg" alt="橘福福元氣滿滿狀態" onerror="this.src='assets/images3.jpg'" />
         </div>
-        <div style="font-weight:800; font-size:0.95rem;">圖一：1045nm 麥克森低同調干涉光路架構</div>
-        <p style="font-size:0.82rem; color:var(--text-secondary);">將掃頻雷射分為參考臂與樣品臂，當兩臂光程差小於同調長度時產生微米級干涉條紋。</p>
+        <span class="pill-badge">🌞 狀態一 // 元氣滿滿・對光成功 (images3.jpg)</span>
+        <h4>「雲巋山上有猛虎！小師弟，今天對光一次就找到干涉峰值啦！」</h4>
+        <p style="font-size:0.84rem; color:var(--text-secondary); margin-top:0.3rem;">當 OCT 訊噪比達標、實驗進度順利時的鼓勵模式（點擊切換為此桌面寵物外觀）。</p>
       </div>
 
-      <div class="gallery-card">
-        <div class="gallery-img-wrap">
-          <svg viewBox="0 0 320 160" width="100%" height="100%">
-            <rect width="320" height="160" fill="#0F172A"/>
-            <path d="M 20 80 Q 45 20, 70 80 T 120 80 T 170 80" fill="none" stroke="#38BDF8" stroke-width="2.5"/>
-            <path d="M 20 80 Q 45 130, 70 80 T 120 80 T 170 80" fill="none" stroke="#F97316" stroke-width="2.5" stroke-dasharray="4 2"/>
-            <text x="95" y="28" fill="#38BDF8" font-size="10" text-anchor="middle">水平偏振 E_H(z) 與垂直偏振 E_V(z)</text>
-            <rect x="195" y="35" width="105" height="90" rx="8" fill="#1E293B" stroke="#34D399" stroke-width="2"/>
-            <text x="247" y="65" fill="#34D399" font-size="11" text-anchor="middle" font-weight="bold">雙折射相位延遲</text>
-            <text x="247" y="88" fill="#F8FAFC" font-size="11" text-anchor="middle">δ(z) = arctan</text>
-            <text x="247" y="106" fill="#F97316" font-size="11" text-anchor="middle">(|E_V| / |E_H|)</text>
-          </svg>
+      <div class="fufu-card" id="fcard2" onclick="switchFufuState(2)">
+        <div class="fufu-img-box">
+          <img src="images1.jpg" alt="橘福福暗房打盹溫習狀態" onerror="this.src='assets/images1.jpg'" />
         </div>
-        <div style="font-weight:800; font-size:0.95rem;">圖二：SS-PS-OCT 雙通道偏振相位延遲重建</div>
-        <p style="font-size:0.82rem; color:var(--text-secondary);">透過雙通道 BPD 同步擷取正交偏振態振幅比值，定量計算後鞏膜膠原纖維雙折射率 $\Delta n$。</p>
+        <span class="pill-badge">💤 狀態二 // 暗房苦讀・文獻沉澱 (images1.jpg)</span>
+        <h4>「呼嚕……師姐才沒有在暗房打瞌睡，我是在幫你讀 AGENTS.md 規格書！」</h4>
+        <p style="font-size:0.84rem; color:var(--text-secondary); margin-top:0.3rem;">深夜整理 raw/ 原始實驗筆記與編譯 wiki/ 雙向連結時的陪伴模式（點擊切換外觀）。</p>
       </div>
 
-      <div class="gallery-card">
-        <div class="gallery-img-wrap">
-          <svg viewBox="0 0 320 160" width="100%" height="100%">
-            <rect width="320" height="160" fill="#0F172A"/>
-            <rect x="18" y="45" width="75" height="70" rx="8" fill="#1E293B" stroke="#F97316" stroke-width="2"/>
-            <text x="55" y="75" fill="#F97316" font-size="11" text-anchor="middle" font-weight="bold">raw/</text>
-            <text x="55" y="95" fill="#CBD5E1" font-size="9" text-anchor="middle">唯讀實驗筆記</text>
-            <text x="108" y="84" fill="#38BDF8" font-size="16" font-weight="bold">&rarr;</text>
-            <rect x="122" y="45" width="75" height="70" rx="8" fill="#1E293B" stroke="#38BDF8" stroke-width="2"/>
-            <text x="160" y="75" fill="#38BDF8" font-size="11" text-anchor="middle" font-weight="bold">wiki/</text>
-            <text x="160" y="95" fill="#CBD5E1" font-size="9" text-anchor="middle">[[雙向連結]]節點</text>
-            <text x="212" y="84" fill="#34D399" font-size="16" font-weight="bold">&rarr;</text>
-            <rect x="226" y="45" width="76" height="70" rx="8" fill="#1E293B" stroke="#34D399" stroke-width="2"/>
-            <text x="264" y="75" fill="#34D399" font-size="11" text-anchor="middle" font-weight="bold">lessons/</text>
-            <text x="264" y="95" fill="#CBD5E1" font-size="9" text-anchor="middle">8篇獨立HTML講義</text>
-          </svg>
+      <div class="fufu-card" id="fcard3" onclick="switchFufuState(3)">
+        <div class="fufu-img-box">
+          <img src="images2.jpg" alt="橘福福猛虎威嚴環安衛警告狀態" onerror="this.src='assets/images2.jpg'" />
         </div>
-        <div style="font-weight:800; font-size:0.95rem;">圖三：AGENTS.md 驅動之三層式 LLM Wiki 管線</div>
-        <p style="font-size:0.82rem; color:var(--text-secondary);">嚴格分離唯讀原始證據（raw）、結構化概念節點（wiki）與互動式單檔教學網頁（lessons）。</p>
+        <span class="pill-badge">🔥 狀態三 // 猛虎震怒・環安衛警報 (images2.jpg)</span>
+        <h4>「誰敢不戴 OD 5+ 護目鏡就開 1045nm 雷射？別拿衛生紙擦 APC 光纖！」</h4>
+        <p style="font-size:0.84rem; color:var(--text-secondary); margin-top:0.3rem;">當偵測到入眼功率超過 1.8 mW、BPD 飽和或違反學術倫理瞎掰數據時的嚴格模式！</p>
       </div>
     </section>
 
@@ -681,7 +682,7 @@
     <div class="section-head" id="game-sec">
       <div>
         <h2>🎮 暗房實戰小遊戲：麥克森干涉尋峰與 BPD 防飽和挑戰</h2>
-        <p>任務目標：拉動下方「參考臂反射鏡微米旋鈕」使光程差 $\Delta L \rightarrow 0\ \mu\text{m}$，同時控制「參考光功率」在 $0.5 \sim 1.0\text{ mW}$ 內，達成 SNR &ge; 90% 即可破關！</p>
+        <p>任務目標：調整下方「參考臂反射鏡微米旋鈕」使光程差 $\Delta L \rightarrow 0\ \mu\text{m}$，同時控制「參考光功率」在 $0.5 \sim 1.0\text{ mW}$ 內，達成 SNR &ge; 90% 即可破關！</p>
       </div>
       <button class="btn-outline" onclick="randomizeGame()">🎲 隨機重設光路偏移</button>
     </div>
@@ -703,7 +704,7 @@
           <input type="range" id="gamePwr" min="0.1" max="1.6" step="0.05" value="0.85" oninput="updateGame()">
         </div>
         <div id="gameStatusBox" style="padding:1rem; border-radius:12px; background:var(--bg-secondary); font-weight:700; font-size:0.9rem;">
-          🔍 請將第一條滑桿拉向 0 μm，觀察右方示波器的干涉條紋振幅變化！
+          🔍 目前狀態：請將第一條滑桿拉向 0 μm，觀察右方示波器的干涉條紋包絡線變化！
         </div>
       </div>
 
@@ -829,11 +830,11 @@
       <div class="treehole-notes" id="treeholeList"></div>
     </div>
 
-    <!-- Section 5: External Learning Resources Hub (Updated First Link to Real Optical Tutorial!) -->
+    <!-- Section 5: External Learning Resources Hub (All Verified Educational Links) -->
     <div class="section-head" id="links-sec">
       <div>
         <h2>🔗 國內外生醫光電與 OCT 權威學習資源傳送門 (External Learning Hub)</h2>
-        <p>精選真正能學到微透鏡成像、干涉物理公式、光機元件實務與 LLM Wiki 架構的核心知識庫：</p>
+        <p>精選實驗室常查閱的微透鏡光學圖解教材、國際光電物理百科、光機元件實務指南與本專案原始碼庫：</p>
       </div>
     </div>
 
@@ -842,7 +843,7 @@
         <div>
           <span class="pill-badge">🔬 微光學圖解教材 // Edmund Optics</span>
           <h4>Edmund Optics — GRIN 梯度折射率透鏡與生醫光學指南</h4>
-          <p>用淺顯易懂的幾何光學圖表，詳盡解析 GRIN 透鏡徑向折射率分布、節距（Pitch）計算與內視鏡 OCT 聚焦設計。</p>
+          <p>用淺顯易懂的幾何光學圖表，詳盡解析 GRIN 透鏡徑向拋物線折射率分布、節距（Pitch）計算與內視鏡 OCT 聚焦設計。</p>
         </div>
         <span class="ext-url">edmundoptics.com/knowledge-center &nearr;</span>
       </a>
@@ -983,34 +984,44 @@
       </table>
     </div>
 
+    <!-- Copyright, Fair Use & Academic Integrity Declaration -->
+    <div class="copyright-box">
+      <strong>📌 學術原創、生成式 AI 協作與素材版權聲明（Copyright &amp; Academic Integrity Notice）</strong><br/>
+      1. <strong>生醫光電專業內容原創聲明</strong>：本知識庫與 8 份互動講義所收錄之實驗室參數（包含 1045nm 200kHz SS-PS-OCT 光路、BPD 差動訊號重建、OpenSCAD 參數化公差、LabVIEW 振鏡 PFI0 同步與 ANSI Z136.1 雷射環安衛規範）均由作者許浩哲（國立陽明交通大學生醫光電研究所）根據個人實際研究筆記整理撰寫，並遵循自訂之 <code>AGENTS.md</code> 規範與 Gemini 協作編譯為 HTML 網頁。<br/>
+      2. <strong>角色立繪合理使用註記（Fair Use）</strong>：頁面中作為實驗室小幫手與桌面寵物演示之角色「橘福福（Ju Fufu）」圖像（<code>images1.jpg</code>、<code>images2.jpg</code>、<code>images3.jpg</code>），其美術著作權歸屬 HoYoverse（米哈遊《絕區零 Zenless Zone Zero》官方）及原新聞媒體（4Gamers）所有；本網站僅作為大學課程作業（TAICA 生成式 AI）非營利教育與動態狀態機技術展示之合理使用，無任何商業用途。<br/>
+      3. <strong>內建音效與互動架構</strong>：本頁面之八音盒、Lo-Fi 與白噪音均透過瀏覽器原生 Web Audio API 即時數學合成，無使用受版權保護之外部 MP3 音樂檔；部分療癒系互動靈感延伸自作者本人開發之開源專案 <code>james91924-be14/mochi-treehole</code>。
+    </div>
+
     <footer>
       TAICA 生成式 AI：文字與圖像生成的原理與實務（第九週作業：建立自己的 AGENTS.md）<br/>
       國立陽明交通大學 生醫光電研究所 碩二 314264011 許浩哲 ｜ GitHub Pages 靜態知識庫展示系統 v3.0
     </footer>
   </div>
 
-  <!-- Interactive Desktop Pet (3 Visual States + Roaming Walk) -->
-  <div class="mascot-widget" id="mascotWidget">
+  <!-- Container for Roaming Desktop Virus Clones -->
+  <div id="virusContainer"></div>
+
+  <!-- Floating Desktop Mascot: Ju Fufu with Real Uploaded Images -->
+  <div class="mascot-widget">
     <div class="mascot-bubble" id="mascotBubble">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
-        <strong style="color:var(--accent-primary);">🐯 桌面小寵物・橘福福師姐</strong>
-        <span id="mascotExp" style="font-family:'JetBrains Mono',monospace; font-size:0.74rem; color:var(--text-muted);">EXP 20/100</span>
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <strong style="color:var(--accent-primary);">🐯 駐站守護神・橘福福師姐</strong>
+        <span id="mascotExp" style="font-family:'JetBrains Mono',monospace; font-size:0.74rem; color:var(--text-muted);">EXP 50/100</span>
       </div>
-      <div class="pet-state-tabs">
-        <span class="pet-tab active" id="ptab1" onclick="setPetState(1)">① 呆萌陪伴</span>
-        <span class="pet-tab" id="ptab2" onclick="setPetState(2)">② 撒嬌餵食</span>
-        <span class="pet-tab" id="ptab3" onclick="setPetState(3)">③ 嚴格口試</span>
+      <div class="mascot-img-preview">
+        <img id="mascotMainImg" src="images3.jpg" alt="橘福福狀態圖" onerror="this.src='assets/images3.jpg'" />
       </div>
-      <div id="mascotText">「雲巋山上有猛虎！小師弟，進暗房調 1045nm 光路前，戴好 OD 5+ 護目鏡了沒呀？嗷——！」</div>
+      <div id="mascotText">「雲巋山上有猛虎！小師弟，進暗房調 1045nm 光路前，戴好 OD 5+ 護目鏡了沒呀？點下方按鈕可以召喚滿螢幕的師姐分身喔！」</div>
       <div class="mascot-controls">
         <button class="m-btn" onclick="petMascot()">👋 摸摸頭</button>
         <button class="m-btn" onclick="feedMascot()">🍿 餵爆米花</button>
-        <button class="m-btn" onclick="quizMascot()">🎲 抽考口試</button>
-        <button class="m-btn" onclick="walkMascot()">🐾 散步移動</button>
+        <button class="m-btn" onclick="quizMascot()">🔥 猛虎抽考</button>
+        <button class="m-btn" onclick="spawnVirusPet(2)">🦠 病毒增殖</button>
+        <button class="m-btn" onclick="document.getElementById('mascotBubble').style.display='none'">收起</button>
       </div>
     </div>
-    <div class="mascot-avatar-box" onclick="toggleMascotBubble()" title="點擊切換小寵物對話框">
-      <div id="petSvgContainer" style="width:100%; height:100%; display:grid; place-items:center;"></div>
+    <div class="mascot-avatar" onclick="toggleMascotBubble()" title="點擊呼叫橘福福大師姐！">
+      <img id="mascotAvatarImg" src="images3.jpg" alt="橘福福頭像" onerror="this.src='assets/images3.jpg'" />
     </div>
   </div>
 
@@ -1039,9 +1050,9 @@
       }
     }
 
-    // 2. Upgraded Built-in Music Box & Ambient Synthesizer (Loud, Clear & Melodic!)
+    // 2. Web Audio API Music Box & Lofi Synthesizer (Default Auto-Play Enabled!)
     let audioCtx = null;
-    let isPlaying = false;
+    let isPlaying = true;
     let bgmInterval = null;
     let noiseNode = null;
 
@@ -1051,18 +1062,19 @@
     }
 
     function startBgmEngine() {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+      } catch(e) { return; }
       stopAudioNodes();
       const mode = document.getElementById('bgmMode').value;
-      const getVol = () => parseFloat(document.getElementById('bgmVol').value || 0.25);
 
       if (mode === 'musicbox') {
-        // Cheerful Pentatonic Music Box Melody
         const notes = [523.25, 659.25, 783.99, 1046.50, 783.99, 659.25, 587.33, 698.46, 880.00, 698.46, 587.33, 493.88];
         let step = 0;
         const playNote = () => {
-          if (!isPlaying) return;
+          if (!isPlaying || !audioCtx) return;
+          if (audioCtx.state === 'suspended') audioCtx.resume();
           const now = audioCtx.currentTime;
           const freq = notes[step % notes.length];
           const osc = audioCtx.createOscillator();
@@ -1070,7 +1082,7 @@
           osc.type = 'sine';
           osc.frequency.setValueAtTime(freq, now);
           gain.gain.setValueAtTime(0.01, now);
-          gain.gain.linearRampToValueAtTime(getVol(), now + 0.04);
+          gain.gain.linearRampToValueAtTime(0.20, now + 0.04);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
           osc.connect(gain); gain.connect(audioCtx.destination);
           osc.start(now); osc.stop(now + 0.7);
@@ -1087,7 +1099,8 @@
         ];
         let step = 0;
         const playChord = () => {
-          if (!isPlaying) return;
+          if (!isPlaying || !audioCtx) return;
+          if (audioCtx.state === 'suspended') audioCtx.resume();
           const now = audioCtx.currentTime;
           chords[step % chords.length].forEach(freq => {
             const osc = audioCtx.createOscillator();
@@ -1095,7 +1108,7 @@
             osc.type = 'triangle';
             osc.frequency.setValueAtTime(freq, now);
             gain.gain.setValueAtTime(0.005, now);
-            gain.gain.linearRampToValueAtTime(getVol() * 0.45, now + 0.15);
+            gain.gain.linearRampToValueAtTime(0.11, now + 0.15);
             gain.gain.exponentialRampToValueAtTime(0.001, now + 1.9);
             osc.connect(gain); gain.connect(audioCtx.destination);
             osc.start(now); osc.stop(now + 2.0);
@@ -1113,7 +1126,7 @@
           const white = Math.random() * 2 - 1;
           data[i] = (lastOut + (0.04 * white)) / 1.04;
           lastOut = data[i];
-          data[i] *= getVol() * 1.4;
+          data[i] *= 0.30;
         }
         noiseNode = audioCtx.createBufferSource();
         noiseNode.buffer = buffer;
@@ -1129,7 +1142,7 @@
       isPlaying = !isPlaying;
       if (isPlaying) {
         startBgmEngine();
-        btn.textContent = '⏸ 暫停';
+        btn.textContent = '⏸ 音樂播放中';
         pill.classList.add('playing');
       } else {
         stopAudioNodes();
@@ -1138,6 +1151,15 @@
       }
     }
     function changeBgm() { if (isPlaying) startBgmEngine(); }
+
+    // Unlock browser audio autoplay on first user gesture anywhere on page
+    function unlockDefaultAudio() {
+      if (isPlaying) {
+        if (!audioCtx || audioCtx.state === 'suspended') startBgmEngine();
+      }
+      ['pointerdown', 'keydown', 'touchstart'].forEach(ev => window.removeEventListener(ev, unlockDefaultAudio));
+    }
+    ['pointerdown', 'keydown', 'touchstart'].forEach(ev => window.addEventListener(ev, unlockDefaultAudio));
 
     // 3. Progress Bar Tracker
     function updateProgress() {
@@ -1164,7 +1186,7 @@
       });
     }
 
-    // 5. Animated 60FPS Darkroom Alignment Mini-Game (Never a Black Screen!)
+    // 5. Animated 60FPS Darkroom Alignment Mini-Game
     let phaseOffset = 0;
     function updateGame() {
       const pos = parseFloat(document.getElementById('gamePos').value);
@@ -1183,10 +1205,12 @@
         snrEl.style.color = '#EF4444';
         snrEl.textContent = '⚠️ BPD 飽和紅燈 (SATURATED!)';
         statusEl.textContent = '🚨 警告：參考臂功率超過 1.0 mW，平衡探測器發生飽和變成水平直線！請立即調降可調光衰減器！';
+        switchFufuState(3);
       } else if (snr >= 90) {
         snrEl.style.color = 'var(--accent-green)';
         snrEl.textContent = `🎉 耦合訊噪比 SNR: ${snr}% (完美尋峰!)`;
         statusEl.textContent = '🏆 恭喜破關！光程差已進入同調長度峰值（ΔL ≈ 0）且 BPD 功率完美平衡！橘福福師姐獎勵你一顆大雞腿！';
+        switchFufuState(1);
         addMascotExp(5);
       } else {
         snrEl.style.color = 'var(--accent-blue)';
@@ -1208,17 +1232,14 @@
         ctx.fillStyle = '#090D16';
         ctx.fillRect(0, 0, w, h);
 
-        // Grid
         ctx.strokeStyle = 'rgba(148, 163, 184, 0.16)';
         ctx.lineWidth = 1;
         for (let x = 0; x < w; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
         for (let y = 0; y < h; y += 38) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
 
-        // Center Reference Line
         ctx.strokeStyle = 'rgba(249, 115, 22, 0.35)';
         ctx.beginPath(); ctx.moveTo(w / 2, 0); ctx.lineTo(w / 2, h); ctx.stroke();
 
-        // Live Interferogram Waveform
         ctx.beginPath();
         ctx.lineWidth = 2.4;
         ctx.strokeStyle = saturated ? '#EF4444' : (env > 0.85 ? '#34D399' : '#38BDF8');
@@ -1280,6 +1301,7 @@
         alertBox.style.background = 'var(--accent-soft)';
         alertBox.style.color = 'var(--accent-primary)';
         alertBox.textContent = `⚠️ 環安衛超標警告：入眼功率 ${pwr.toFixed(1)} mW 已超過 ANSI 1.8 mW 上限！請立即調降光衰減器！`;
+        switchFufuState(3);
       }
     }
 
@@ -1321,92 +1343,128 @@
       addMascotExp(10);
     }
 
-    // 8. Desktop Pet (3 Visual States + Walking Roam)
-    let exp = 20;
-    let petPosRight = 24;
-    const petSvgs = {
-      1: `<svg viewBox="0 0 80 80" width="70" height="70">
-            <circle cx="40" cy="42" r="28" fill="#FB923C"/>
-            <polygon points="16,24 24,8 34,20" fill="#EA580C"/>
-            <polygon points="64,24 56,8 46,20" fill="#EA580C"/>
-            <circle cx="30" cy="38" r="4" fill="#1E293B"/>
-            <circle cx="50" cy="38" r="4" fill="#1E293B"/>
-            <ellipse cx="40" cy="46" rx="6" ry="4" fill="#FFF7ED"/>
-            <path d="M 35 48 Q 40 53 45 48" fill="none" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round"/>
-            <line x1="36" y1="22" x2="44" y2="22" stroke="#7C2D12" stroke-width="3" stroke-linecap="round"/>
-            <line x1="40" y1="18" x2="40" y2="27" stroke="#7C2D12" stroke-width="3" stroke-linecap="round"/>
-          </svg>`,
-      2: `<svg viewBox="0 0 80 80" width="70" height="70">
-            <circle cx="40" cy="42" r="28" fill="#FB923C"/>
-            <polygon points="16,24 24,8 34,20" fill="#EA580C"/>
-            <polygon points="64,24 56,8 46,20" fill="#EA580C"/>
-            <path d="M 25 38 Q 30 32 35 38" fill="none" stroke="#1E293B" stroke-width="3" stroke-linecap="round"/>
-            <path d="M 45 38 Q 50 32 55 38" fill="none" stroke="#1E293B" stroke-width="3" stroke-linecap="round"/>
-            <circle cx="23" cy="45" r="4.5" fill="#F43F5E" opacity="0.6"/>
-            <circle cx="57" cy="45" r="4.5" fill="#F43F5E" opacity="0.6"/>
-            <path d="M 34 47 Q 40 56 46 47 Z" fill="#F43F5E"/>
-            <text x="56" y="22" font-size="14">💖</text>
-          </svg>`,
-      3: `<svg viewBox="0 0 80 80" width="70" height="70">
-            <circle cx="40" cy="42" r="28" fill="#FB923C"/>
-            <polygon points="16,24 24,8 34,20" fill="#EA580C"/>
-            <polygon points="64,24 56,8 46,20" fill="#EA580C"/>
-            <rect x="20" y="31" width="17" height="12" rx="3" fill="#0284C7" opacity="0.85" stroke="#fff" stroke-width="1.5"/>
-            <rect x="43" y="31" width="17" height="12" rx="3" fill="#0284C7" opacity="0.85" stroke="#fff" stroke-width="1.5"/>
-            <line x1="37" y1="36" x2="43" y2="36" stroke="#fff" stroke-width="2"/>
-            <path d="M 35 51 L 45 51" stroke="#1E293B" stroke-width="3" stroke-linecap="round"/>
-            <text x="40" y="20" font-size="10" fill="#fff" text-anchor="middle" font-weight="bold">OD5+</text>
-          </svg>`
+    // 8. Ju Fufu 3 Real Uploaded Images State Machine + Desktop Virus Clones
+    let exp = 50;
+    const fufuStates = {
+      1: {
+        img: "images3.jpg",
+        quote: "「雲巋山上有猛虎！小師弟，今天對光超順喔！繼續保持，師姐獎勵你焦糖爆米花！」"
+      },
+      2: {
+        img: "images1.jpg",
+        quote: "「呼嚕……師姐才沒有打瞌睡，我是在幫你檢查 AGENTS.md 的雙向連結有沒有寫對啦！」"
+      },
+      3: {
+        img: "images2.jpg",
+        quote: "「吼——！老虎不發威別當我是病貓！誰沒戴 OD 5+ 護目鏡就開雷射？誰敢瞎掰實驗數據？」"
+      }
     };
 
-    function setPetState(st) {
-      [1, 2, 3].forEach(i => document.getElementById('ptab' + i).classList.toggle('active', i === st));
-      document.getElementById('petSvgContainer').innerHTML = petSvgs[st];
+    function switchFufuState(st) {
+      [1, 2, 3].forEach(i => document.getElementById('fcard' + i).classList.toggle('active-state', i === st));
+      const data = fufuStates[st];
+      const mainImg = document.getElementById('mascotMainImg');
+      const avatarImg = document.getElementById('mascotAvatarImg');
+      mainImg.src = data.img;
+      avatarImg.src = data.img;
+      document.getElementById('mascotText').textContent = data.quote;
     }
 
     function addMascotExp(val) {
       exp = Math.min(100, exp + val);
       document.getElementById('mascotExp').textContent = `EXP ${exp}/100`;
       const lvEl = document.getElementById('petLv');
-      if (exp >= 80) lvEl.textContent = 'Lv.3 首席守護神';
+      if (exp >= 80) lvEl.textContent = 'Lv.3 首席護山神獸';
       else if (exp >= 50) lvEl.textContent = 'Lv.2 光學大師姐';
     }
     function petMascot() {
-      setPetState(1);
-      const quotes = [
-        "「……老虎不發威，別當我是胖橘貓啊！嗷——！快去溫習 Module 02 的雙折射公式！」",
-        "「修煉光學術法著實不易，師姐助你一爪之力！記得 OpenSCAD 的 $fn 要設 120 喔！」"
-      ];
-      document.getElementById('mascotText').textContent = quotes[Math.floor(Math.random() * quotes.length)];
+      switchFufuState(2);
       addMascotExp(10);
     }
     function feedMascot() {
-      setPetState(2);
-      document.getElementById('mascotText').textContent = "「嗷嗚！是香噴噴的大雞腿跟焦糖爆米花！師姐最喜歡你了，祝你實驗一次對光成功！」";
+      switchFufuState(1);
       addMascotExp(15);
     }
     function quizMascot() {
-      setPetState(3);
+      switchFufuState(3);
       const quizTips = [
-        "🎲 口試抽考：為什麼 200kHz OCT 鋸齒波要留 15% Flyback？答：保護 Galvo 振鏡避免瞬間反轉過熱失步！",
-        "🎲 口試抽考：訓練 OCT 降噪 CNN 最怕什麼？答：把同一顆眼球的相鄰 B-scan 同時分進訓練與測試集（Data Leakage）！",
-        "🎲 口試抽考：量測 1045nm 樣品臂功率前要做什麼？答：把功率計波長檔位從 633nm 切換到 1045nm，並確認 ≤ 1.8 mW！"
+        "🔥 猛虎抽考：為什麼 200kHz OCT 鋸齒波要留 15% Flyback？答：保護 Galvo 振鏡避免瞬間反轉過熱失步！",
+        "🔥 猛虎抽考：訓練 OCT 降噪 CNN 最怕什麼？答：把同一顆眼球的相鄰 B-scan 同時分進訓練與測試集（Data Leakage）！",
+        "🔥 猛虎抽考：量測 1045nm 樣品臂功率前要做什麼？答：把功率計波長檔位從 633nm 切換到 1045nm，並確認 ≤ 1.8 mW！"
       ];
       document.getElementById('mascotText').textContent = quizTips[Math.floor(Math.random() * quizTips.length)];
       addMascotExp(10);
-    }
-    function walkMascot() {
-      const widget = document.getElementById('mascotWidget');
-      petPosRight = petPosRight < 180 ? Math.floor(Math.random() * 240) + 120 : 24;
-      widget.style.right = petPosRight + 'px';
-      document.getElementById('mascotText').textContent = "「噠噠噠……師姐在光學桌旁邊巡邏中！沒有人忘記戴護目鏡吧？」";
     }
     function toggleMascotBubble() {
       const b = document.getElementById('mascotBubble');
       b.style.display = b.style.display === 'none' ? 'block' : 'none';
     }
 
-    // 9. Modal Content Dictionary
+    // 9. Desktop Virus / Roaming Ju Fufu Clones Engine
+    const virusPets = [];
+    const virusLines = [
+      "戴好 OD5+ 護目鏡！",
+      "嗷嗚！不准擦光纖！",
+      "點我會分裂增殖喔！",
+      "1045nm 穿透最深！",
+      "福虓爐爐轉起來！",
+      "記得留 15% Flyback！"
+    ];
+    const virusImgs = ["images3.jpg", "images1.jpg", "images2.jpg"];
+
+    function spawnVirusPet(count = 1, startX = null, startY = null) {
+      const container = document.getElementById('virusContainer');
+      for (let i = 0; i < count; i++) {
+        if (virusPets.length >= 28) break; // prevent browser lag
+        const el = document.createElement('div');
+        el.className = 'virus-pet';
+        const imgFile = virusImgs[virusPets.length % virusImgs.length];
+        const msg = virusLines[Math.floor(Math.random() * virusLines.length)];
+        el.innerHTML = `<span class="virus-tag">${msg}</span><img src="${imgFile}" onerror="this.src='assets/${imgFile}'" alt="橘福福分身" />`;
+
+        const x = startX !== null ? startX : Math.random() * (window.innerWidth - 110) + 15;
+        const y = startY !== null ? startY : Math.random() * (window.innerHeight - 140) + 60;
+        const vx = (Math.random() < 0.5 ? -1 : 1) * (1.4 + Math.random() * 1.8);
+        const vy = (Math.random() < 0.5 ? -1 : 1) * (1.2 + Math.random() * 1.6);
+
+        const petObj = { el, x, y, vx, vy };
+        el.style.left = x + 'px';
+        el.style.top = y + 'px';
+
+        // Clicking a virus pet multiplies it into 2 more pets!
+        el.addEventListener('click', (e) => {
+          e.stopPropagation();
+          spawnVirusPet(2, petObj.x, petObj.y);
+        });
+
+        container.appendChild(el);
+        virusPets.push(petObj);
+      }
+      document.getElementById('virusCount').textContent = virusPets.length;
+    }
+
+    function clearVirusPets() {
+      document.getElementById('virusContainer').innerHTML = '';
+      virusPets.length = 0;
+      document.getElementById('virusCount').textContent = '0';
+    }
+
+    function animateVirusPets() {
+      const maxW = window.innerWidth - 88;
+      const maxH = window.innerHeight - 92;
+      for (let i = 0; i < virusPets.length; i++) {
+        const p = virusPets[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x <= 8 || p.x >= maxW) p.vx *= -1;
+        if (p.y <= 55 || p.y >= maxH) p.vy *= -1;
+        p.el.style.left = p.x + 'px';
+        p.el.style.top = p.y + 'px';
+      }
+      requestAnimationFrame(animateVirusPets);
+    }
+
+    // 10. Modal Content Dictionary
     const modalData = {
       m1: {
         title: "🌱 Module 01 // 認識 OCT：光學界的超音波與低同調干涉",
@@ -1442,7 +1500,7 @@
       },
       agents_spec: {
         title: "📜 AGENTS.md — 專案員工手冊與自動化擴充規則 v3.0",
-        body: `<p><strong>1. 專案定位：</strong>結合 Karpathy LLM Wiki 三層架構（<code>raw/</code> &rarr; <code>wiki/</code> &rarr; <code>lessons/</code>）與 Mochi-Treehole 互動學習體驗，收錄 8 大完整獨立講義模組。</p><p><strong>2. 互動元件標準：</strong>內建八音盒與白噪音合成器、60FPS 暗房對光尋峰小遊戲、OCT 解析度模擬器、新手翻翻卡、樹洞許願牆與三態桌面小寵物。</p><p><strong>3. 防幻覺限制：</strong><code>raw/</code> 唯讀不可修改；未實測物理參數強制標註 <code>[待實驗室實測補齊]</code>。</p>`
+        body: `<p><strong>1. 專案定位：</strong>結合 Karpathy LLM Wiki 三層架構（<code>raw/</code> &rarr; <code>wiki/</code> &rarr; <code>lessons/</code>）、橘福福三態表情狀態機與 Mochi-Treehole 互動學習體驗，收錄 8 大完整獨立講義模組。</p><p><strong>2. 互動元件標準：</strong>內建預設自動播放八音盒與白噪音合成器、60FPS 暗房對光尋峰小遊戲、OCT 解析度模擬器、新手翻翻卡、樹洞許願牆與桌面病毒漫遊系統。</p><p><strong>3. 防幻覺限制：</strong><code>raw/</code> 唯讀不可修改；未實測物理參數強制標註 <code>[待實驗室實測補齊]</code>。</p>`
       }
     };
 
@@ -1461,11 +1519,15 @@
     function closeModal() { document.getElementById('modalBackdrop').classList.remove('open'); }
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-    // Initialize Immediately
-    setPetState(1);
-    updateGame();
-    renderTreehole();
-    animateOscilloscope();
+    // Initialize Everything on Load
+    window.addEventListener('DOMContentLoaded', () => {
+      updateGame();
+      renderTreehole();
+      animateOscilloscope();
+      startBgmEngine();
+      spawnVirusPet(2); // Spawn 2 roaming Ju Fufu desktop virus pets by default!
+      animateVirusPets();
+    });
   </script>
 </body>
 </html>
